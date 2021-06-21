@@ -3,7 +3,7 @@ alias dart='fvm dart'
 alias copy='clipboard'
 alias flc='flutter clean'
 alias brw='flutter pub run build_runner watch --delete-conflicting-outputs'
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dfile='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 ZSH_THEME="spaceship"
 SPACESHIP_PROMPT_ADD_NEWLINE='false'
 SPACESHIP_PROMPT_SEPARATE_LINE='false'
