@@ -15,7 +15,7 @@ function pdelete(){
 if [[ $USER != '' && $USER == 'root' ]] then
   ZSH_DISABLE_COMPFIX='true'
 fi
-export ZSH="/home/saileshbro/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 plugins=(git zsh-autosuggestions extract zsh-syntax-highlighting zsh-completions)
 eval "$(fnm env --use-on-cd)"
 source $ZSH/oh-my-zsh.sh
@@ -25,7 +25,7 @@ source $ZSH/oh-my-zsh.sh
 
 # tabtab source for yarn package
 # uninstall by removing these lines or running `tabtab uninstall yarn`
-[[ -f /home/saileshbro/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh ]] && . /home/saileshbro/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh
+[[ -f $HOME/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh ]] && . $HOME/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh
 
 # EXPORTS
 # *********************************
