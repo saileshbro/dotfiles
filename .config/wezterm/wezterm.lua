@@ -13,6 +13,30 @@ wezterm.on("update-right-status", function(window, pane)
     }}));
 end)
 return {
+    keys = { -- This will create a new split and run the `top` program inside it
+    {
+        key = "v",
+        mods = "CTRL|ALT",
+        action = wezterm.action {
+            SplitVertical = {
+                domain = "CurrentPaneDomain"
+            }
+        }
+    }, {
+        key = "h",
+        mods = "CTRL|ALT",
+        action = wezterm.action {
+            SplitHorizontal = {
+                domain = "CurrentPaneDomain"
+            }
+        }
+    }, {
+        key = "t",
+        mods = "SHIFT|ALT",
+        action = wezterm.action {
+            SpawnTab = "DefaultDomain"
+        }
+    }},
     window_background_opacity = 1.0,
     initial_rows = 26,
     initial_cols = 90,
@@ -48,4 +72,5 @@ return {
     exit_behavior = "Close",
     color_scheme = "OceanicMaterial",
     dpi = 121.0
+
 }
