@@ -1,0 +1,12 @@
+eval "$(fnm env --use-on-cd)"
+[[ -f $HOME/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh ]] && . $HOME/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh
+fpath+=~/.zfunc
+_dotnet_zsh_complete()
+{
+  local completions=("$(dotnet complete "$words")")
+  reply=( "${(ps:\n:)completions}" )
+}
+
+compctl -K _dotnet_zsh_complete dotnet
+autoload -U compinit && compinit
+zstyle ':completion:*' menu select

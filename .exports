@@ -1,0 +1,5 @@
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+export PATH="$PATH":"$HOME/.dotnet/tools"
+export PATH="$PATH":"$HOME/.yarn/bin"
+export CHROME_EXECUTABLE=$(which brave)
+export ZSH="$HOME/.oh-my-zsh"

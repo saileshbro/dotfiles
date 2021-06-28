@@ -1,0 +1,4 @@
+function pdelete(){
+  sudo pacman -Rsun $(pacman -Qqdt)
+  yay -Scc
+}
