@@ -1,0 +1,8 @@
+configuration {
+	modi: "emoji";
+	font: "Operator Mono Lig Light 14";
+	padding: 5;
+	dpi: 121;
+}
+
+@import "~/.config/rofi/themes/config.rasi"
