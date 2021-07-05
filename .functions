@@ -2,3 +2,7 @@ function pdelete(){
   sudo pacman -Rsun $(pacman -Qqdt)
   yay -Scc
 }
+
+function pw(){
+  pwgen -n -y -s -B -v $1 1 | copy
+}
