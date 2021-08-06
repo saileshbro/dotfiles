@@ -1,4 +1,3 @@
-source ~/.alias
 source ~/.exports
 source ~/.functions
 ZSH_THEME="spaceship"
@@ -10,3 +9,4 @@ fi
 plugins=(git zsh-autosuggestions extract zsh-syntax-highlighting zsh-completions)
 source $ZSH/oh-my-zsh.sh
 source ~/.completions
+source ~/.alias
