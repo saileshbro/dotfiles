@@ -61,7 +61,8 @@
       <property name="Print" type="string" value="flameshot gui"/>
       <property name="&lt;Shift&gt;&lt;Super&gt;c" type="string" value="colorpicker --preview --one-shot --short | copy"/>
       <property name="&lt;Super&gt;period" type="string" value="rofi -show emoji"/>
-      <property name="&lt;Primary&gt;space" type="string" value="rofi -show drun"/>
+      <property name="&lt;Primary&gt;&lt;Alt&gt;space" type="string" value="rofi -show drun"/>
+      <property name="Super_R" type="string" value="xfce4-popup-whiskermenu"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">

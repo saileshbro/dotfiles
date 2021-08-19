@@ -68,9 +68,9 @@ return {
             }
         }
     },
-    font = wezterm.font("Operator Mono Lig Medium"),
+    font = wezterm.font("Operator Mono SSm Lig Medium"),
+    font_size = 11.0,
     exit_behavior = "Close",
     color_scheme = "OceanicMaterial",
     dpi = 121.0
-
 }
