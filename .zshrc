@@ -1,12 +1,16 @@
+eval "$(fnm env --shell=zsh)"
+eval "$(rbenv init - zsh)"
 source ~/.exports
 source ~/.functions
 ZSH_THEME="spaceship"
 SPACESHIP_PROMPT_ADD_NEWLINE='false'
 SPACESHIP_PROMPT_SEPARATE_LINE='false'
-if [[ $USER != '' && $USER == 'root' ]] then
+if [[ $USER != '' && $USER == 'root' ]]; then
   ZSH_DISABLE_COMPFIX='true'
 fi
 plugins=(git zsh-autosuggestions extract zsh-syntax-highlighting zsh-completions)
 source $ZSH/oh-my-zsh.sh
 source ~/.completions
 source ~/.alias
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"

@@ -12,3 +12,9 @@
 [user]
 	name = Sailesh Dahal
 	email = saileshbro@gmail.com
+[url "https://"]
+	insteadOf = git://
+[safe]
+	directory = /opt/hostedtoolcache/flutter/stable-3.3.0-x64
+[push]
+	autoSetupRemote = true
