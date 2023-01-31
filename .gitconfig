@@ -1,20 +1,23 @@
 [init]
-	defaultBranch = main
+defaultBranch = main
 [pull]
-	rebase = false
+rebase = false
 [core]
-	editor = nano
+editor = nano
 [filter "lfs"]
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
+process = git-lfs filter-process
+required = true
+clean = git-lfs clean -- %f
+smudge = git-lfs smudge -- %f
 [user]
-	name = Sailesh Dahal
-	email = saileshbro@gmail.com
+name = Sailesh Dahal
+email = saileshbro@gmail.com
 [url "https://"]
-	insteadOf = git://
-[safe]
-	directory = /opt/hostedtoolcache/flutter/stable-3.3.0-x64
+insteadOf = git://
 [push]
-	autoSetupRemote = true
+autoSetupRemote = true
+[commit]
+gpgsign = true
+[alias]
+c = commit -s
+co = checkout -b

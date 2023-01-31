@@ -14,3 +14,8 @@ source ~/.completions
 source ~/.alias
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+## [Completion] 
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /Users/saileshbro/.dart-cli-completion/zsh-config.zsh ]] && . /Users/saileshbro/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
