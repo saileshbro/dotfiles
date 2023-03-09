@@ -1,8 +1,9 @@
 eval "$(fnm env --shell=zsh)"
+eval "$(starship init zsh)"
 eval "$(rbenv init - zsh)"
+source "$HOME/.cargo/env"
 source ~/.exports
 source ~/.functions
-ZSH_THEME="spaceship"
 SPACESHIP_PROMPT_ADD_NEWLINE='false'
 SPACESHIP_PROMPT_SEPARATE_LINE='false'
 if [[ $USER != '' && $USER == 'root' ]]; then
@@ -18,4 +19,6 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 ## Completion scripts setup. Remove the following line to uninstall
 [[ -f /Users/saileshbro/.dart-cli-completion/zsh-config.zsh ]] && . /Users/saileshbro/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
-
+## keybindings for zsh-sutosuggestions
+bindkey '  ' autosuggest-accept
+bindkey '^ ' autosuggest-execute
