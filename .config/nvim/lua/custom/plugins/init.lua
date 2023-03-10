@@ -72,16 +72,21 @@ local plugins = {
   },
 
   ["akinsho/flutter-tools.nvim"] = {
-    config = function ()
+    config = function()
       require "custom.plugins.flutter"
-    end
-  },
-  ["mfussenegger/nvim-dap"] = {
-    config = function ()
-      require("custom.plugins.nvim-dap")
     end,
   },
-  ["ThePrimeagen/vim-be-good"]={}
+  ["mfussenegger/nvim-dap"] = {
+    config = function()
+      require "custom.plugins.nvim-dap"
+    end,
+  },
+
+  ["ThePrimeagen/vim-be-good"] = {},
+
+  ["sar/cmp-cmdline.nvim"] = {
+    after = "cmp-buffer",
+  },
 }
 
 return plugins
