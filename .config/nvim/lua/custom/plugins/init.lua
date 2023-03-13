@@ -61,7 +61,6 @@ local plugins = {
   },
 
   -- remove plugin
-  -- ["hrsh7th/cmp-path"] = false,
   -- markdown previewer
   ["toppair/peek.nvim"] = {
     run = "deno taks --quiet build:fast",
@@ -82,10 +81,23 @@ local plugins = {
     end,
   },
 
-  ["ThePrimeagen/vim-be-good"] = {},
-
-  ["sar/cmp-cmdline.nvim"] = {
-    after = "cmp-buffer",
+  ["hrsh7th/nvim-cmp"] = {
+    config = function ()
+      local cmp = require('cmp')
+      cmp.setup.cmdline(':', {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+          { name = 'path' }
+        }, {
+            {
+              name = 'cmdline',
+              option = {
+                ignore_cmds = { 'Man', '!' }
+              }
+            }
+          })
+      })
+    end
   },
 }
 

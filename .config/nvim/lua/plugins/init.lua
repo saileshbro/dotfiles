@@ -47,6 +47,7 @@ local plugins = {
   ["nvim-tree/nvim-web-devicons"] = {
     after = "ui",
     module = "nvim-web-devicons",
+    commit = "dd468f6991a4e447607097dfc89d47ae97d14dea",
     config = function()
       require("plugins.configs.others").devicons()
     end,
@@ -152,7 +153,7 @@ local plugins = {
 
   ["goolord/alpha-nvim"] = {
     after = "base46",
-    disable = false,
+    disable = true,
     config = function()
       require "plugins.configs.alpha"
     end,
