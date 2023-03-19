@@ -3,12 +3,10 @@ local overrides = require("custom.configs.overrides")
 ---@type NvPluginSpec[]
 local plugins = {
 
-  -- Override plugin definition options
 
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      -- format & linting
       {
         "jose-elias-alvarez/null-ls.nvim",
         config = function()
@@ -19,10 +17,8 @@ local plugins = {
     config = function()
       require "plugins.configs.lspconfig"
       require "custom.configs.lspconfig"
-    end, -- Override to setup mason-lspconfig
+    end,
   },
-  
-  -- override plugin configs
   {
     "williamboman/mason.nvim",
     opts = overrides.mason
@@ -38,7 +34,6 @@ local plugins = {
     opts = overrides.nvimtree,
   },
 
-  -- Install a plugin
   {
     "max397574/better-escape.nvim",
     event = "InsertEnter",
@@ -46,18 +41,111 @@ local plugins = {
       require("better_escape").setup()
     end,
   },
+  {
+    "folke/which-key.nvim",
+    enabled = true,
+  },
+  {
+    "neovim/nvim-lspconfig",
+    config = function()
+      require "plugins.configs.lspconfig"
+      require "custom.configs.lspconfig"
+    end,
+  },
 
-  -- To make a plugin not be loaded
-  -- {
-  --   "NvChad/nvim-colorizer.lua",
-  --   enabled = false
-  -- },
+  {
+    "ggandor/lightspeed.nvim",
+    after = "alpha",
+    disable = false,
+    config = function()
+      require "custom.configs.lightspeed"
+    end,
+  },
 
-  -- Uncomment if you want to re-enable which-key
-  -- {
-  --   "folke/which-key.nvim",
-  --   enabled = true,
-  -- },
+  -- overrde plugin configs
+  {
+    "nvim-treesitter/nvim-treesitter",
+    override_options = overrides.treesitter,
+  },
+
+  {
+    "williamboman/mason.nvim",
+    override_options = overrides.mason,
+  },
+
+  {
+    "nvim-tree/nvim-tree.lua",
+    override_options = overrides.nvimtree,
+  },
+
+  -- Install a plugin
+  {
+    "max397574/better-escape.nvim",
+    --   event = "InsertEnter",
+    --   config = function()
+    --     require("better_escape").setup()
+    --   end,
+    -- },
+
+    -- code formatting, linting etc
+    {
+      "jose-elias-alvarez/null-ls.nvim",
+      after = "nvim-lspconfig",
+      config = function()
+        require "custom.configs.null-ls"
+      end,
+    },
+
+
+    -- remove plugin
+    -- markdown previewer
+    {
+      "toppair/peek.nvim",
+      run = "deno taks --quiet build:fast",
+      disable = false,
+      config = function()
+        require "custom.configs.peek"
+      end,
+    },
+
+    {
+      "akinsho/flutter-tools.nvim",
+      lazy = false,
+      dependencies = {
+        'nvim-lua/plenary.nvim',
+        'stevearc/dressing.nvim',
+      },
+      config = function()
+        require "custom.configs.flutter"
+      end,
+    },
+    {
+      "mfussenegger/nvim-dap",
+      config = function()
+        require "custom.configs.nvim-dap"
+      end,
+    },
+
+    {
+      "hrsh7th/nvim-cmp",
+      config = function ()
+        local cmp = require('cmp')
+        cmp.setup.cmdline(':', {
+          mapping = cmp.mapping.preset.cmdline(),
+          sources = cmp.config.sources({
+            { name = 'path' }
+          }, {
+              {
+                name = 'cmdline',
+                option = {
+                  ignore_cmds = { 'Man', '!' }
+                }
+              }
+            })
+        })
+      end
+    },
+  },
 }
 
 return plugins

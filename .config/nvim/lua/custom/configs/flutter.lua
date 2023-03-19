@@ -1,5 +1,5 @@
 
-local present, wk = pcall(require, "flutter-tools")
+local present, flutter = pcall(require, "flutter-tools")
 
 if not present then
   return
@@ -46,8 +46,5 @@ local options = {
       lineLength = 100,
     },
   },
-}
-
-options = require("core.utils").load_override(options, "akinsho/flutter-tools.nvim")
-
-wk.setup(options)
+};
+flutter.setup(options);
