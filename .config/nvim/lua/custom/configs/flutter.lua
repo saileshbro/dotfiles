@@ -1,11 +1,4 @@
-
-local present, flutter = pcall(require, "flutter-tools")
-
-if not present then
-  return
-end
-
-local options = {
+require("flutter-tools").setup {
   ui = {
     border = "rounded" 
   },
@@ -47,4 +40,4 @@ local options = {
     },
   },
 };
-flutter.setup(options);
+
