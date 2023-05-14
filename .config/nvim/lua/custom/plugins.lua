@@ -120,6 +120,13 @@ local plugins = {
       end,
     },
     {
+      "github/copilot.vim",
+      lazy = false,
+      config = function()
+        require "custom.configs.copilot"
+      end,
+    },
+    {
       "mfussenegger/nvim-dap",
       config = function()
         require "custom.configs.nvim-dap"
