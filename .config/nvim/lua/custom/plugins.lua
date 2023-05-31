@@ -127,11 +127,42 @@ local plugins = {
       end,
     },
     {
+      "b0o/schemastore.nvim",
+      lazy = false,
+      config = function()
+        require('lspconfig').jsonls.setup{
+          settings = {
+            json = {
+              schemas = require('schemastore').json.schemas(),
+              validate = { enable = true },
+            },
+          },
+        }
+      end,
+    },
+    {
       "mfussenegger/nvim-dap",
       config = function()
         require "custom.configs.nvim-dap"
       end,
     },
+    {
+      "alexghergh/nvim-tmux-navigation",
+      lazy = false,
+      config = function()
+        require'nvim-tmux-navigation'.setup {
+            disable_when_zoomed = true, -- defaults to false
+            keybindings = {
+                left = "<C-h>",
+                down = "<C-j>",
+                up = "<C-k>",
+                right = "<C-l>",
+                last_active = "<C-\\>",
+                next = "<C-Space>",
+            }
+        }
+      end,
+    }
   },
 }
 
