@@ -19,7 +19,6 @@ export PATH="$PATH":"$HOME/Library/Application Support/JetBrains/Toolbox/scripts
 
 export JAVA_HOME=$(/usr/libexec/java_home)
 
-export ANDROID_PREFS_ROOT="$XDG_DATA_HOME"/android
 export ANDROID_USER_HOME="$XDG_DATA_HOME"/android
 export ANDROID_AVD_HOME="$ANDROID_USER_HOME"/avd
 export ANDROID_HOME="$ANDROID_USER_HOME"/sdk
