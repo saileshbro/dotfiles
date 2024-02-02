@@ -10,12 +10,15 @@ smudge = git-lfs smudge -- %f
 [user]
 name = Sailesh Dahal
 email = saileshbro@gmail.com
+	signingkey = /Users/saileshbro/.ssh/id_rsa.pub
 [url "https://"]
 insteadOf = git://
 [push]
 autoSetupRemote = true
 [commit]
-gpgsign = true
+	gpgsign = true
 [alias]
 c = commit -s
 co = checkout -b
+[gpg]
+	format = ssh

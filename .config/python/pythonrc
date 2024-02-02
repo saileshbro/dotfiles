@@ -2,7 +2,7 @@ import os
 import atexit
 import readline
 
-history = os.path.join(os.path.expanduser('~'), '.cache/python_history')
+history = os.path.join(os.environ['XDG_CACHE_HOME'], 'python_history')
 try:
     readline.read_history_file(history)
 except OSError:

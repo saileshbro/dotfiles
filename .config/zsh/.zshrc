@@ -11,3 +11,8 @@ zstyle ':omz:update' frequency 7
 eval "$(fnm env --use-on-cd)"
 eval "$(starship init zsh)"
 eval "$(github-copilot-cli alias -- "$0")"
+
+
+export PATH="$XDG_DATA_HOME/npm/bin:$PATH"
+export PATH="/opt/homebrew/opt/ccache/libexec:$PATH"
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"

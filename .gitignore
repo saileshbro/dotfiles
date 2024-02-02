@@ -1,0 +1,11 @@
+.DS_Store
+.config/docker/*
+.config/configstore/*
+.config/firebase/*
+.config/gh/hosts.yml
+.config/github-copilot/*
+.config/iterm2/*
+.config/jgit/config
+.config/raycast/*
+.config/githubnext__github-copilot-cli.json
+.config/settings
