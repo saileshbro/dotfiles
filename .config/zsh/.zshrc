@@ -1,3 +1,4 @@
+eval "$(starship init zsh)"
 export HISTFILE="$XDG_STATE_HOME"/zsh/history
 source ~/.alias
 plugins=(zsh-autosuggestions zsh-syntax-highlighting zsh-completions)
@@ -9,7 +10,6 @@ bindkey '^ ' autosuggest-execute
 zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 7
 eval "$(fnm env --use-on-cd)"
-eval "$(starship init zsh)"
 eval "$(github-copilot-cli alias -- "$0")"
 
 

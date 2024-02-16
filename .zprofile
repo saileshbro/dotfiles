@@ -8,8 +8,7 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_STATE_HOME="$HOME/.local/state"
 
-export FVM_HOME="$XDG_DATA_HOME"/fvm
-# export FLUTTER_ROOT="$FVM_HOME/default"
+export FVM_CACHE_PATH="$XDG_DATA_HOME"/fvm
 
 export RBENV_ROOT="$XDG_DATA_HOME"/rbenv
 export ANDROID_USER_HOME="$XDG_DATA_HOME"/android

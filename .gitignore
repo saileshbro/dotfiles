@@ -10,3 +10,6 @@
 .config/githubnext__github-copilot-cli.json
 .config/settings
 .config/tmux/plugins/*
+.config/stacked
+.config/zed/.tmp*
+.config/zed/embeddings*
