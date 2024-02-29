@@ -62,7 +62,7 @@ brew "cqlabs/dcm/dcm"
 brew "dart-lang/dart/dart"
 brew "fluttergen/tap/fluttergen"
 brew "jesseduffield/lazygit/lazygit"
-brew "leoafarias/fvm/fvm", link: false
+brew "leoafarias/fvm/fvm"
 brew "oven-sh/bun/bun"
 cask "aldente"
 cask "alt-tab"
