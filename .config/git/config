@@ -22,3 +22,5 @@ c = commit -s
 co = checkout -b
 [gpg]
 	format = ssh
+[http]
+	postBuffer = 1M

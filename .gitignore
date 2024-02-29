@@ -13,3 +13,5 @@
 .config/stacked
 .config/zed/.tmp*
 .config/zed/embeddings*
+.config/.very_good_cli/version
+.config/qBittorrent/*
