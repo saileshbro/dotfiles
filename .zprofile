@@ -34,7 +34,7 @@ export CCACHE_DIR="$XDG_CACHE_HOME"/ccache
 export PUB_CACHE="$XDG_CACHE_HOME"/pub-cache
 export BUNDLE_USER_PLUGIN="$XDG_DATA_HOME"/bundle
 export NODE_REPL_HISTORY="$XDG_DATA_HOME"/node_repl_history
-
+export WAKATIME_HOME="$XDG_CONFIG_HOME"/wakatime
 export GEM_SPEC_CACHE="$XDG_CACHE_HOME"/gem
 export LESSHISTFILE="$XDG_CACHE_HOME"/less/history
 export ZSH_COMPDUMP="$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
@@ -46,21 +46,19 @@ export HOMEBREW_BUNDLE_FILE="$XDG_CONFIG_HOME"/homebrew/Brewfile
 export CHROME_EXECUTABLE="/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
 export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD="djno-znmp-ztnn-uceb"
 export ZSH="$XDG_DATA_HOME/oh-my-zsh"
-export JAVA_HOME="$HOME/Library/Java/JavaVirtualMachines/jdk/Contents/Home"
 export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
 export PKG_CONFIG_PATH="/opt/homebrew/opt/ruby/lib/pkgconfig"
-export JAVA_HOME="$HOME/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+export CP_HOME_DIR="$XDG_DATA_HOME"/cocoapods
 export PATH="$PATH:$HOMEBREW_PREFIX/opt/cache/libexec"
 export PATH="$XDG_DATA_HOME/cargo/bin:$PATH"
-export PATH="$FLUTTER_ROOT/bin:$PATH"
 export PATH="$HOME/.yarn/bin:$PATH"
 export PATH="$XDG_DATA_HOME/fvm/default/bin/:$PATH"
 export PATH="$XDG_CACHE_HOME/pub-cache/bin:$PATH"
 export PATH="$HOME/Library/Application Support/JetBrains/Toolbox/scripts:$PATH"
 export PATH="$ANDROID_HOME/platform-tools:$PATH"
 export PATH="$ANDROID_HOME/tools:$PATH"
-
+export PATH="$XDG_CONFIG_HOME/shorebird/bin:$PATH"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;

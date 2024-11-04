@@ -1,5 +1,4 @@
 eval "$(starship init zsh)"
-export HISTFILE="$XDG_STATE_HOME"/zsh/history
 source ~/.alias
 plugins=(zsh-autosuggestions zsh-syntax-highlighting zsh-completions)
 source $ZSH/oh-my-zsh.sh
@@ -16,3 +15,16 @@ eval "$(github-copilot-cli alias -- "$0")"
 export PATH="$XDG_DATA_HOME/npm/bin:$PATH"
 export PATH="/opt/homebrew/opt/ccache/libexec:$PATH"
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+source <(fzf --zsh)
+
+
+HISTFILE="$XDG_STATE_HOME"/zsh/history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt appendhistory
+if command -v ngrok &>/dev/null; then
+    eval "$(ngrok completion)"
+fi
+[[ "$TERM_PROGRAM" == "CodeEditApp_Terminal" ]] && . "/Applications/CodeEdit.app/Contents/Resources/codeedit_shell_integration.zsh"
+[[ -f /Users/saileshbro/.config/.dart-cli-completion/zsh-config.zsh ]] && . /Users/saileshbro/.config/.dart-cli-completion/zsh-config.zsh || true

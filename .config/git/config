@@ -1,7 +1,7 @@
 [init]
 defaultBranch = main
 [core]
-editor = nano
+	editor = vim
 [filter "lfs"]
 process = git-lfs filter-process
 required = true
