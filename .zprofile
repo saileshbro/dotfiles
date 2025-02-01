@@ -63,3 +63,5 @@ case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
+export ESLINT_USE_FLAT_CONFIG=false
+export TERM=xterm-256color
