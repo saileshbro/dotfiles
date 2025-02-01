@@ -1,0 +1,9 @@
+font-family = Operator Mono SSm Lig
+font-feature = liga
+font-size = 16
+quit-after-last-window-closed = true
+clipboard-read = allow
+clipboard-write = allow
+theme = Tinacious Design (Dark)
+mouse-hide-while-typing = true
+macos-option-as-alt = true
