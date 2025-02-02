@@ -1,6 +1,8 @@
 export ZDOTDIR="$HOME"/.config/zsh
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 export XDG_RUNTIME_DIR="$HOME/.run"
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -37,6 +39,7 @@ export NODE_REPL_HISTORY="$XDG_DATA_HOME"/node_repl_history
 export WAKATIME_HOME="$XDG_CONFIG_HOME"/wakatime
 export GEM_SPEC_CACHE="$XDG_CACHE_HOME"/gem
 export LESSHISTFILE="$XDG_CACHE_HOME"/less/history
+export HISTFILE="$XDG_STATE_HOME"/zsh/history
 export ZSH_COMPDUMP="$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
 export M2_HOME="$XDG_CACHE_HOME"/maven
 export PYTHONSTARTUP="${XDG_CONFIG_HOME}/python/pythonrc"
@@ -59,6 +62,8 @@ export PATH="$HOME/Library/Application Support/JetBrains/Toolbox/scripts:$PATH"
 export PATH="$ANDROID_HOME/platform-tools:$PATH"
 export PATH="$ANDROID_HOME/tools:$PATH"
 export PATH="$XDG_CONFIG_HOME/shorebird/bin:$PATH"
+export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$(brew --prefix)/share/zsh-syntax-highlighting/highlighters
+
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;

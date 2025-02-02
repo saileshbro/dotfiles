@@ -2,15 +2,10 @@
 defaultBranch = main
 [core]
 	editor = vim
-[filter "lfs"]
-process = git-lfs filter-process
-required = true
-clean = git-lfs clean -- %f
-smudge = git-lfs smudge -- %f
 [user]
 name = Sailesh Dahal
 email = saileshbro@gmail.com
-	signingkey = /Users/saileshbro/.ssh/id_rsa.pub
+	signingkey = 1757E1AF8499A93F
 [url "https://"]
 insteadOf = git://
 [push]
@@ -21,6 +16,4 @@ autoSetupRemote = true
 c = commit -s
 co = checkout -b
 [gpg]
-	format = ssh
-[http]
-	postBuffer = 1M
+	program = /opt/homebrew/bin/gpg
