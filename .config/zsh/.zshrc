@@ -97,8 +97,8 @@ case ":$PATH:" in
 esac
 
 # Load essential tools
-[[ -f "$ZDOTDIR/aliases.zsh" ]] && source "$ZDOTDIR/aliases.zsh"
-[[ -f "$ZDOTDIR/functions.zsh" ]] && source "$ZDOTDIR/functions.zsh"
+[[ -f "$ZDOTDIR/.alias" ]] && source "$ZDOTDIR/.alias"
+[[ -f "$ZDOTDIR/.functions" ]] && source "$ZDOTDIR/.functions"
 
 # Key bindings
 bindkey '  ' autosuggest-accept
