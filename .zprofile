@@ -13,10 +13,9 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export FVM_CACHE_PATH="$XDG_DATA_HOME"/fvm
 
 export RBENV_ROOT="$XDG_DATA_HOME"/rbenv
-export ANDROID_USER_HOME="$XDG_DATA_HOME"/android
-export ANDROID_AVD_HOME="$ANDROID_USER_HOME"/avd
-export ANDROID_HOME="$ANDROID_USER_HOME"/sdk
-export ANDROID_NDK_ROOT="$ANDROID_HOME"/ndk
+export ANDROID_SDK_HOME="$XDG_DATA_HOME"/android
+export ANDROID_AVD_HOME="$ANDROID_SDK_HOME"/avd
+export ANDROID_NDK_ROOT="$ANDROID_SDK_HOME"/ndk
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export DOCKER_HOME="$XDG_DATA_HOME"/docker
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
@@ -59,8 +58,8 @@ export PATH="$HOME/.yarn/bin:$PATH"
 export PATH="$XDG_DATA_HOME/fvm/default/bin/:$PATH"
 export PATH="$XDG_CACHE_HOME/pub-cache/bin:$PATH"
 export PATH="$HOME/Library/Application Support/JetBrains/Toolbox/scripts:$PATH"
-export PATH="$ANDROID_HOME/platform-tools:$PATH"
-export PATH="$ANDROID_HOME/tools:$PATH"
+export PATH="$ANDROID_SDK_HOME/platform-tools:$PATH"
+export PATH="$ANDROID_SDK_HOME/tools:$PATH"
 export PATH="$XDG_CONFIG_HOME/shorebird/bin:$PATH"
 export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=$(brew --prefix)/share/zsh-syntax-highlighting/highlighters
 

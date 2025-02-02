@@ -14,4 +14,3 @@ alias cat='bat'
 alias ls='lsd'
 alias ping='gping'
 alias spotx="bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Mac/main/install.sh) -hu"
-alias adb='HOME="$XDG_DATA_HOME"/android adb'
