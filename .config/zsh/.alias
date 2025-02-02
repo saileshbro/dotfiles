@@ -9,8 +9,8 @@ alias clearpod='cd ios && rm -rf ~/Library/Caches/CocoaPods && rm -rf Pods && rm
 
 alias onlyMain='git branch | grep -v "main" | xargs git branch -D'
 alias onlyStaging='git branch | grep -v "staging" | xargs git branch -D'
-alias vim='nvim'
 alias cat='bat'
 alias ls='lsd'
 alias ping='gping'
 alias spotx="bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Mac/main/install.sh) -hu"
+alias nv='nvim'

@@ -7,23 +7,27 @@ return {
   { "williamboman/mason-lspconfig.nvim" },
 
   -- Autocompletion plugins
-  { "hrsh7th/nvim-cmp" },
-  { "hrsh7th/cmp-nvim-lsp" },
-  { "hrsh7th/cmp-buffer" },
-  { "hrsh7th/cmp-path" },
-
-  --Plugin to enhance diagnostic display
   {
-    {
-      "folke/trouble.nvim",
-      dependencies = { "nvim-tree/nvim-web-devicons" },
-      config = function()
-        require("trouble").setup()
-      end,
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "saadparwaiz1/cmp_luasnip",
+      "L3MON4D3/LuaSnip", -- Ensure LuaSnip is loaded
     },
   },
 
-  --Autoformatting with null-ls
+  -- Plugin to enhance diagnostic display
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("trouble").setup()
+    end,
+  },
+
+  -- Autoformatting with null-ls
   {
     "jose-elias-alvarez/null-ls.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
@@ -42,8 +46,7 @@ return {
 
   -- Snippet support
   { "L3MON4D3/LuaSnip" },
-  { "saadparwaiz1/cmp_luasnip" },
 
   -- Syntax highlighting for treesitter
-  { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" },
+  { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 }
