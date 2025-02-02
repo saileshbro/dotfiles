@@ -15,3 +15,6 @@
 .config/zed/embeddings*
 .config/.very_good_cli/version
 .config/qBittorrent/*
+.config/zsh/.zsh_sessions/*
+.config/zsh/.zcompdump
+.config/zsh/.zsh_history
