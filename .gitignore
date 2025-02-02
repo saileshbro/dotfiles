@@ -20,3 +20,6 @@
 .config/zsh/.zsh_history
 .config/nvim/lazy-lock.json
 .config/.dart-cli-completion/*
+.config/swiftpm/*
+.config/wakatime/*
+.config/tool_state
