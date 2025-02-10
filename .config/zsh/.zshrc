@@ -39,6 +39,7 @@ declare -A xdg_configs=(
     [PNPM_HOME]="$XDG_DATA_HOME/pnpm"
     [CP_HOME_DIR]="$XDG_DATA_HOME/cocoapods"
     [GNUPGHOME]="$XDG_DATA_HOME/gnupg"
+    [VOLTA_HOME]="$XDG_DATA_HOME/volta"
     [DOCKER_CONFIG]="$XDG_CONFIG_HOME/docker"
     [WAKATIME_HOME]="$XDG_CONFIG_HOME/wakatime"
     [JAVA_HOME]="$HOME/Applications/Android Studio.app/Contents/jbr/Contents/Home"
@@ -85,6 +86,7 @@ path=(
     "$ANDROID_SDK_HOME/tools"
     "$XDG_CONFIG_HOME/shorebird/bin"
     "$XDG_DATA_HOME/npm/bin"
+    "$VOLTA_HOME/bin"
     "/opt/homebrew/opt/ccache/libexec"
     "/opt/homebrew/opt/ruby/bin"
     "$HOME/.pub-cache/bin"
@@ -114,7 +116,6 @@ if type brew &>/dev/null; then
 fi
 
 # Tool initialization
-eval "$(fnm env --use-on-cd)"
 eval "$(gh copilot alias -- zsh)"
 eval "$(starship init zsh)"
 
