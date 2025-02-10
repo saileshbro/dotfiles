@@ -41,6 +41,7 @@ declare -A xdg_configs=(
     [GNUPGHOME]="$XDG_DATA_HOME/gnupg"
     [DOCKER_CONFIG]="$XDG_CONFIG_HOME/docker"
     [WAKATIME_HOME]="$XDG_CONFIG_HOME/wakatime"
+    [JAVA_HOME]="$HOME/Applications/Android Studio.app/Contents/jbr/Contents/Home"
     [NPM_CONFIG_USERCONFIG]="$XDG_CONFIG_HOME/npm/npmrc"
     [STARSHIP_CONFIG]="$XDG_CONFIG_HOME/starship/starship.toml"
     [HOMEBREW_BUNDLE_FILE]="$XDG_CONFIG_HOME/homebrew/Brewfile"
@@ -69,6 +70,7 @@ export M2_HOME="$XDG_CACHE_HOME/maven"
 export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 export ZSH_COMPDUMP="$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=""
 
 # Development paths
 typeset -U path PATH
