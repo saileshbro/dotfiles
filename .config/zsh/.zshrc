@@ -25,7 +25,6 @@ export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
 export PKG_CONFIG_PATH="/opt/homebrew/opt/ruby/lib/pkgconfig"
 export CHROME_EXECUTABLE="/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
-export ESLINT_USE_FLAT_CONFIG=false
 
 # XDG path configurations
 declare -A xdg_configs=(
@@ -54,6 +53,7 @@ done
 
 # Android SDK configurations
 export ANDROID_SDK_HOME="$XDG_DATA_HOME/android"
+export ANDROID_HOME="$ANDROID_SDK_HOME"
 export ANDROID_AVD_HOME="$ANDROID_SDK_HOME/avd"
 export ANDROID_NDK_ROOT="$ANDROID_SDK_HOME/ndk"
 

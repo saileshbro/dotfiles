@@ -7,8 +7,28 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "icon_theme": "Material Icon Theme",
+  "assistant": {
+    "default_model": {
+      "provider": "openai",
+      "model": "gpt-4o"
+    },
+    "version": "2"
+  },
+  "features": {
+    "edit_prediction_provider": "zed"
+  },
+  "base_keymap": "VSCode",
+  "theme": "Catppuccin Mocha",
+  "telemetry": {
+    "metrics": false,
+    "diagnostics": false
+  },
   "vim_mode": true,
   "ui_font_size": 16,
-  "buffer_font_size": 16,
-  "relative_line_numbers": true
+  "buffer_font_size": 15,
+  "relative_line_numbers": true,
+  "buffer_font_family": "Operator Mono SSm Lig",
+  "buffer_font_features": { "calt": true },
+  "buffer_font_weight": 200
 }

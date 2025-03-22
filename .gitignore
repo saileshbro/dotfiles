@@ -12,6 +12,8 @@
 .config/tmux/plugins/*
 .config/stacked
 .config/zed/.tmp*
+.config/zed/conversations*
+.config/zed/prompts*
 .config/zed/embeddings*
 .config/.very_good_cli/version
 .config/qBittorrent/*
