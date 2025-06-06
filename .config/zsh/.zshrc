@@ -56,6 +56,7 @@ export ANDROID_SDK_HOME="$XDG_DATA_HOME/android"
 export ANDROID_HOME="$ANDROID_SDK_HOME"
 export ANDROID_AVD_HOME="$ANDROID_SDK_HOME/avd"
 export ANDROID_NDK_ROOT="$ANDROID_SDK_HOME/ndk"
+export ANDROID_NDK_HOME="$ANDROID_SDK_HOME/ndk"
 
 # Bundle configurations
 export BUNDLE_USER_CONFIG="$XDG_CONFIG_HOME/bundle"
@@ -71,7 +72,7 @@ export M2_HOME="$XDG_CACHE_HOME/maven"
 export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 export ZSH_COMPDUMP="$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
-export FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=""
+export VOLTA_HOME="$XDG_DATA_HOME/volta"
 
 # Development paths
 typeset -U path PATH
@@ -81,6 +82,7 @@ path=(
     "$HOME/.yarn/bin"
     "$XDG_DATA_HOME/fvm/default/bin"
     "$XDG_CACHE_HOME/pub-cache/bin"
+    "$XDG_CACHE_HOME/.bun/bin"
     "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
     "$ANDROID_SDK_HOME/platform-tools"
     "$ANDROID_SDK_HOME/tools"
@@ -139,3 +141,9 @@ fi
 
 # Dart CLI completion
 [[ -f "$XDG_CONFIG_HOME/.dart-cli-completion/zsh-config.zsh" ]] && source "$XDG_CONFIG_HOME/.dart-cli-completion/zsh-config.zsh"
+
+# bun completions
+[ -s "/opt/homebrew/Cellar/bun/$(bun --version)/share/zsh/site-functions/_bun" ] && source "/opt/homebrew/Cellar/bun/$(bun --version)/share/zsh/site-functions/_bun"
+
+# Added by OrbStack: command-line tools and integration
+[ -s ~/.orbstack/shell/init.zsh ] && source ~/.orbstack/shell/init.zsh 2>/dev/null
