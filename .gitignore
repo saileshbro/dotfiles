@@ -25,3 +25,8 @@
 .config/swiftpm/*
 .config/wakatime/*
 .config/**/tool_state
+.vscode/*
+.cache/*
+.cursor/*
+.local/*
+.run/*

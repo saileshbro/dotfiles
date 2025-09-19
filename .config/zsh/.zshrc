@@ -32,7 +32,6 @@ declare -A xdg_configs=(
     [RBENV_ROOT]="$XDG_DATA_HOME/rbenv"
     [CARGO_HOME]="$XDG_DATA_HOME/cargo"
     [DOCKER_HOME]="$XDG_DATA_HOME/docker"
-    [GOPATH]="$XDG_DATA_HOME/go"
     [GRADLE_USER_HOME]="$XDG_DATA_HOME/gradle"
     [RUSTUP_HOME]="$XDG_DATA_HOME/rustup"
     [PNPM_HOME]="$XDG_DATA_HOME/pnpm"
@@ -55,8 +54,8 @@ done
 export ANDROID_SDK_HOME="$XDG_DATA_HOME/android"
 export ANDROID_HOME="$ANDROID_SDK_HOME"
 export ANDROID_AVD_HOME="$ANDROID_SDK_HOME/avd"
-export ANDROID_NDK_ROOT="$ANDROID_SDK_HOME/ndk"
 export ANDROID_NDK_HOME="$ANDROID_SDK_HOME/ndk"
+export ANDROID_USER_HOME="$XDG_DATA_HOME/android"
 
 # Bundle configurations
 export BUNDLE_USER_CONFIG="$XDG_CONFIG_HOME/bundle"
@@ -68,12 +67,11 @@ export BUNDLE_USER_PLUGIN="$XDG_DATA_HOME/bundle"
 export CCACHE_DIR="$XDG_CACHE_HOME/ccache"
 export PUB_CACHE="$XDG_CACHE_HOME/pub-cache"
 export GEM_SPEC_CACHE="$XDG_CACHE_HOME/gem"
-export M2_HOME="$XDG_CACHE_HOME/maven"
 export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 export ZSH_COMPDUMP="$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
-export VOLTA_HOME="$XDG_DATA_HOME/volta"
 export GPG_TTY=$(tty)
+
 # Development paths
 typeset -U path PATH
 path=(
@@ -118,7 +116,6 @@ if type brew &>/dev/null; then
 fi
 
 # Tool initialization
-eval "$(gh copilot alias -- zsh)"
 eval "$(starship init zsh)"
 
 # Source plugins
