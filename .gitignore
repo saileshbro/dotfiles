@@ -24,4 +24,4 @@
 .config/.dart-cli-completion/*
 .config/swiftpm/*
 .config/wakatime/*
-.config/tool_state
+.config/**/tool_state
