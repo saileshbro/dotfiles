@@ -145,5 +145,7 @@ fi
 # bun completions
 [ -s "/opt/homebrew/Cellar/bun/$(bun --version)/share/zsh/site-functions/_bun" ] && source "/opt/homebrew/Cellar/bun/$(bun --version)/share/zsh/site-functions/_bun"
 
-# Added by OrbStack: command-line tools and integration
 [ -s ~/.orbstack/shell/init.zsh ] && source ~/.orbstack/shell/init.zsh 2>/dev/null
+
+[[ -f /Users/saileshbro/.config/.dart-cli-completion/zsh-config.zsh ]] && . /Users/saileshbro/.config/.dart-cli-completion/zsh-config.zsh || true
+
