@@ -70,7 +70,10 @@ export GEM_SPEC_CACHE="$XDG_CACHE_HOME/gem"
 export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 export ZSH_COMPDUMP="$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+export HISTFILE="$XDG_STATE_HOME/zsh/history"
+
 export GPG_TTY=$(tty)
+export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 
 # Development paths
 typeset -U path PATH
