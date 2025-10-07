@@ -5,7 +5,7 @@
 [user]
 	name = Sailesh Dahal
 	email = saileshbro@gmail.com
-	signingkey = 1757E1AF8499A93F
+	signingkey = D424D6C329A1EE4D
 [url "https://"]
 	insteadOf = git://
 [push]

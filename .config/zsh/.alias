@@ -12,6 +12,6 @@ alias onlyStaging='git branch | grep -v "staging" | xargs git branch -D'
 alias cat='bat'
 alias ls='lsd'
 alias ping='gping'
-alias spotx="bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Mac/main/install.sh) -hu"
+alias spotx="bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Mac/main/install.sh) -huf"
 alias nv='nvim'
 alias npm='bun'
