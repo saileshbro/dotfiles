@@ -4,3 +4,6 @@ README.md
 .git
 .stow-local-ignore
 .DS_Store
+RULES.md
+.cursor/
+.github/
