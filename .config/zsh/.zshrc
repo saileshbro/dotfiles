@@ -31,6 +31,7 @@ path=(
     "$XDG_CACHE_HOME/.bun/bin"
     "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
     "$ANDROID_SDK_HOME/platform-tools"
+    "$ANDROID_SDK_HOME/emulator"
     "$ANDROID_SDK_HOME/tools"
     "$XDG_CONFIG_HOME/shorebird/bin"
     "$XDG_DATA_HOME/npm/bin"

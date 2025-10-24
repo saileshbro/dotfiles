@@ -15,3 +15,4 @@ alias ping='gping'
 alias spotx="bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-Mac/main/install.sh) -huf"
 alias nv='nvim'
 alias npm='bun'
+alias avd='emulator -list-avds'

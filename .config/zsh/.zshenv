@@ -47,7 +47,7 @@ for key value in ${(kv)xdg_configs}; do
 done
 
 # Android SDK configurations
-export ANDROID_SDK_HOME="$XDG_DATA_HOME/android"
+export ANDROID_SDK_HOME="$XDG_DATA_HOME/android/sdk"
 export ANDROID_HOME="$ANDROID_SDK_HOME"
 export ANDROID_AVD_HOME="$ANDROID_SDK_HOME/avd"
 export ANDROID_NDK_HOME="$ANDROID_SDK_HOME/ndk"
