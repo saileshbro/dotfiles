@@ -36,7 +36,7 @@ declare -A xdg_configs=(
     [VOLTA_HOME]="$XDG_DATA_HOME/volta"
     [DOCKER_CONFIG]="$XDG_CONFIG_HOME/docker"
     [WAKATIME_HOME]="$XDG_CONFIG_HOME/wakatime"
-    [JAVA_HOME]="$HOME/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+    [JAVA_HOME]="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
     [NPM_CONFIG_USERCONFIG]="$XDG_CONFIG_HOME/npm/npmrc"
     [STARSHIP_CONFIG]="$XDG_CONFIG_HOME/starship/starship.toml"
     [HOMEBREW_BUNDLE_FILE]="$XDG_CONFIG_HOME/homebrew/Brewfile"
@@ -47,11 +47,11 @@ for key value in ${(kv)xdg_configs}; do
 done
 
 # Android SDK configurations
-export ANDROID_SDK_HOME="$XDG_DATA_HOME/android/sdk"
+export ANDROID_SDK_HOME="$XDG_DATA_HOME/android"
 export ANDROID_HOME="$ANDROID_SDK_HOME"
-export ANDROID_AVD_HOME="$ANDROID_SDK_HOME/avd"
+export ANDROID_USER_HOME="$ANDROID_SDK_HOME"
+export ANDROID_AVD_HOME="$ANDROID_SDK_HOME/emulator"
 export ANDROID_NDK_HOME="$ANDROID_SDK_HOME/ndk"
-export ANDROID_USER_HOME="$XDG_DATA_HOME/android"
 
 # Bundle configurations
 export BUNDLE_USER_CONFIG="$XDG_CONFIG_HOME/bundle"
