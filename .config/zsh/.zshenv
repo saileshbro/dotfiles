@@ -36,7 +36,7 @@ declare -A xdg_configs=(
     [VOLTA_HOME]="$XDG_DATA_HOME/volta"
     [DOCKER_CONFIG]="$XDG_CONFIG_HOME/docker"
     [WAKATIME_HOME]="$XDG_CONFIG_HOME/wakatime"
-    [JAVA_HOME]="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+    [JAVA_HOME]="/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home"
     [NPM_CONFIG_USERCONFIG]="$XDG_CONFIG_HOME/npm/npmrc"
     [STARSHIP_CONFIG]="$XDG_CONFIG_HOME/starship/starship.toml"
     [HOMEBREW_BUNDLE_FILE]="$XDG_CONFIG_HOME/homebrew/Brewfile"
@@ -49,7 +49,6 @@ done
 # Android SDK configurations
 export ANDROID_SDK_HOME="$XDG_DATA_HOME/android"
 export ANDROID_HOME="$ANDROID_SDK_HOME"
-export ANDROID_USER_HOME="$ANDROID_SDK_HOME"
 export ANDROID_AVD_HOME="$ANDROID_SDK_HOME/emulator"
 export ANDROID_NDK_HOME="$ANDROID_SDK_HOME/ndk"
 
