@@ -16,4 +16,3 @@ alias spotx="bash <(curl -sSL https://raw.githubusercontent.com/SpotX-CLI/SpotX-
 alias nv='nvim'
 alias npm='bun'
 alias avd='emulator -list-avds'
-alias studio='open /Applications/Android\ Studio.app'

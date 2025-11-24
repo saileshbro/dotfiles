@@ -39,6 +39,7 @@ path=(
     "/opt/homebrew/opt/ccache/libexec"
     "/opt/homebrew/opt/ruby/bin"
     "$HOME/.pub-cache/bin"
+    "$HOME/.antigravity/antigravity/bin"
     $path
 )
 export PATH
@@ -94,4 +95,3 @@ fi
 [ -s ~/.orbstack/shell/init.zsh ] && source ~/.orbstack/shell/init.zsh 2>/dev/null
 
 [[ -f /Users/saileshbro/.config/.dart-cli-completion/zsh-config.zsh ]] && . /Users/saileshbro/.config/.dart-cli-completion/zsh-config.zsh || true
-
