@@ -26,6 +26,7 @@
 .config/wakatime/*
 .config/**/tool_state
 .vscode/*
+.antigravity/*
 .cache/*
 .cursor/*
 .local/*
