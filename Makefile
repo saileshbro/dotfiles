@@ -10,6 +10,7 @@ all: setup-aliases
 	stow --verbose --target=$$HOME --restow .
 	@echo "Creating symlink for cursor configuration..."
 	ln -sf $$HOME/.config/cursor $$HOME/.cursor
+	ln -sf $$HOME/.config/antigravity $$HOME/.antigravity
 	@echo "Fresh machine setup complete!"
 
 # Remove all symlinks (created by stow)

@@ -47,6 +47,10 @@
 !.config/opencode/skill/
 !.config/opencode/skill/**
 
+# Antigravity (with exceptions for tracked files)
+.config/antigravity/*
+
+
 # Zed editor - temporary and generated files
 .config/zed/.tmp*
 .config/zed/conversations*
@@ -61,7 +65,6 @@
 
 # IDE and editor directories
 .vscode/*
-.antigravity/
 
 # System directories
 .cache/*
