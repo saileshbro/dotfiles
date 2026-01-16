@@ -31,6 +31,7 @@ declare -A xdg_configs=(
     [GRADLE_USER_HOME]="$XDG_DATA_HOME/gradle"
     [RUSTUP_HOME]="$XDG_DATA_HOME/rustup"
     [PNPM_HOME]="$XDG_DATA_HOME/pnpm"
+    [CURSOR_CONFIG_DIR]="$XDG_CONFIG_HOME/cursor"
     [CP_HOME_DIR]="$XDG_DATA_HOME/cocoapods"
     [GNUPGHOME]="$XDG_DATA_HOME/gnupg"
     [VOLTA_HOME]="$XDG_DATA_HOME/volta"
@@ -42,7 +43,7 @@ declare -A xdg_configs=(
     [HOMEBREW_BUNDLE_FILE]="$XDG_CONFIG_HOME/homebrew/Brewfile"
     [ZSH]="$XDG_DATA_HOME/oh-my-zsh"
 )
-for key value in ${(kv)xdg_configs}; do
+for key value in "${(@kv)xdg_configs}"; do
     export $key=$value
 done
 
