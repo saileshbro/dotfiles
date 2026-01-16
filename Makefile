@@ -8,6 +8,8 @@ all: setup-aliases
 	@echo "Setting up dotfiles with GNU Stow..."
 	@echo "Note: .cache, .local, and .run remain as real directories (not symlinked)"
 	stow --verbose --target=$$HOME --restow .
+	@echo "Creating symlink for cursor configuration..."
+	ln -sf $$HOME/.config/cursor $$HOME/.cursor
 	@echo "Fresh machine setup complete!"
 
 # Remove all symlinks (created by stow)
@@ -24,8 +26,6 @@ setup-aliases:
 	ln -sf $$HOME/.config/zsh/.zshrc $$HOME/.zshrc
 	ln -sf $$HOME/.config/zsh/.zprofile $$HOME/.zprofile
 	ln -sf $$HOME/.config/zsh/.zlogin $$HOME/.zlogin
-	@echo "Creating symlink for cursor configuration..."
-	ln -sf $$HOME/.config/cursor $$HOME/.cursor
 	@echo "Creating XDG directories (these remain as real directories, not symlinks)..."
 	mkdir -p $$HOME/.cache $$HOME/.local $$HOME/.run
 	@echo "Setup complete!"
