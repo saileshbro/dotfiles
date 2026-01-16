@@ -1,34 +1,69 @@
+# macOS
 .DS_Store
+.config/.DS_Store
+
+# Docker
 .config/docker/*
+
+# Config stores and caches
 .config/configstore/*
 .config/firebase/*
+.config/.dart-cli-completion/*
+.config/swiftpm/*
+.config/wakatime/*
+.config/yarn/*
+
+# Development tools - machine-specific configs
 .config/gh/hosts.yml
 .config/github-copilot/*
-.config/iterm2/*
-.config/jgit/config
-.config/raycast/*
 .config/githubnext__github-copilot-cli.json
+.config/.very_good_cli/version
+.config/flutter/*
+.config/.android/*
+
+# Terminal and shell
+.config/iterm2/*
+.config/zsh/.zsh_sessions/*
+.config/zsh/.zcompdump
+.config/zsh/.zsh_history
+
+# Editor configs - machine-specific
+.config/nvim/lazy-lock.json
+.config/raycast/*
+.config/qBittorrent/*
+.config/mole/mole.log
+.config/**/tool_state
 .config/settings
-.config/tmux/plugins/*
 .config/stacked
+
+# Cursor IDE (with exceptions for tracked files)
+.config/cursor/*
+!.config/cursor/skills/
+!.config/cursor/skills/**
+!.config/cursor/mcp.json
+
+# OpenCode (with exceptions for tracked files)
+.config/opencode/*
+!.config/opencode/skill/
+!.config/opencode/skill/**
+
+# Zed editor - temporary and generated files
 .config/zed/.tmp*
 .config/zed/conversations*
 .config/zed/prompts*
 .config/zed/embeddings*
-.config/.very_good_cli/version
-.config/qBittorrent/*
-.config/zsh/.zsh_sessions/*
-.config/zsh/.zcompdump
-.config/zsh/.zsh_history
-.config/nvim/lazy-lock.json
-.config/.dart-cli-completion/*
-.config/swiftpm/*
-.config/wakatime/*
-.config/**/tool_state
+
+# Tmux plugins (managed separately)
+.config/tmux/plugins/*
+
+# Legacy entries (kept for future use)
+.config/jgit/config
+
+# IDE and editor directories
 .vscode/*
-.antigravity/*
+.antigravity/
+
+# System directories
 .cache/*
-.cursor/*
 .local/*
 .run/*
-.config/mole/mole.log
