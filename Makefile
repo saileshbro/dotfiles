@@ -11,6 +11,7 @@ all: setup-aliases
 	@echo "Creating symlink for cursor configuration..."
 	ln -sf $$HOME/.config/cursor $$HOME/.cursor
 	ln -sf $$HOME/.config/antigravity $$HOME/.antigravity
+	ln -sf $$HOME/.config/gemini $$HOME/.gemini
 	@echo "Fresh machine setup complete!"
 
 # Remove all symlinks (created by stow)

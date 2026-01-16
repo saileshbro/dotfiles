@@ -49,7 +49,16 @@
 
 # Antigravity (with exceptions for tracked files)
 .config/antigravity/*
+!.config/antigravity/skills/
+!.config/antigravity/skills/**
 
+.config/gemini/*
+!.config/gemini/skills/
+!.config/gemini/skills/**
+!.config/gemini/antigravity/
+.config/gemini/antigravity/*
+!.config/gemini/antigravity/skills/
+!.config/gemini/antigravity/skills/**
 
 # Zed editor - temporary and generated files
 .config/zed/.tmp*
