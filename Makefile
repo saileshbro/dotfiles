@@ -20,6 +20,10 @@ setup-aliases:
 	ln -sf $$HOME/.config/zsh/.zshrc $$HOME/.zshrc
 	ln -sf $$HOME/.config/zsh/.zprofile $$HOME/.zprofile
 	ln -sf $$HOME/.config/zsh/.zlogin $$HOME/.zlogin
+	@echo "Creating symlinks for VS Code configuration..."
+	mkdir -p $$HOME/Library/Application\ Support/Code/User
+	ln -sf $$HOME/.config/vscode/settings.json $$HOME/Library/Application\ Support/Code/User/settings.json
+	ln -sf $$HOME/.config/vscode/mcp.json $$HOME/Library/Application\ Support/Code/User/mcp.json
 	@echo "Creating XDG directories..."
 	mkdir -p $$HOME/.cache $$HOME/.cursor $$HOME/.local $$HOME/.run
 	@echo "Setup complete!"

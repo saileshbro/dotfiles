@@ -97,5 +97,7 @@ fi
 
 [[ -f /Users/saileshbro/.config/.dart-cli-completion/zsh-config.zsh ]] && . /Users/saileshbro/.config/.dart-cli-completion/zsh-config.zsh || true
 
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
+
 # Added by Antigravity
 export PATH="/Users/saileshbro/.antigravity/antigravity/bin:$PATH"

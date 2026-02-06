@@ -5,13 +5,13 @@
 [user]
 	name = Sailesh Dahal
 	email = saileshbro@gmail.com
-	signingkey = D424D6C329A1EE4D
+	signingKey = 1757E1AF8499A93F
 [url "https://"]
 	insteadOf = git://
 [push]
 	autoSetupRemote = true
 [commit]
-	gpgsign = true
+	gpgSign = true
 [alias]
 	c = commit -s
 	co = checkout -b
