@@ -32,3 +32,8 @@
 .local/*
 .run/*
 .config/mole/mole.log
+
+# GnuPG - ignore all private data
+.config/gnupg/*
+# But allow public configuration files
+!.config/gnupg/*.conf
