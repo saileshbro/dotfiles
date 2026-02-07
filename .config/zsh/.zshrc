@@ -40,7 +40,6 @@ path=(
   "$XDG_CONFIG_HOME/shorebird/bin"
   "$XDG_DATA_HOME/npm/bin"
   "$VOLTA_HOME/bin"
-  "/opt/homebrew/opt/ccache/libexec"
   "/opt/homebrew/opt/ruby/bin"
   "$HOME/.pub-cache/bin"
   "$HOME/.antigravity/antigravity/bin"
@@ -54,14 +53,6 @@ case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) path=("$PNPM_HOME" $path) ;;
 esac
-
-# ccache - compiler cache for faster builds
-if command -v ccache &>/dev/null; then
-  export CC="ccache clang"
-  export CXX="ccache clang++"
-  # Set cache size to 10GB (adjust as needed)
-  ccache --max-size=10G >/dev/null 2>&1
-fi
 
 
 ######################################

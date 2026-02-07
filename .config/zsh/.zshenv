@@ -59,7 +59,6 @@ export BUNDLE_PATH="$XDG_CACHE_HOME/bundle"
 export BUNDLE_USER_PLUGIN="$XDG_DATA_HOME/bundle"
 
 # Cache and state directories
-export CCACHE_DIR="$XDG_CACHE_HOME/ccache"
 export PUB_CACHE="$XDG_CACHE_HOME/pub-cache"
 export GEM_SPEC_CACHE="$XDG_CACHE_HOME/gem"
 export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
