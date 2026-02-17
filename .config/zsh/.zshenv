@@ -49,10 +49,8 @@ done
 # Android SDK configurations
 export ANDROID_SDK_HOME="$XDG_DATA_HOME/android"
 export ANDROID_HOME="$ANDROID_SDK_HOME"
-export ANDROID_EMULATOR_HOME="$ANDROID_SDK_HOME/emulator"
-export ANDROID_AVD_HOME="$ANDROID_EMULATOR_HOME/avd"
+export ANDROID_AVD_HOME="$ANDROID_SDK_HOME/emulator"
 export ANDROID_NDK_HOME="$ANDROID_SDK_HOME/ndk"
-export STUDIO_GRADLE_JDK="$JAVA_HOME"
 
 # Bundle configurations
 export BUNDLE_USER_CONFIG="$XDG_CONFIG_HOME/bundle"
@@ -61,9 +59,12 @@ export BUNDLE_PATH="$XDG_CACHE_HOME/bundle"
 export BUNDLE_USER_PLUGIN="$XDG_DATA_HOME/bundle"
 
 # Cache and state directories
+export CCACHE_DIR="$XDG_CACHE_HOME/ccache"
+export CCACHE_DIR="$XDG_CACHE_HOME/ccache"
 export PUB_CACHE="$XDG_CACHE_HOME/pub-cache"
 export GEM_SPEC_CACHE="$XDG_CACHE_HOME/gem"
 export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 export ZSH_COMPDUMP="$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 
+export CCACHE_BINARY=$(command -v ccache)
