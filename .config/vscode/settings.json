@@ -629,5 +629,6 @@
     "vscode",
     "vscode-insiders",
     "src/app/_layout.tsx"
-  ]
+  ],
+  "javascript.updateImportsOnFileMove.enabled": "always"
 }
