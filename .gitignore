@@ -37,3 +37,4 @@
 .config/gnupg/*
 # But allow public configuration files
 !.config/gnupg/*.conf
+.config/.wrangler/metrics.json

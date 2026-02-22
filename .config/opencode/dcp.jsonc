@@ -1,0 +1,73 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Opencode-DCP/opencode-dynamic-context-pruning/master/dcp.schema.json",
+  "enabled": true,
+  "pruneNotification": "detailed",
+  "pruneNotificationType": "chat",
+  "commands": {
+    "enabled": true,
+    "protectedTools": []
+  },
+  "manualMode": {
+    "enabled": false,
+    "automaticStrategies": true
+  },
+  "turnProtection": {
+    "enabled": true,
+    "turns": 4
+  },
+  "protectedFilePatterns": [],
+  "tools": {
+    "settings": {
+      "nudgeEnabled": true,
+      "nudgeFrequency": 10,
+      "protectedTools": [
+        "task",
+        "todowrite",
+        "todoread",
+        "session_read",
+        "session_write",
+        "session_search"
+      ],
+      "contextLimit": 100000,
+      "modelLimits": {
+        "google/antigravity-gemini-3-pro": 1048576,
+        "google/antigravity-gemini-3.1-pro": 1048576,
+        "google/antigravity-gemini-3-flash": 1048576,
+        "google/antigravity-claude-sonnet-4-6": 200000,
+        "google/antigravity-claude-sonnet-4-6-thinking": 200000,
+        "google/antigravity-claude-opus-4-6-thinking": 200000,
+        "google/gemini-2.5-flash": 1048576,
+        "google/gemini-2.5-pro": 1048576,
+        "google/gemini-3-flash-preview": 1048576,
+        "google/gemini-3-pro-preview": 1048576,
+        "google/gemini-3.1-pro-preview": 1048576,
+        "google/gemini-3.1-pro-preview-customtools": 1048576
+      }
+    },
+    "distill": {
+      "permission": "allow",
+      "showDistillation": false
+    },
+    "compress": {
+      "permission": "ask",
+      "showCompression": false
+    },
+    "prune": {
+      "permission": "allow"
+    }
+  },
+  "strategies": {
+    "deduplication": {
+      "enabled": true,
+      "protectedTools": []
+    },
+    "supersedeWrites": {
+      "enabled": true
+    },
+    "purgeErrors": {
+      "enabled": true,
+      "turns": 4,
+      "protectedTools": []
+    }
+  }
+}
