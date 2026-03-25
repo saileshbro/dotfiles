@@ -1,4 +1,33 @@
 alias copy='pbcopy'
+
+# ── Directory listing (OMZ-equivalent, works with lsd alias) ──────────────────
+alias ll='ls -lh'
+alias la='ls -lAh'
+alias l='ls -lah'
+alias lsa='ls -lah'
+
+# ── Directory navigation ───────────────────────────────────────────────────────
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+alias -- -='cd -'
+
+# Show numbered directory stack
+d() {
+  if [[ -n $1 ]]; then
+    dirs "$@"
+  else
+    dirs -v | head -10
+  fi
+}
+compdef _dirs d
+
+# mkdir + cd in one step (mirrors OMZ's `take`)
+take() {
+  mkdir -p "$@" && cd "${@:$#}"
+}
+
 alias flc='flutter clean'
 alias flr='flutter run'
 alias fpg='flutter pub get'

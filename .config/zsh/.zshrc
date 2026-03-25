@@ -1,23 +1,73 @@
+# .zshrc — interactive shells only.
+# Loaded after .zshenv (always) and .zprofile (login shells).
+# HOMEBREW_PREFIX, XDG_*, and all tool homes are already set in .zshenv.
+#
+# Structure:
+#   .zshrc          — history, PATH, env (foundational, must run first)
+#   .alias          — all aliases and small helper functions
+#   .functions      — larger functions
+#   conf.d/*.zsh    — topic files, sourced in alphabetical order:
+#                       01-plugins.zsh     zsh-autosuggestions, syntax-highlighting
+#                       02-completion.zsh  compinit, zstyle, tool completions
+#                       03-keybindings.zsh bindkey
+#                       04-tools.zsh       fzf, starship, zoxide, vscode, ...
+#
+# To disable a conf.d file without deleting it, prefix its name with `_`.
+# Example: mv conf.d/04-tools.zsh conf.d/_04-tools.zsh
+
 ######################################
 # History
 ######################################
-HISTSIZE=10000
-SAVEHIST=10000
+# Re-assert HISTFILE here because /etc/zshrc (which runs before this file)
+# resets it to ${ZDOTDIR}/.zsh_history with HISTSIZE=2000.
+HISTFILE="$XDG_STATE_HOME/zsh/history"
+HISTSIZE=1000000
+SAVEHIST=1000000
 
-setopt EXTENDED_HISTORY
-setopt SHARE_HISTORY
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_FIND_NO_DUPS
-setopt HIST_IGNORE_SPACE
-setopt HIST_SAVE_NO_DUPS
-setopt HIST_VERIFY
-setopt APPEND_HISTORY
-setopt INC_APPEND_HISTORY
-setopt AUTO_PUSHD
-setopt PUSHD_IGNORE_DUPS
-setopt PUSHD_SILENT
+setopt EXTENDED_HISTORY       # save timestamp + duration with each entry
+setopt SHARE_HISTORY          # write + import history across all live sessions
+setopt HIST_EXPIRE_DUPS_FIRST # evict duplicates before unique entries when trimming
+setopt HIST_IGNORE_DUPS       # don't record a command identical to the previous one
+setopt HIST_IGNORE_ALL_DUPS   # remove older duplicate if the same command is run again
+setopt HIST_FIND_NO_DUPS      # skip duplicates when searching
+setopt HIST_IGNORE_SPACE      # don't record commands that start with a space
+setopt HIST_SAVE_NO_DUPS      # don't write duplicates to the history file
+setopt HIST_VERIFY            # show the substituted command before running !! etc.
+setopt HIST_REDUCE_BLANKS     # strip superfluous whitespace before saving
+setopt AUTO_PUSHD             # cd pushes the old directory onto the stack
+setopt PUSHD_IGNORE_DUPS      # don't push duplicate directories
+setopt PUSHD_SILENT           # don't print the directory stack after pushd/popd
+
+
+######################################
+# PATH (interactive additions)
+######################################
+typeset -U path PATH
+path=(
+  "$HOMEBREW_PREFIX/opt/ccache/libexec"
+  "$XDG_DATA_HOME/cargo/bin"
+  "$HOME/.yarn/bin"
+  "$HOME/.bun/bin"
+  "$XDG_DATA_HOME/fvm/default/bin"
+  "$PUB_CACHE/bin"
+  "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
+  "$ANDROID_SDK_HOME/platform-tools"
+  "$ANDROID_SDK_HOME/tools"
+  "$XDG_CONFIG_HOME/shorebird/bin"
+  "$XDG_DATA_HOME/npm/bin"
+  "$VOLTA_HOME/bin"
+  "$HOMEBREW_PREFIX/opt/ruby/bin"
+  "$HOMEBREW_PREFIX/share/google-cloud-sdk/bin"
+  "$HOME/.antigravity/antigravity/bin"
+  "$HOME/.local/bin"
+  "$HOME/.maestro/bin"
+  $path
+)
+
+# PNPM — only prepend if not already present
+[[ ":$PATH:" != *":$PNPM_HOME:"* ]] && path=("$PNPM_HOME" $path)
+
+export PATH
 
 
 ######################################
@@ -25,132 +75,39 @@ setopt PUSHD_SILENT
 ######################################
 export GPG_TTY=$(tty)
 
-typeset -U path PATH
-path=(
-  "$HOMEBREW_PREFIX/opt/cache/libexec"
-  "$XDG_DATA_HOME/cargo/bin"
-  "$HOME/.yarn/bin"
-  "$XDG_DATA_HOME/fvm/default/bin"
-  "$XDG_CACHE_HOME/pub-cache/bin"
-  "$XDG_CACHE_HOME/.bun/bin"
-  "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
-  "$ANDROID_SDK_HOME/platform-tools"
-  "$ANDROID_AVD_HOME"
-  "$ANDROID_SDK_HOME/tools"
-  "$XDG_CONFIG_HOME/shorebird/bin"
-  "$XDG_DATA_HOME/npm/bin"
-  "$VOLTA_HOME/bin"
-  "/opt/homebrew/opt/ccache/libexec"
-  "/opt/homebrew/opt/ruby/bin"
-  "/opt/homebrew/share/google-cloud-sdk/bin"
-  "$HOME/.pub-cache/bin"
-  "$HOME/.antigravity/antigravity/bin"
-  "$HOME/.local/bin"
-  "$HOME/.maestro/bin"
-  $path
-)
-export PATH
-
-# PNPM
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) path=("$PNPM_HOME" $path) ;;
-esac
-
-# ccache - compiler cache for faster builds
-if command -v ccache &>/dev/null; then
+# ccache compiler wrappers — env vars only, no subprocess
+if [[ -x "$HOMEBREW_PREFIX/opt/ccache/libexec/clang" ]]; then
   export CC="ccache clang"
   export CXX="ccache clang++"
-  # Set cache size to 10GB (adjust as needed)
-  ccache --max-size=10G >/dev/null 2>&1
 fi
+
+
+######################################
+# conf.d — topic files
+######################################
+for _f in "$ZDOTDIR/conf.d"/*.zsh(N); do
+  source "$_f"
+done
+unset _f
+
 
 ######################################
 # Aliases & Functions
+# Sourced after conf.d so compinit (and compdef) are already available.
 ######################################
-[[ -f "$ZDOTDIR/.alias" ]] && source "$ZDOTDIR/.alias"
+[[ -f "$ZDOTDIR/.alias" ]]     && source "$ZDOTDIR/.alias"
 [[ -f "$ZDOTDIR/.functions" ]] && source "$ZDOTDIR/.functions"
 
 
 ######################################
-# Key bindings
+# Benchmarking helper
 ######################################
-bindkey '  ' autosuggest-accept
-bindkey '^ ' autosuggest-execute
-
-
-######################################
-# Completion system
-######################################
-if command -v brew &>/dev/null; then
-  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-  autoload -Uz compinit
-  compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
-fi
-
-
-######################################
-# Prompt
-######################################
-if command -v starship &>/dev/null; then
-  eval "$(starship init zsh)"
-fi
-
-
-######################################
-# Plugins (brew-based)
-######################################
-if command -v brew &>/dev/null; then
-  source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-
-  export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR="$(brew --prefix)/share/zsh-syntax-highlighting/highlighters"
-  source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-
-  # fzf (modern, no ~/.fzf.zsh)
-  source <(fzf --zsh)
-fi
-
-
-######################################
-# Oh My Zsh
-######################################
-zstyle ':omz:update' mode auto
-zstyle ':omz:update' frequency 7
-source "$ZSH/oh-my-zsh.sh"
-
-
-######################################
-# Tool completions
-######################################
-command -v ngrok &>/dev/null && eval "$(ngrok completion)"
-
-[[ -f "$XDG_CONFIG_HOME/.dart-cli-completion/zsh-config.zsh" ]] \
-  && source "$XDG_CONFIG_HOME/.dart-cli-completion/zsh-config.zsh"
-
-[ -s "/opt/homebrew/Cellar/bun/$(bun --version)/share/zsh/site-functions/_bun" ] \
-  && source "/opt/homebrew/Cellar/bun/$(bun --version)/share/zsh/site-functions/_bun"
-
-[ -f ~/.orbstack/shell/init.zsh ] && source ~/.orbstack/shell/init.zsh 2>/dev/null
-
-[[ "$TERM_PROGRAM" == "vscode" ]] \
-  && source "$(code --locate-shell-integration-path zsh)"
-
-
-######################################
-# zoxide (base init)
-######################################
-if command -v zoxide &>/dev/null; then
-  eval "$(zoxide init zsh --cmd j)"
-fi
-
-
-######################################
-# j → TRUE fuzzy jump (typo tolerant)
-######################################
-j() {
-  local dir
-  dir=$(zoxide query -l | fzf --query="$*" --select-1 --exit-0)
-  [[ -n "$dir" ]] && cd "$dir"
+zsh-bench() {
+  local runs=${1:-5}
+  echo "Timing $runs shell startups..."
+  for i in $(seq 1 $runs); do
+    /usr/bin/time zsh -i -c exit 2>&1
+  done
+  echo ""
+  echo "Tip: run 'zsh -i -c zprof' to see a per-function breakdown."
 }
-# Vite+ bin (https://viteplus.dev)
-. "$HOME/.vite-plus/env"

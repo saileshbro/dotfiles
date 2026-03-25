@@ -14,10 +14,16 @@
     "mcp-server-exa-search": {
       "enabled": true,
       "remote": false,
+      "settings": {
+        "exa_api_key": "cf5fa263-054b-4b33-93fe-b7930804f9bf",
+      },
     },
     "mcp-server-context7": {
       "enabled": true,
       "remote": false,
+      "settings": {
+        "context7_api_key": "ctx7sk-b8b7f943-551d-4d60-b0c1-b0992cfff753",
+      },
     },
   },
   "agent": {
