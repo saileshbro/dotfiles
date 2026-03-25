@@ -37,4 +37,11 @@
 .config/gnupg/*
 # But allow public configuration files
 !.config/gnupg/*.conf
-.config/.wrangler/metrics.json
+.config/.wrangler
+.config/.copilot
+.config/gcloud/
+.config/mole/operations.log
+.config/mole/purge_paths
+.config/opencode/opencode.json
+.config/opencode/opencode.json.tui-migration.bak
+.config/opencode/tui.json

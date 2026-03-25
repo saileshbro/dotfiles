@@ -1,4 +1,6 @@
 {
+  "workbench.browser.enableChatTools":true,
+  "window.nativeTabs": true,
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
   },
@@ -10,7 +12,7 @@
   "workbench.editor.tabSizing": "shrink",
   "workbench.iconTheme": "material-icon-theme",
   "git.autofetch": true,
-  "typescript.suggest.completeFunctionCalls": true,
+  "js/ts.suggest.completeFunctionCalls": true,
   "editor.snippetSuggestions": "inline",
   "editor.detectIndentation": false,
   "editor.linkedEditing": true,
@@ -30,7 +32,7 @@
   "workbench.startupEditor": "readme",
   "terminal.integrated.fontFamily": "Operator Mono SSm Lig",
   "editor.matchBrackets": "always",
-  "javascript.validate.enable": true,
+  "js/ts.validate.enabled": true,
   "html.format.preserveNewLines": true,
   "[scss]": {},
   "editor.renderControlCharacters": true,
@@ -388,7 +390,6 @@
   },
   "editor.find.seedSearchStringFromSelection": "always",
   "editor.lineHeight": 25,
-  "typescript.validate.enable": true,
   "editor.minimap.showSlider": "always",
   "window.title": "",
   "git-autoconfig.configList": [
@@ -398,7 +399,7 @@
     }
   ],
   "terminal.integrated.localEchoLatencyThreshold": 30,
-  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
   "html.format.enable": true,
   "workbench.editor.enablePreview": false,
   "editor.fontFamily": "Operator Mono SSm Lig",
@@ -414,7 +415,7 @@
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
-  "typescript.format.enable": true,
+  "js/ts.format.enable": true,
   "dart.enableCompletionCommitCharacters": true,
   "editor.tabSize": 2,
   "extensions.ignoreRecommendations": true,
@@ -558,7 +559,7 @@
     "*.pdf": "latex-workshop-pdf-hook"
   },
   "chat.agent.maxRequests": 125,
-  "typescript.updateImportsOnFileMove.enabled": "always",
+  "js/ts.updateImportsOnFileMove.enabled": "always",
   "chat.tools.terminal.autoApprove": {
     "rm": false,
     "rmdir": false,
@@ -598,7 +599,12 @@
       "approve": true,
       "matchCommandLine": true
     },
-    "/Applications/Xcode.app/Contents/Developer/usr/bin/ibtool": true
+    "/Applications/Xcode.app/Contents/Developer/usr/bin/ibtool": true,
+    "/^npx eslint \\. --format json 2>&1 \\| head -100$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "npx eslint": true
   },
   "chat.tools.edits.autoApprove": {
     "**/*": true,
@@ -615,7 +621,6 @@
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
   "chat.mcp.gallery.enabled": true,
-  "chat.viewSessions.orientation": "stacked",
   "workbench.colorTheme": "Tinacious Design",
   "chat.tools.urls.autoApprove": {
     "https://docs.expo.dev": true,
@@ -630,5 +635,8 @@
     "vscode-insiders",
     "src/app/_layout.tsx"
   ],
-  "javascript.updateImportsOnFileMove.enabled": "always"
+  "chat.agentsControl.enabled": false,
+  "window.commandCenter": false,
+  "chat.tips.enabled": false,
+  "chat.viewSessions.orientation": "stacked"
 }

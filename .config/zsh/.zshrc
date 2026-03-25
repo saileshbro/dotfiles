@@ -42,9 +42,11 @@ path=(
   "$VOLTA_HOME/bin"
   "/opt/homebrew/opt/ccache/libexec"
   "/opt/homebrew/opt/ruby/bin"
+  "/opt/homebrew/share/google-cloud-sdk/bin"
   "$HOME/.pub-cache/bin"
   "$HOME/.antigravity/antigravity/bin"
   "$HOME/.local/bin"
+  "$HOME/.maestro/bin"
   $path
 )
 export PATH
@@ -150,3 +152,5 @@ j() {
   dir=$(zoxide query -l | fzf --query="$*" --select-1 --exit-0)
   [[ -n "$dir" ]] && cd "$dir"
 }
+# Vite+ bin (https://viteplus.dev)
+. "$HOME/.vite-plus/env"

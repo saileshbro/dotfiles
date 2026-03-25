@@ -68,3 +68,6 @@ export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 export ZSH_COMPDUMP="$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 
 export CCACHE_BINARY=$(command -v ccache)
+
+# Vite+ bin (https://viteplus.dev)
+. "$HOME/.vite-plus/env"
