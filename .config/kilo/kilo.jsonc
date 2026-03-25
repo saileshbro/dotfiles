@@ -1,0 +1,14 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "permission": {
+    "bash": {
+      "ls *": "allow",
+      "flutter *": "allow",
+      "fvm *": "allow",
+      "rm *": "allow"
+    },
+    "external_directory": {
+      "/Users/saileshbro/.opencode/plans/*": "allow"
+    }
+  }
+}

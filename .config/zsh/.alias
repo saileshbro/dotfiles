@@ -7,10 +7,11 @@ alias l='ls -lah'
 alias lsa='ls -lah'
 
 # ── Directory navigation ───────────────────────────────────────────────────────
-alias -g ...='../..'
-alias -g ....='../../..'
-alias -g .....='../../../..'
-alias -g ......='../../../../..'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
 alias -- -='cd -'
 
 # Show numbered directory stack
