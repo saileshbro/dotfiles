@@ -1,48 +1,169 @@
 {
+  // ─── WORKBENCH ────────────────────────────────────────────────────────────────
   "workbench.browser.enableChatTools": true,
-  "window.nativeTabs": true,
-  "[html]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
-  },
-  "workbench.editor.decorations.colors": true,
-  "editor.renderWhitespace": "all",
-  "emmet.includeLanguages": {
-    "javascript": "javascriptreact"
-  },
-  "workbench.editor.tabSizing": "shrink",
   "workbench.iconTheme": "material-icon-theme",
-  "git.autofetch": true,
-  "js/ts.suggest.completeFunctionCalls": true,
-  "editor.snippetSuggestions": "inline",
+  "workbench.startupEditor": "readme",
+  "workbench.editor.decorations.colors": true,
+  "workbench.editor.decorations.badges": true,
+  "workbench.editor.tabSizing": "shrink",
+  "workbench.editor.tabActionLocation": "right",
+  "workbench.editor.wrapTabs": true,
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  "workbench.layoutControl.enabled": false,
+  "workbench.navigationControl.enabled": false,
+  "workbench.activityBar.orientation": "vertical",
+  "workbench.colorTheme": "Tinacious Design",
+  "workbench.colorCustomizations": {},
+  "window.nativeTabs": true,
+  "window.openFilesInNewWindow": "off",
+  "window.titleBarStyle": "custom",
+  "window.title": "",
+  "window.commandCenter": false,
+  "window.newWindowProfile": "Default",
+  // ─── EDITOR — CORE ────────────────────────────────────────────────────────────
+  "editor.fontFamily": "Operator Mono SSm Lig",
+  "editor.fontSize": 13,
+  "editor.lineHeight": 25,
+  "editor.letterSpacing": 0.5,
+  "editor.fontLigatures": true,
+  "editor.tabSize": 2,
   "editor.detectIndentation": false,
-  "editor.linkedEditing": true,
-  "editor.inlineSuggest.enabled": true,
+  "editor.useTabStops": true,
+  "editor.wordWrap": "off",
+  "editor.lineNumbers": "relative",
+  "editor.scrollBeyondLastLine": true,
+  "editor.matchBrackets": "always",
+  "editor.renderWhitespace": "all",
+  "editor.renderControlCharacters": true,
   "editor.colorDecorators": true,
-  "dart.showInspectorNotificationsForWidgetErrors": false,
-  "editor.parameterHints.enabled": false,
+  "editor.linkedEditing": true,
+  "editor.stickyScroll.enabled": true,
+  "editor.showFoldingControls": "always",
+  "editor.accessibilitySupport": "off",
+  "editor.largeFileOptimizations": false,
+  "editor.unicodeHighlight.invisibleCharacters": false,
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  // REMOVED: editor.cursorBlinking and editor.cursorStyle — overridden by Vim extension per mode
+  // ─── EDITOR — PERFORMANCE ─────────────────────────────────────────────────────
+  // Faster syntax tokenization (uses web workers, non-blocking)
+  "editor.experimental.asyncTokenization": true,
+  // GPU-accelerated rendering — dramatically faster on Apple Silicon
+  "editor.experimentalGpuAcceleration": "on",
+  // Reduces layout reflow on scroll
+  "editor.fastScrollSensitivity": 5,
+  // Disable heavy decorations that cause repaints
+  "editor.occurrencesHighlight": "off",
+  // REMOVED: editor.selectionHighlight — already false; conflicts with Vim highlighting
+  "editor.selectionHighlight": false,
+  // Minimap off — already set, saves significant render budget
+  "editor.minimap.enabled": false,
+  // REMOVED: editor.minimap.showSlider — has no effect when minimap is disabled
+  // ─── EDITOR — INTELLISENSE / SUGGESTIONS ──────────────────────────────────────
+  "editor.inlineSuggest.enabled": true,
+  "editor.snippetSuggestions": "inline",
+  "editor.suggest.localityBonus": true,
+  "editor.suggestSelection": "first",
+  "editor.wordBasedSuggestions": "off",
+  // REMOVED: editor.parameterHints.enabled: false — keeping it on for unfamiliar APIs;
+  // trigger manually with ⌘⇧Space. Remove this line to re-disable.
+  "editor.parameterHints.enabled": true,
+  // REMOVED: editor.tabCompletion: "onlySnippets" — Tab conflicts with Vim Insert mode indentation
+  "editor.tabCompletion": "off",
+  // REMOVED: editor.find.seedSearchStringFromSelection — irrelevant in Vim / mode
+  // ─── EDITOR — FORMAT / SAVE ───────────────────────────────────────────────────
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "modifications",
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true,
+  "editor.autoIndent": "full",
+  // ─── FILES ────────────────────────────────────────────────────────────────────
+  "files.eol": "\n",
+  "files.autoSave": "afterDelay",
+  "files.autoSaveWhenNoErrors": true,
+  "files.trimTrailingWhitespace": true,
+  "files.associations": {
+    "*.html": "html",
+    "*.css": "tailwindcss"
+  },
+  "files.exclude": {
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.fvm": true,
+    "**/.next": true
+  },
+  "files.watcherExclude": {
+    "**/.fvm": true
+  },
+  // ─── SEARCH ───────────────────────────────────────────────────────────────────
   "search.exclude": {
     "**/*.code-search": true,
     "**/.fvm": true,
     "**/node_modules": true,
     "**/bower_components": true
   },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "workbench.startupEditor": "readme",
+  // ─── TERMINAL ─────────────────────────────────────────────────────────────────
   "terminal.integrated.fontFamily": "Operator Mono SSm Lig",
-  "editor.matchBrackets": "always",
-  "js/ts.validate.enabled": true,
-  "html.format.preserveNewLines": true,
-  "[scss]": {},
-  "editor.renderControlCharacters": true,
-  "files.associations": {
-    "*.html": "html",
-    "*.css": "tailwindcss"
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.sendKeybindingsToShell": true,
+  "terminal.integrated.localEchoStyle": "dim",
+  "terminal.integrated.localEchoLatencyThreshold": 30,
+  "terminal.integrated.enableMultiLinePasteWarning": "never",
+  "terminal.integrated.env.osx": {
+    "FIG_NEW_SESSION": "1"
   },
-  "editor.wordWrap": "off",
-  "files.eol": "\n",
+  "terminal.integrated.allowedLinkSchemes": [
+    "file",
+    "http",
+    "https",
+    "mailto",
+    "vscode",
+    "vscode-insiders",
+    "src/app/_layout.tsx"
+  ],
+  // GPU acceleration in terminal — smoother scrolling, less CPU
+  "terminal.integrated.gpuAcceleration": "on",
+  "terminal.explorerKind": "external",
+  "terminal.external.osxExec": "iTerm.app",
+  // ─── GIT ──────────────────────────────────────────────────────────────────────
+  "git.autofetch": true,
+  "git.suggestSmartCommit": false,
+  "git.confirmSync": false,
+  "git.openRepositoryInParentFolders": "always",
+  "git-autoconfig.configList": [
+    {
+      "user.name": "Sailesh Dahal",
+      "user.email": "saileshbro@gmail.com"
+    }
+  ],
+  "git-autoconfig.ignoreRootList": [
+    "/Users/saileshbro/projects/dietralens"
+  ],
+  // ─── GITLENS ──────────────────────────────────────────────────────────────────
   "gitlens.views.stashes.files.layout": "list",
+  "gitlens.advanced.messages": {
+    "suppressCreatePullRequestPrompt": true,
+    "suppressIntegrationRequestTimedOutWarning": true
+  },
+  "gitlens.views.scm.grouped.views": {
+    "commits": true,
+    "branches": true,
+    "remotes": true,
+    "stashes": true,
+    "tags": true,
+    "worktrees": true,
+    "contributors": true,
+    "repositories": false,
+    "searchAndCompare": true,
+    "launchpad": false
+  },
+  "gitlens.ai.generateCommitMessage.customInstructions": "Generate a concise, Conventional Commit message (type(scope): description), max 74 chars, using git diff --staged; infer issue ID from branch name if present, include body and footer only if clearly supported, localize message to specified language, and use emojis if relevant.",
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:o3-mini",
+  // ─── GITHUB COPILOT ───────────────────────────────────────────────────────────
   "github.copilot.enable": {
     "*": true,
     "plaintext": true,
@@ -50,18 +171,175 @@
     "scminput": false,
     "yaml": true
   },
-  "security.workspace.trust.untrustedFiles": "open",
-  "editor.autoIndent": "full",
-  "terminal.integrated.sendKeybindingsToShell": true,
-  "editor.fontLigatures": true,
-  "editor.showFoldingControls": "always",
-  "gitlens.advanced.messages": {
-    "suppressCreatePullRequestPrompt": true,
-    "suppressIntegrationRequestTimedOutWarning": true
+  // Inline completions deliberately off — you prefer explicit triggering
+  "github.copilot.editor.enableAutoCompletions": false,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "github.copilot.chat.scopeSelection": true,
+  "github.copilot.chat.completionContext.typescript.mode": "on",
+  "github.copilot.chat.editor.temporalContext.enabled": "true",
+  "github.copilot.chat.edits.temporalContext.enabled": true,
+  "github.copilot.chat.generateTests.codeLens": true,
+  "github.copilot.chat.languageContext.typescript.enabled": true,
+  "github.copilot.chat.search.semanticTextResults": true,
+  "github.copilot.chat.agent.thinkingTool": true,
+  "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+  "github.copilot.chat.languageContext.inline.typescript.enabled": true,
+  "github.copilot.chat.notebook.followCellExecution.enabled": true,
+  "github.copilot.chat.codesearch.enabled": true,
+  // ─── CHAT / AGENT ─────────────────────────────────────────────────────────────
+  "chat.agent.enabled": true,
+  "chat.agent.maxRequests": 125,
+  "chat.editing.confirmEditRequestRetry": false,
+  "chat.editing.confirmEditRequestRemoval": false,
+  "chat.mcp.discovery.enabled": {
+    "claude-desktop": true,
+    "windsurf": true,
+    "cursor-global": true,
+    "cursor-workspace": true
   },
-  "git.suggestSmartCommit": false,
-  "workbench.editor.decorations.badges": true,
+  "chat.mcp.gallery.enabled": true,
+  "chat.agentsControl.enabled": false,
+  "chat.tips.enabled": false,
+  "chat.viewSessions.orientation": "stacked",
+  "chat.mcp.serverSampling": {
+    "Global in Code: MarkItDown MCP": {
+      "allowedModels": [
+        "github.copilot-chat/gpt-4.1",
+        "github.copilot-chat/claude-3.5-sonnet",
+        "github.copilot-chat/claude-3.7-sonnet",
+        "github.copilot-chat/claude-3.7-sonnet-thought",
+        "github.copilot-chat/claude-sonnet-4",
+        "github.copilot-chat/gemini-2.0-flash-001",
+        "github.copilot-chat/gemini-2.5-pro",
+        "github.copilot-chat/OpenAI-gpt-4.1",
+        "github.copilot-chat/OpenAI-gpt-4.1-mini",
+        "github.copilot-chat/OpenAI-gpt-4.1-nano",
+        "github.copilot-chat/OpenAI-gpt-4.5-preview",
+        "github.copilot-chat/gpt-4o",
+        "github.copilot-chat/OpenAI-gpt-4o-2024-11-20",
+        "github.copilot-chat/OpenAI-o3",
+        "github.copilot-chat/o3-mini",
+        "github.copilot-chat/o4-mini"
+      ]
+    }
+  },
+  "chat.tools.terminal.autoApprove": {
+    "rm": false,
+    "rmdir": false,
+    "del": false,
+    "kill": false,
+    "curl": false,
+    "wget": false,
+    "eval": false,
+    "chmod": false,
+    "chown": false,
+    "mv": true,
+    "mkdir": true,
+    "bun": true,
+    "bunx ultracite@latest check --write": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "bunx ultracite@latest fix": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "bunx ultracite fix": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "sed": true,
+    "yarn typescript": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "yarn add": true,
+    "brew": true,
+    "mas": true,
+    "make": true,
+    "bunx": true,
+    "/^cd data && python3 analyze_critical\\.py$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/Applications/Xcode.app/Contents/Developer/usr/bin/ibtool": true,
+    "/^npx eslint \\. --format json 2>&1 \\| head -100$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "npx eslint": true
+  },
+  "chat.tools.edits.autoApprove": {
+    "**/*": true,
+    "**/.vscode/*.json": false,
+    "**/.env": false
+  },
+  "chat.tools.urls.autoApprove": {
+    "https://docs.expo.dev": true,
+    "https://arxiv.org": true
+  },
+  // ─── TYPESCRIPT / JS ──────────────────────────────────────────────────────────
+  "js/ts.suggest.completeFunctionCalls": true,
+  "js/ts.validate.enabled": true,
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  "js/ts.format.enable": true,
+  "js/ts.updateImportsOnFileMove.enabled": "always",
+  "eslint.codeActionsOnSave.mode": "all",
+  // ─── PRETTIER ─────────────────────────────────────────────────────────────────
+  "prettier.arrowParens": "avoid",
+  // ─── EMMET ────────────────────────────────────────────────────────────────────
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  // ─── LANGUAGE-SPECIFIC FORMATTERS ─────────────────────────────────────────────
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[dockercompose]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[latex]": {
+    "editor.defaultFormatter": "James-Yu.latex-workshop"
+  },
+  "[scss]": {},
+  // ─── DART / FLUTTER ───────────────────────────────────────────────────────────
+  "dart.flutterSdkPath": "/Users/saileshbro/.local/share/fvm/default",
+  "dart.showInspectorNotificationsForWidgetErrors": false,
+  "dart.completeFunctionCalls": true,
+  "dart.previewFlutterUiGuides": true,
+  "dart.checkForSdkUpdates": true,
+  "dart.previewFlutterUiGuidesCustomTracking": true,
+  "dart.debugExternalPackageLibraries": true,
+  "dart.debugSdkLibraries": true,
+  "dart.warnWhenEditingFilesOutsideWorkspace": false,
+  "dart.enableSnippets": true,
+  "dart.updateImportsOnRename": true,
+  "dart.autoImportCompletions": true,
+  "dart.enableCompletionCommitCharacters": true,
   "[dart]": {
+    // Word wrap helps with deep widget trees
+    "editor.wordWrap": "on",
     "editor.codeActionsOnSave": {
       "source.dcm.fixAll": "always",
       "quickfix.insertSemicolon": "always",
@@ -357,120 +635,32 @@
     "quickfix.wrap.future": true,
     "quickfix.wrap.unawaited": true
   },
-  "dart.completeFunctionCalls": true,
-  "terminal.integrated.fontSize": 14,
-  "editor.fontSize": 13,
-  "terminal.explorerKind": "external",
-  "dart.debugExternalPackageLibraries": true,
-  "prettier.arrowParens": "avoid",
-  "window.openFilesInNewWindow": "off",
-  "githubPullRequests.createOnPublishBranch": "never",
-  "explorer.confirmDragAndDrop": false,
-  "files.exclude": {
-    "**/.hg": true,
-    "**/CVS": true,
-    "**/.DS_Store": true,
-    "**/.git": true,
-    "**/.svn": true,
-    "**/.fvm": true,
-    "**/.next": true
-  },
-  "editor.useTabStops": true,
-  "editor.cursorBlinking": "smooth",
-  "eslint.codeActionsOnSave.mode": "all",
-  "dart.previewFlutterUiGuides": true,
-  "dart.checkForSdkUpdates": true,
-  "dart.previewFlutterUiGuidesCustomTracking": true,
-  "terminal.integrated.localEchoStyle": "dim",
-  "editor.minimap.enabled": false,
-  "files.trimTrailingWhitespace": true,
-  "editor.accessibilitySupport": "off",
-  "editor.formatOnPaste": true,
-  "files.watcherExclude": {
-    "**/.fvm": true
-  },
-  "editor.find.seedSearchStringFromSelection": "always",
-  "editor.lineHeight": 25,
-  "editor.minimap.showSlider": "always",
-  "window.title": "",
-  "git-autoconfig.configList": [
-    {
-      "user.name": "Sailesh Dahal",
-      "user.email": "saileshbro@gmail.com"
-    }
-  ],
-  "terminal.integrated.localEchoLatencyThreshold": 30,
-  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  // ─── HTML ─────────────────────────────────────────────────────────────────────
   "html.format.enable": true,
-  "workbench.editor.enablePreview": false,
-  "editor.fontFamily": "Operator Mono SSm Lig",
-  "dart.warnWhenEditingFilesOutsideWorkspace": false,
-  "dart.enableSnippets": true,
-  "editor.scrollBeyondLastLine": true,
-  "explorer.confirmDelete": false,
-  "dart.updateImportsOnRename": true,
-  "dart.autoImportCompletions": true,
-  "githubPullRequests.pullBranch": "never",
-  "terminal.integrated.enableMultiLinePasteWarning": "never",
-  "editor.letterSpacing": 0.5,
-  "[jsonc]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  },
-  "js/ts.format.enable": true,
-  "dart.enableCompletionCommitCharacters": true,
-  "editor.tabSize": 2,
-  "extensions.ignoreRecommendations": true,
-  "workbench.editor.enablePreviewFromQuickOpen": false,
-  "editor.stickyScroll.enabled": true,
-  "git.confirmSync": false,
-  "editor.cursorStyle": "line",
-  "editor.tabCompletion": "onlySnippets",
-  "workbench.editor.wrapTabs": true,
-  "terminal.integrated.env.osx": {
-    "FIG_NEW_SESSION": "1"
-  },
-  "files.autoSave": "afterDelay",
-  "[yaml]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "redhat.telemetry.enabled": true,
-  "quitControl.closeTabShouldTryToCloseEmptyWindow": false,
-  "terminal.external.osxExec": "iTerm.app",
-  "editor.largeFileOptimizations": false,
-  "editor.unicodeHighlight.invisibleCharacters": false,
-  "editor.unicodeHighlight.ambiguousCharacters": false,
-  "editor.lineNumbers": "relative",
-  "discord.removeRemoteRepository": true,
-  "git.openRepositoryInParentFolders": "always",
-  "workbench.editor.tabActionLocation": "right",
-  "go.toolsManagement.autoUpdate": true,
-  "dart.debugSdkLibraries": true,
-  "files.autoSaveWhenNoErrors": true,
+  "html.format.preserveNewLines": true,
+  // ─── DIFF EDITOR ──────────────────────────────────────────────────────────────
   "diffEditor.ignoreTrimWhitespace": false,
-  "vim.neovimUseConfigFile": true,
-  "dart.flutterSdkPath": "/Users/saileshbro/.local/share/fvm/default",
-  "github.copilot.editor.enableAutoCompletions": false,
+  "diffEditor.codeLens": true,
+  // ─── EXPLORER ─────────────────────────────────────────────────────────────────
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmPasteNative": false,
+  // ─── GITHUB PR ────────────────────────────────────────────────────────────────
+  "githubPullRequests.createOnPublishBranch": "never",
+  "githubPullRequests.pullBranch": "never",
+  // ─── MISC EXTENSIONS ──────────────────────────────────────────────────────────
+  "security.workspace.trust.untrustedFiles": "open",
+  "extensions.ignoreRecommendations": true,
   "update.showReleaseNotes": false,
   "conventionalCommits.showNewVersionNotes": false,
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "workbench.layoutControl.enabled": false,
-  "workbench.navigationControl.enabled": false,
-  "window.newWindowProfile": "Default",
-  "github.copilot.nextEditSuggestions.enabled": true,
-  "github.copilot.chat.scopeSelection": true,
-  "github.copilot.chat.completionContext.typescript.mode": "on",
-  "github.copilot.chat.editor.temporalContext.enabled": "true",
-  "github.copilot.chat.edits.temporalContext.enabled": true,
-  "github.copilot.chat.generateTests.codeLens": true,
-  "github.copilot.chat.languageContext.typescript.enabled": true,
-  "github.copilot.chat.search.semanticTextResults": true,
+  "console-ninja.featureSet": "Community",
   "react-native-tools.showUserTips": false,
-  "explorer.confirmPasteNative": false,
+  "discord.removeRemoteRepository": true,
+  "redhat.telemetry.enabled": true,
+  "go.toolsManagement.autoUpdate": true,
+  "vim.neovimUseConfigFile": true,
+  "geminicodeassist.inlineSuggestions.enableAuto": false,
+  // ─── LATEX ────────────────────────────────────────────────────────────────────
   "latex-workshop.formatting.latex": "latexindent",
   "latex-workshop.latex.tools": [
     {
@@ -485,159 +675,9 @@
       ]
     }
   ],
-  "editor.suggest.localityBonus": true,
-  "editor.formatOnType": true,
-  "editor.selectionHighlight": false,
-  "editor.suggestSelection": "first",
-  "editor.wordBasedSuggestions": "off",
-  "gitlens.views.scm.grouped.views": {
-    "commits": true,
-    "branches": true,
-    "remotes": true,
-    "stashes": true,
-    "tags": true,
-    "worktrees": true,
-    "contributors": true,
-    "repositories": false,
-    "searchAndCompare": true,
-    "launchpad": false
-  },
-  "gitlens.ai.generateCommitMessage.customInstructions": "Generate a concise, Conventional Commit message (type(scope): description), max 74 chars, using git diff --staged; infer issue ID from branch name if present, include body and footer only if clearly supported, localize message to specified language, and use emojis if relevant.",
-  "workbench.activityBar.orientation": "vertical",
-  "gitlens.ai.model": "vscode",
-  "gitlens.ai.vscode.model": "copilot:o3-mini",
-  "chat.agent.enabled": true,
-  "console-ninja.featureSet": "Community",
-  "chat.editing.confirmEditRequestRetry": false,
-  "diffEditor.codeLens": true,
-  "github.copilot.chat.codesearch.enabled": true,
-  "git-autoconfig.ignoreRootList": [
-    "/Users/saileshbro/projects/dietralens"
-  ],
-  "editor.formatOnSaveMode": "modifications",
-  "geminicodeassist.inlineSuggestions.enableAuto": false,
-  "chat.editing.confirmEditRequestRemoval": false,
-  "editor.formatOnSave": true,
-  "[latex]": {
-    "editor.defaultFormatter": "James-Yu.latex-workshop"
-  },
-  "workbench.colorCustomizations": {},
-  "window.titleBarStyle": "custom",
-  "chat.mcp.discovery.enabled": {
-    "claude-desktop": true,
-    "windsurf": true,
-    "cursor-global": true,
-    "cursor-workspace": true
-  },
-  "github.copilot.chat.agent.thinkingTool": true,
-  "github.copilot.chat.languageContext.fix.typescript.enabled": true,
-  "github.copilot.chat.languageContext.inline.typescript.enabled": true,
-  "github.copilot.chat.notebook.followCellExecution.enabled": true,
-  "chat.mcp.serverSampling": {
-    "Global in Code: MarkItDown MCP": {
-      "allowedModels": [
-        "github.copilot-chat/gpt-4.1",
-        "github.copilot-chat/claude-3.5-sonnet",
-        "github.copilot-chat/claude-3.7-sonnet",
-        "github.copilot-chat/claude-3.7-sonnet-thought",
-        "github.copilot-chat/claude-sonnet-4",
-        "github.copilot-chat/gemini-2.0-flash-001",
-        "github.copilot-chat/gemini-2.5-pro",
-        "github.copilot-chat/OpenAI-gpt-4.1",
-        "github.copilot-chat/OpenAI-gpt-4.1-mini",
-        "github.copilot-chat/OpenAI-gpt-4.1-nano",
-        "github.copilot-chat/OpenAI-gpt-4.5-preview",
-        "github.copilot-chat/gpt-4o",
-        "github.copilot-chat/OpenAI-gpt-4o-2024-11-20",
-        "github.copilot-chat/OpenAI-o3",
-        "github.copilot-chat/o3-mini",
-        "github.copilot-chat/o4-mini"
-      ]
-    }
-  },
+  // ─── EDITOR ASSOCIATIONS ──────────────────────────────────────────────────────
   "workbench.editorAssociations": {
     "*.copilotmd": "vscode.markdown.preview.editor",
     "*.pdf": "latex-workshop-pdf-hook"
-  },
-  "chat.agent.maxRequests": 125,
-  "js/ts.updateImportsOnFileMove.enabled": "always",
-  "chat.tools.terminal.autoApprove": {
-    "rm": false,
-    "rmdir": false,
-    "del": false,
-    "kill": false,
-    "curl": false,
-    "wget": false,
-    "eval": false,
-    "chmod": false,
-    "chown": false,
-    "mv": true,
-    "mkdir": true,
-    "bun": true,
-    "bunx ultracite@latest check --write": {
-      "approve": true,
-      "matchCommandLine": true
-    },
-    "bunx ultracite@latest fix": {
-      "approve": true,
-      "matchCommandLine": true
-    },
-    "bunx ultracite fix": {
-      "approve": true,
-      "matchCommandLine": true
-    },
-    "sed": true,
-    "yarn typescript": {
-      "approve": true,
-      "matchCommandLine": true
-    },
-    "yarn add": true,
-    "brew": true,
-    "mas": true,
-    "make": true,
-    "bunx": true,
-    "/^cd data && python3 analyze_critical\\.py$/": {
-      "approve": true,
-      "matchCommandLine": true
-    },
-    "/Applications/Xcode.app/Contents/Developer/usr/bin/ibtool": true,
-    "/^npx eslint \\. --format json 2>&1 \\| head -100$/": {
-      "approve": true,
-      "matchCommandLine": true
-    },
-    "npx eslint": true
-  },
-  "chat.tools.edits.autoApprove": {
-    "**/*": true,
-    "**/.vscode/*.json": false,
-    "**/.env": false
-  },
-  "[dockercompose]": {
-    "editor.insertSpaces": true,
-    "editor.tabSize": 2,
-    "editor.autoIndent": "advanced",
-    "editor.defaultFormatter": "redhat.vscode-yaml"
-  },
-  "[github-actions-workflow]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
-  },
-  "chat.mcp.gallery.enabled": true,
-  "chat.tools.urls.autoApprove": {
-    "https://docs.expo.dev": true,
-    "https://arxiv.org": true
-  },
-  "terminal.integrated.allowedLinkSchemes": [
-    "file",
-    "http",
-    "https",
-    "mailto",
-    "vscode",
-    "vscode-insiders",
-    "src/app/_layout.tsx"
-  ],
-  "chat.agentsControl.enabled": false,
-  "window.commandCenter": false,
-  "chat.tips.enabled": false,
-  "chat.viewSessions.orientation": "stacked",
-  "workbench.colorTheme": "Tinacious Design"
+  }
 }
