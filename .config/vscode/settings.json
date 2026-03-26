@@ -1,5 +1,5 @@
 {
-  "workbench.browser.enableChatTools":true,
+  "workbench.browser.enableChatTools": true,
   "window.nativeTabs": true,
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
@@ -37,7 +37,8 @@
   "[scss]": {},
   "editor.renderControlCharacters": true,
   "files.associations": {
-    "*.html": "html"
+    "*.html": "html",
+    "*.css": "tailwindcss"
   },
   "editor.wordWrap": "off",
   "files.eol": "\n",
@@ -621,7 +622,6 @@
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
   "chat.mcp.gallery.enabled": true,
-  "workbench.colorTheme": "Tinacious Design",
   "chat.tools.urls.autoApprove": {
     "https://docs.expo.dev": true,
     "https://arxiv.org": true
@@ -638,5 +638,6 @@
   "chat.agentsControl.enabled": false,
   "window.commandCenter": false,
   "chat.tips.enabled": false,
-  "chat.viewSessions.orientation": "stacked"
+  "chat.viewSessions.orientation": "stacked",
+  "workbench.colorTheme": "Tinacious Design"
 }
