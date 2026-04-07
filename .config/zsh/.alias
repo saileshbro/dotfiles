@@ -7,12 +7,13 @@ alias l='ls -lah'
 alias lsa='ls -lah'
 
 # ── Directory navigation ───────────────────────────────────────────────────────
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-alias ......='cd ../../../../..'
-alias -- -='cd -'
+# AUTO_CD handles bare paths like `..` and `../somedir` — explicit cd not needed
+alias ..='..'
+alias ...='../..'
+alias ....='../../..'
+alias .....='../../../..'
+alias ......='../../../../..'
+alias -- -='cd -'  # `-` is not a path, needs explicit cd
 
 # Show numbered directory stack
 d() {

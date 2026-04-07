@@ -20,6 +20,8 @@ setup-aliases:
 	ln -sf $$HOME/.config/zsh/.zshrc $$HOME/.zshrc
 	ln -sf $$HOME/.config/zsh/.zprofile $$HOME/.zprofile
 	ln -sf $$HOME/.config/zsh/.zlogin $$HOME/.zlogin
+	@echo "Creating symlink for git configuration..."
+	ln -sf $$HOME/.config/git/config $$HOME/.gitconfig
 	@echo "Creating symlinks for VS Code configuration..."
 	mkdir -p $$HOME/Library/Application\ Support/Code/User
 	ln -sf $$HOME/.config/vscode/settings.json $$HOME/Library/Application\ Support/Code/User/settings.json

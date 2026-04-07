@@ -5,10 +5,50 @@
       "ls *": "allow",
       "flutter *": "allow",
       "fvm *": "allow",
-      "rm *": "allow"
+      "rm *": "allow",
+      "npx *": "allow",
+      "head *": "allow",
+      "npm run lint *": "allow",
+      "npm ls *": "allow",
+      "npm run lint:fix *": "allow",
+      "git diff *": "allow",
+      "yarn install *": "allow",
+      "tail *": "allow",
+      "yarn typecheck *": "allow",
+      "bun lint *": "allow",
+      "uv *": "allow",
+      "make slides-m01 *": "allow",
+      "latexmk *": "allow"
     },
     "external_directory": {
       "/Users/saileshbro/.opencode/plans/*": "allow"
+    },
+    "read": {
+      "*": "allow"
+    }
+  },
+  "mcp": {
+    "deepwiki": {
+      "type": "remote",
+      "url": "https://mcp.deepwiki.com/mcp"
+    },
+    "context7": {
+      "type": "local",
+      "command": [
+        "bunx",
+        "-y",
+        "@upstash/context7-mcp",
+      ]
+    },
+    "chrome-dev-tools": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "-e",
+        "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
+      ]
     }
   }
 }

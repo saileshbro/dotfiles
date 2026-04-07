@@ -34,9 +34,21 @@ setopt HIST_IGNORE_SPACE      # don't record commands that start with a space
 setopt HIST_SAVE_NO_DUPS      # don't write duplicates to the history file
 setopt HIST_VERIFY            # show the substituted command before running !! etc.
 setopt HIST_REDUCE_BLANKS     # strip superfluous whitespace before saving
+setopt AUTO_CD                # type a directory path to cd into it (enables ../somedir)
 setopt AUTO_PUSHD             # cd pushes the old directory onto the stack
 setopt PUSHD_IGNORE_DUPS      # don't push duplicate directories
 setopt PUSHD_SILENT           # don't print the directory stack after pushd/popd
+setopt CORRECT                # suggest corrections for mistyped commands
+setopt INTERACTIVE_COMMENTS   # allow # comments in interactive shell
+setopt LONG_LIST_JOBS         # show PID in job listings
+setopt NOTIFY                 # report job status immediately, not at next prompt
+setopt MULTIOS                # allow multiple redirections (cmd > a > b)
+setopt GLOB_DOTS              # include dotfiles in glob patterns (ls * shows .files)
+setopt NO_BEEP                # silence terminal bell on errors/no-completions
+setopt ALWAYS_TO_END          # move cursor to end of word after completion
+setopt COMPLETE_IN_WORD       # tab-complete from the middle of a word
+unsetopt FLOW_CONTROL         # disable Ctrl+S / Ctrl+Q terminal freeze
+setopt EXTENDED_GLOB          # ^pat (negate), pat# (zero+), **/*.dart (recursive glob)
 
 
 ######################################
@@ -47,7 +59,7 @@ path=(
   "$HOMEBREW_PREFIX/opt/ccache/libexec"
   "$XDG_DATA_HOME/cargo/bin"
   "$HOME/.yarn/bin"
-  "$HOME/.bun/bin"
+  "$XDG_CACHE_HOME/.bun/bin"
   "$XDG_DATA_HOME/fvm/default/bin"
   "$PUB_CACHE/bin"
   "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"

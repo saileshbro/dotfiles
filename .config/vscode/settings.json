@@ -108,7 +108,6 @@
   // ─── TERMINAL ─────────────────────────────────────────────────────────────────
   "terminal.integrated.fontFamily": "Operator Mono SSm Lig",
   "terminal.integrated.fontSize": 14,
-  "terminal.integrated.sendKeybindingsToShell": true,
   "terminal.integrated.localEchoStyle": "dim",
   "terminal.integrated.localEchoLatencyThreshold": 30,
   "terminal.integrated.enableMultiLinePasteWarning": "never",
@@ -267,7 +266,11 @@
       "approve": true,
       "matchCommandLine": true
     },
-    "npx eslint": true
+    "npx eslint": true,
+    "/^\\./node_modules/\\.bin/tsc --noEmit$/": {
+      "approve": true,
+      "matchCommandLine": true
+    }
   },
   "chat.tools.edits.autoApprove": {
     "**/*": true,
@@ -679,5 +682,10 @@
   "workbench.editorAssociations": {
     "*.copilotmd": "vscode.markdown.preview.editor",
     "*.pdf": "latex-workshop-pdf-hook"
-  }
+  },
+  "security.promptForLocalFileProtocolHandling": false,
+  "claudeCode.preferredLocation": "panel",
+  "claudeCode.useTerminal": true,
+  "terminal.integrated.suggest.inlineSuggestion": "off",
+  "terminal.integrated.suggest.enabled": false
 }
