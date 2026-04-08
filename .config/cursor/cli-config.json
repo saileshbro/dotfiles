@@ -1,13 +1,55 @@
 {
+  "permissions": {
+    "allow": [
+      "Shell(ls)",
+      "Shell(cd)",
+      "Shell(yarn install)",
+      "Shell(sleep)",
+      "Shell(tail)",
+      "Shell(test)",
+      "Shell(cat)",
+      "Shell(head)",
+      "Shell(git fetch)",
+      "Shell(git status)",
+      "Shell(bun tsc)"
+    ],
+    "deny": []
+  },
   "version": 1,
   "editor": {
     "vimMode": false
   },
-  "hasChangedDefaultModel": false,
-  "permissions": {
-    "allow": [
-      "Shell(ls)"
+  "model": {
+    "modelId": "default",
+    "displayModelId": "auto",
+    "displayName": "Auto",
+    "displayNameShort": "Auto",
+    "aliases": [
+      "auto"
     ],
-    "deny": []
+    "maxMode": false
+  },
+  "hasChangedDefaultModel": true,
+  "maxMode": false,
+  "modelParameters": {
+    "default": []
+  },
+  "selectedModel": {
+    "modelId": "default",
+    "parameters": []
+  },
+  "privacyCache": {
+    "ghostMode": true,
+    "privacyMode": 2,
+    "updatedAt": 1775545608565
+  },
+  "authInfo": {
+    "email": "sailesh6524@student.ku.edu.np",
+    "displayName": "SAILESH DAHAL",
+    "userId": 199869171,
+    "authId": "google-oauth2|user_01JTM547NW94J4S808GTYGKN3P"
+  },
+  "network": {
+    "useHttp1ForAgent": false
   }
 }

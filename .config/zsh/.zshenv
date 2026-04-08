@@ -48,7 +48,7 @@ export FVM_CACHE_PATH="$XDG_DATA_HOME/fvm"
 export PUB_CACHE="$XDG_CACHE_HOME/pub-cache"
 export ANDROID_SDK_HOME="$XDG_DATA_HOME/android"
 export ANDROID_HOME="$ANDROID_SDK_HOME"
-export ANDROID_AVD_HOME="$ANDROID_SDK_HOME/emulator"
+export ANDROID_AVD_HOME="$HOME/.android/avd"
 export ANDROID_NDK_HOME="$ANDROID_SDK_HOME/ndk"
 
 # ── Ruby / CocoaPods ──────────────────────────────────────────────────────────

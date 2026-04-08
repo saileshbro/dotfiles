@@ -65,6 +65,7 @@ path=(
   "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
   "$ANDROID_SDK_HOME/platform-tools"
   "$ANDROID_SDK_HOME/tools"
+  "$ANDROID_SDK_HOME/emulator"
   "$XDG_CONFIG_HOME/shorebird/bin"
   "$XDG_DATA_HOME/npm/bin"
   "$VOLTA_HOME/bin"
@@ -85,7 +86,9 @@ export PATH
 ######################################
 # Environment
 ######################################
-export GPG_TTY=$(tty)
+if [ -z "$INTELLIJ_ENVIRONMENT_READER" ]; then
+  export GPG_TTY=$(tty)
+fi
 
 # ccache compiler wrappers — env vars only, no subprocess
 if [[ -x "$HOMEBREW_PREFIX/opt/ccache/libexec/clang" ]]; then
@@ -123,3 +126,26 @@ zsh-bench() {
   echo ""
   echo "Tip: run 'zsh -i -c zprof' to see a per-function breakdown."
 }
+
+# >>> forge initialize >>>
+# !! Contents within this block are managed by 'forge zsh setup' !!
+# !! Do not edit manually - changes will be overwritten !!
+
+# Add required zsh plugins if not already present
+if [[ ! " ${plugins[@]} " =~ " zsh-autosuggestions " ]]; then
+    plugins+=(zsh-autosuggestions)
+fi
+if [[ ! " ${plugins[@]} " =~ " zsh-syntax-highlighting " ]]; then
+    plugins+=(zsh-syntax-highlighting)
+fi
+
+# Load forge shell plugin (commands, completions, keybindings) if not already loaded
+if [[ -z "$_FORGE_PLUGIN_LOADED" ]]; then
+    eval "$(forge zsh plugin)"
+fi
+
+# Load forge shell theme (prompt with AI context) if not already loaded
+if [[ -z "$_FORGE_THEME_LOADED" ]]; then
+    eval "$(forge zsh theme)"
+fi
+# <<< forge initialize <<<

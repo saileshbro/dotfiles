@@ -45,3 +45,4 @@
 .config/opencode/opencode.json
 .config/opencode/opencode.json.tui-migration.bak
 .config/opencode/tui.json
+.config/cursor/chats/
