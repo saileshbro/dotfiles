@@ -11,7 +11,10 @@
       "Shell(head)",
       "Shell(git fetch)",
       "Shell(git status)",
-      "Shell(bun tsc)"
+      "Shell(bun tsc)",
+      "Shell(yarn typecheck)",
+      "Shell(yarn build)",
+      "Shell(zsh)"
     ],
     "deny": []
   },
@@ -41,7 +44,7 @@
   "privacyCache": {
     "ghostMode": true,
     "privacyMode": 2,
-    "updatedAt": 1775545608565
+    "updatedAt": 1775800160258
   },
   "authInfo": {
     "email": "sailesh6524@student.ku.edu.np",
@@ -51,5 +54,6 @@
   },
   "network": {
     "useHttp1ForAgent": false
-  }
+  },
+  "runEverythingSettingsPromptStreak": 0
 }

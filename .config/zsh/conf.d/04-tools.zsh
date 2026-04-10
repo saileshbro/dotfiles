@@ -1,22 +1,7 @@
 # conf.d/04-tools.zsh — external tool initialisation
 # All tools that need an `eval` or `source` to integrate with the shell.
 # Loaded last so the prompt (starship) wraps everything that came before.
-
-######################################
-# Cache-eval helper
-# Generates a tool's shell init script once, caches it beside the binary's
-# mtime, and re-generates automatically after a `brew upgrade`.
-######################################
-_zsh_cache_eval() {
-  # Usage: _zsh_cache_eval <cache-file> <binary-path> <cmd> [args...]
-  local cache="$1" bin="$2"; shift 2
-  if [[ ! -f "$cache" || "$bin" -nt "$cache" ]]; then
-    mkdir -p "${cache:h}"
-    "$@" >| "$cache"
-  fi
-  source "$cache"
-}
-
+# _zsh_cache_eval is defined in 00-cache.zsh (must load before 02-completion.zsh).
 
 ######################################
 # fzf
