@@ -54,7 +54,7 @@ setopt EXTENDED_GLOB          # ^pat (negate), pat# (zero+), **/*.dart (recursiv
 ######################################
 # PATH (interactive additions)
 ######################################
-if [[ -z "${__ZSH_PATH_BUILT:-}" ]]; then
+if [[ -z "${__ZSH_INTERACTIVE_PATH_BUILT:-}" ]]; then
   typeset -U path PATH
   path=(
     "$HOMEBREW_PREFIX/opt/ccache/libexec"
@@ -82,7 +82,7 @@ if [[ -z "${__ZSH_PATH_BUILT:-}" ]]; then
   [[ ":$PATH:" != *":$PNPM_HOME:"* ]] && path=("$PNPM_HOME" $path)
 
   export PATH
-  export __ZSH_PATH_BUILT=1
+  export __ZSH_INTERACTIVE_PATH_BUILT=1
 fi
 
 

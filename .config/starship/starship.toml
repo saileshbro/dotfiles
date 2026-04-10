@@ -2,7 +2,8 @@
 
 add_newline = false 
 scan_timeout = 8
-command_timeout = 500
+# Give Python a little more breathing room on slower shell starts.
+command_timeout = 1500
 format = "$directory$hostname$git_branch$git_status$python$nodejs$dart$cmd_duration$line_break$character"
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
