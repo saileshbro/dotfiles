@@ -3,7 +3,7 @@
 add_newline = false 
 scan_timeout = 8
 command_timeout = 500
-format = "$directory$git_branch$git_status$python$nodejs$dart$cmd_duration$line_break$character"
+format = "$directory$hostname$git_branch$git_status$python$nodejs$dart$cmd_duration$line_break$character"
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 symbol = '  '
@@ -269,6 +269,8 @@ symbol = ' '
 read_only = ' '
 
 [hostname]
+ssh_only = true
+format = '\[[$ssh_symbol$hostname]($style)\]'
 ssh_symbol = ' '
 
 [rlang]

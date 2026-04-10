@@ -14,7 +14,8 @@
       "Shell(bun tsc)",
       "Shell(yarn typecheck)",
       "Shell(yarn build)",
-      "Shell(zsh)"
+      "Shell(zsh)",
+      "WebFetch(ghostty.org)"
     ],
     "deny": []
   },
@@ -44,7 +45,7 @@
   "privacyCache": {
     "ghostMode": true,
     "privacyMode": 2,
-    "updatedAt": 1775800160258
+    "updatedAt": 1775811570253
   },
   "authInfo": {
     "email": "sailesh6524@student.ku.edu.np",

@@ -16,3 +16,9 @@ EOF
     builtin exit
   }
 fi
+
+# Ghostty advertises truecolor, but explicitly setting this keeps tooling
+# behavior consistent across local sessions and nested shells.
+if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+  export COLORTERM=truecolor
+fi
