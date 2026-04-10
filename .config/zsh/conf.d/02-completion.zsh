@@ -10,46 +10,69 @@ FPATH="$HOMEBREW_PREFIX/share/zsh-completions:$HOMEBREW_PREFIX/share/zsh/site-fu
 
 autoload -Uz compinit
 
-# Only run the slow compaudit security scan when the dump is >24 h old.
-# -C skips the audit entirely (uses the cached dump as-is).
-# (N) = null-glob, . = regular file, mh+24 = modified >24 hours ago
-_zcompdump="$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
-if [[ -n "$_zcompdump"(#qN.mh+24) ]]; then
-  compinit -d "$_zcompdump"        # stale — full rebuild + security audit
-else
-  compinit -C -d "$_zcompdump"     # fresh — skip audit
-fi
-unset _zcompdump
+typeset -gi _zsh_completion_inited=0
 
-######################################
-# Completion styles
-######################################
-zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*:descriptions' format '%B%d%b'
-zstyle ':completion:*:warnings'     format 'No matches for: %d'
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/compcache"
+_zsh_init_completion_system() {
+  (( _zsh_completion_inited )) && return 0
+  _zsh_completion_inited=1
 
-######################################
-# Tool completions
-######################################
+  # Only run the slow compaudit security scan when the dump is >24 h old.
+  # -C skips the audit entirely (uses the cached dump as-is).
+  # (N) = null-glob, . = regular file, mh+24 = modified >24 hours ago
+  local _zcompdump="$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+  if [[ -n "$_zcompdump"(#qN.mh+24) ]]; then
+    compinit -d "$_zcompdump"        # stale — full rebuild + security audit
+  else
+    compinit -C -d "$_zcompdump"     # fresh — skip audit
+  fi
 
-# Dart CLI
-[[ -f "$XDG_CONFIG_HOME/.dart-cli-completion/zsh-config.zsh" ]] \
-  && source "$XDG_CONFIG_HOME/.dart-cli-completion/zsh-config.zsh"
+  ######################################
+  # Completion styles
+  ######################################
+  zstyle ':completion:*' menu select
+  zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+  zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+  zstyle ':completion:*:descriptions' format '%B%d%b'
+  zstyle ':completion:*:warnings'     format 'No matches for: %d'
+  zstyle ':completion:*' use-cache on
+  zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/compcache"
 
-# Bun — glob instead of $(bun --version) subprocess
-() {
-  local f=("$HOMEBREW_PREFIX/Cellar/bun"/*/share/zsh/site-functions/_bun(N[1]))
-  [[ -f "$f" ]] && source "$f"
+  ######################################
+  # Tool completions
+  ######################################
+  # Dart CLI
+  [[ -f "$XDG_CONFIG_HOME/.dart-cli-completion/zsh-config.zsh" ]] \
+    && source "$XDG_CONFIG_HOME/.dart-cli-completion/zsh-config.zsh"
+
+  # Bun — glob instead of $(bun --version) subprocess
+  () {
+    local f=("$HOMEBREW_PREFIX/Cellar/bun"/*/share/zsh/site-functions/_bun(N[1]))
+    [[ -f "$f" ]] && source "$f"
+  }
+
+  # ngrok — cached; only regenerated when the binary changes
+  if (( $+commands[ngrok] )); then
+    _zsh_cache_eval \
+      "$XDG_CACHE_HOME/zsh/ngrok_completion.zsh" \
+      "$commands[ngrok]" \
+      ngrok completion
+  fi
+
+  return 0
 }
 
-# ngrok — cached; only regenerated when the binary changes
-if (( $+commands[ngrok] )); then
-  _zsh_cache_eval \
-    "$XDG_CACHE_HOME/zsh/ngrok_completion.zsh" \
-    "$commands[ngrok]" \
-    ngrok completion
+# Default: optimize for first prompt by deferring compinit until first Tab.
+: "${ZSH_LAZY_COMPINIT:=1}"
+if (( ZSH_LAZY_COMPINIT )) && [[ -o zle ]]; then
+  autoload -Uz add-zle-hook-widget
+
+  _zsh_lazy_complete() {
+    _zsh_init_completion_system
+    zle .complete-word
+  }
+
+  zle -N _zsh_lazy_complete
+  bindkey '^I' _zsh_lazy_complete
+else
+  _zsh_init_completion_system
 fi

@@ -54,40 +54,44 @@ setopt EXTENDED_GLOB          # ^pat (negate), pat# (zero+), **/*.dart (recursiv
 ######################################
 # PATH (interactive additions)
 ######################################
-typeset -U path PATH
-path=(
-  "$HOMEBREW_PREFIX/opt/ccache/libexec"
-  "$XDG_DATA_HOME/cargo/bin"
-  "$HOME/.yarn/bin"
-  "$XDG_CACHE_HOME/.bun/bin"
-  "$XDG_DATA_HOME/fvm/default/bin"
-  "$PUB_CACHE/bin"
-  "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
-  "$ANDROID_SDK_HOME/platform-tools"
-  "$ANDROID_SDK_HOME/tools"
-  "$ANDROID_SDK_HOME/emulator"
-  "$XDG_CONFIG_HOME/shorebird/bin"
-  "$XDG_DATA_HOME/npm/bin"
-  "$VOLTA_HOME/bin"
-  "$HOMEBREW_PREFIX/opt/ruby/bin"
-  "$HOMEBREW_PREFIX/share/google-cloud-sdk/bin"
-  "$HOME/.antigravity/antigravity/bin"
-  "$HOME/.local/bin"
-  "$HOME/.maestro/bin"
-  $path
-)
+if [[ -z "${__ZSH_PATH_BUILT:-}" ]]; then
+  typeset -U path PATH
+  path=(
+    "$HOMEBREW_PREFIX/opt/ccache/libexec"
+    "$XDG_DATA_HOME/cargo/bin"
+    "$HOME/.yarn/bin"
+    "$XDG_CACHE_HOME/.bun/bin"
+    "$XDG_DATA_HOME/fvm/default/bin"
+    "$PUB_CACHE/bin"
+    "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
+    "$ANDROID_SDK_HOME/platform-tools"
+    "$ANDROID_SDK_HOME/tools"
+    "$ANDROID_SDK_HOME/emulator"
+    "$XDG_CONFIG_HOME/shorebird/bin"
+    "$XDG_DATA_HOME/npm/bin"
+    "$VOLTA_HOME/bin"
+    "$HOMEBREW_PREFIX/opt/ruby/bin"
+    "$HOMEBREW_PREFIX/share/google-cloud-sdk/bin"
+    "$HOME/.antigravity/antigravity/bin"
+    "$HOME/.local/bin"
+    "$HOME/.maestro/bin"
+    $path
+  )
 
-# PNPM — only prepend if not already present
-[[ ":$PATH:" != *":$PNPM_HOME:"* ]] && path=("$PNPM_HOME" $path)
+  # PNPM — only prepend if not already present
+  [[ ":$PATH:" != *":$PNPM_HOME:"* ]] && path=("$PNPM_HOME" $path)
 
-export PATH
+  export PATH
+  export __ZSH_PATH_BUILT=1
+fi
 
 
 ######################################
 # Environment
 ######################################
 if [ -z "$INTELLIJ_ENVIRONMENT_READER" ]; then
-  export GPG_TTY=$(tty)
+  # zsh already exposes the current TTY path via $TTY.
+  export GPG_TTY="$TTY"
 fi
 
 # ccache compiler wrappers — env vars only, no subprocess
@@ -119,33 +123,17 @@ unset _f
 ######################################
 zsh-bench() {
   local runs=${1:-5}
+  local timeout_s=${2:-3}
   echo "Timing $runs shell startups..."
   for i in $(seq 1 $runs); do
-    /usr/bin/time zsh -i -c exit 2>&1
+    # Always enforce a timeout (outer) so a broken init can't hang.
+    if (( $+commands[gtimeout] )); then
+      /usr/bin/time gtimeout "${timeout_s}s" zsh -i -c exit </dev/null 2>&1
+    else
+      # macOS has no `timeout` by default; use perl alarm.
+      /usr/bin/time perl -e 'alarm shift; exec @ARGV' "$timeout_s" zsh -i -c exit </dev/null 2>&1
+    fi
   done
   echo ""
   echo "Tip: run 'zsh -i -c zprof' to see a per-function breakdown."
 }
-
-# >>> forge initialize >>>
-# !! Contents within this block are managed by 'forge zsh setup' !!
-# !! Do not edit manually - changes will be overwritten !!
-
-# Add required zsh plugins if not already present
-if [[ ! " ${plugins[@]} " =~ " zsh-autosuggestions " ]]; then
-    plugins+=(zsh-autosuggestions)
-fi
-if [[ ! " ${plugins[@]} " =~ " zsh-syntax-highlighting " ]]; then
-    plugins+=(zsh-syntax-highlighting)
-fi
-
-# Load forge shell plugin (commands, completions, keybindings) if not already loaded
-if [[ -z "$_FORGE_PLUGIN_LOADED" ]]; then
-    eval "$(forge zsh plugin)"
-fi
-
-# Load forge shell theme (prompt with AI context) if not already loaded
-if [[ -z "$_FORGE_THEME_LOADED" ]]; then
-    eval "$(forge zsh theme)"
-fi
-# <<< forge initialize <<<

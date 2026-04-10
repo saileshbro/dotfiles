@@ -23,7 +23,7 @@ d() {
     dirs -v | head -10
   fi
 }
-compdef _dirs d
+(( $+functions[compdef] )) && compdef _dirs d
 
 # mkdir + cd in one step (mirrors OMZ's `take`)
 take() {

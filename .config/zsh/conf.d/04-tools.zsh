@@ -44,28 +44,53 @@ export FZF_ALT_C_OPTS="
 "
 
 # Shell integration (Ctrl+R, Ctrl+T, Alt+C)
-_zsh_cache_eval \
-  "$XDG_CACHE_HOME/zsh/fzf_init.zsh" \
-  "$HOMEBREW_PREFIX/bin/fzf" \
-  fzf --zsh
+# For first-prompt performance, defer loading fzf widgets until first use.
+if [[ "$TERM" != "dumb" ]] && [[ -o zle ]] && [[ -x "$HOMEBREW_PREFIX/bin/fzf" ]]; then
+  typeset -gi _zsh_fzf_loaded=0
+
+  _zsh_load_fzf() {
+    (( _zsh_fzf_loaded )) && return 0
+    _zsh_fzf_loaded=1
+    _zsh_cache_eval \
+      "$XDG_CACHE_HOME/zsh/fzf_init.zsh" \
+      "$HOMEBREW_PREFIX/bin/fzf" \
+      fzf --zsh
+  }
+
+  _zsh_fzf_history_widget() { _zsh_load_fzf; zle fzf-history-widget; }
+  _zsh_fzf_file_widget()    { _zsh_load_fzf; zle fzf-file-widget; }
+  _zsh_fzf_cd_widget()      { _zsh_load_fzf; zle fzf-cd-widget; }
+
+  zle -N _zsh_fzf_history_widget
+  zle -N _zsh_fzf_file_widget
+  zle -N _zsh_fzf_cd_widget
+
+  bindkey '^R' _zsh_fzf_history_widget
+  bindkey '^T' _zsh_fzf_file_widget
+  bindkey '\ec' _zsh_fzf_cd_widget
+fi
 
 
 ######################################
 # starship prompt
 ######################################
-_zsh_cache_eval \
-  "$XDG_CACHE_HOME/zsh/starship_init.zsh" \
-  "$commands[starship]" \
-  starship init zsh
+if [[ "$TERM" != "dumb" ]] && [[ -o zle ]] && (( $+commands[starship] )); then
+  _zsh_cache_eval \
+    "$XDG_CACHE_HOME/zsh/starship_init.zsh" \
+    "$commands[starship]" \
+    starship init zsh
+fi
 
 
 ######################################
 # zoxide + fuzzy j()
 ######################################
-_zsh_cache_eval \
-  "$XDG_CACHE_HOME/zsh/zoxide_init.zsh" \
-  "$commands[zoxide]" \
-  zoxide init zsh --cmd j
+if (( $+commands[zoxide] )); then
+  _zsh_cache_eval \
+    "$XDG_CACHE_HOME/zsh/zoxide_init.zsh" \
+    "$commands[zoxide]" \
+    zoxide init zsh --cmd j
+fi
 
 # Override the plain `j` zoxide registered above with an fzf-powered picker.
 # Passing a query pre-filters; --select-1 auto-jumps on a single match.
@@ -77,9 +102,21 @@ j() {
 
 
 ######################################
-# OrbStack
+# Deferred integrations
 ######################################
-[[ -f ~/.orbstack/shell/init.zsh ]] && source ~/.orbstack/shell/init.zsh 2>/dev/null
+# Load slower/non-essential integrations only when the first command is run.
+# This keeps startup-to-first-prompt fast while preserving behavior afterward.
+autoload -Uz add-zsh-hook
+typeset -gi _zsh_deferred_integrations_loaded=0
+
+_zsh_load_deferred_integrations() {
+  (( _zsh_deferred_integrations_loaded )) && return 0
+  _zsh_deferred_integrations_loaded=1
+
+  [[ -f "$HOME/.orbstack/shell/init.zsh" ]] && source "$HOME/.orbstack/shell/init.zsh" 2>/dev/null
+  [[ -f "$HOME/.vite-plus/env" ]] && source "$HOME/.vite-plus/env"
+}
+add-zsh-hook preexec _zsh_load_deferred_integrations
 
 
 ######################################
@@ -101,7 +138,6 @@ if [[ "$TERM_PROGRAM" == "vscode" ]] && (( $+commands[code] )); then
 fi
 
 
-######################################
-# Vite+
-######################################
-[[ -f "$HOME/.vite-plus/env" ]] && source "$HOME/.vite-plus/env"
+zsh-load-deferred-integrations() {
+  _zsh_load_deferred_integrations
+}

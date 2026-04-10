@@ -8,10 +8,24 @@
 ######################################
 _zsh_cache_eval() {
   # Usage: _zsh_cache_eval <cache-file> <binary-path> <cmd> [args...]
-  local cache="$1" bin="$2"; shift 2
-  if [[ ! -f "$cache" || "$bin" -nt "$cache" ]]; then
+  local cache="$1" bin="$2" tmp_cache rc; shift 2
+
+  if [[ ! -f "$cache" || ( -n "$bin" && "$bin" -nt "$cache" ) ]]; then
     mkdir -p "${cache:h}"
-    "$@" >| "$cache"
+    tmp_cache="${cache}.tmp.$$"
+    "$@" >| "$tmp_cache"
+    rc=$?
+    if (( rc == 0 )) && [[ -s "$tmp_cache" ]]; then
+      mv -f "$tmp_cache" "$cache"
+      # Parsing large init scripts dominates warm-start time; zcompile reduces it.
+      # Note: zsh automatically uses `file.zwc` when you `source file` and the
+      # compiled file is newer, so we still `source "$cache"` below.
+      zcompile -R -- "$cache" 2>/dev/null || true
+    else
+      rm -f "$tmp_cache"
+      # If regeneration fails, keep using the previous cache when available.
+      [[ -f "$cache" ]] || return "$rc"
+    fi
   fi
   source "$cache"
 }

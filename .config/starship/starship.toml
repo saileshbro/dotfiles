@@ -1,6 +1,9 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 add_newline = false 
+scan_timeout = 8
+command_timeout = 500
+format = "$directory$git_branch$git_status$python$nodejs$dart$cmd_duration$line_break$character"
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 symbol = '  '

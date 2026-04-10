@@ -18,6 +18,9 @@ path=(
   $path
 )
 
+# Mark PATH as initialized so interactive subshells can skip rebuilding it.
+export __ZSH_PATH_BUILT=1
+
 # ── Homebrew env (skip the slow `brew shellenv` subprocess) ───────────────────
 # These are the only vars brew shellenv would add beyond what .zshenv covers.
 export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}:"
