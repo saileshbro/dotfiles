@@ -51,5 +51,7 @@
 !.config/claude/keybindings.json
 !.config/claude/settings.json
 
-
 .config/cursor/*
+
+.config/copilot/*
+!.config/copilot/config.json
