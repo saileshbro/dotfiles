@@ -26,6 +26,7 @@ setup-aliases:
 	mkdir -p $$HOME/Library/Application\ Support/Code/User
 	ln -sf $$HOME/.config/vscode/settings.json $$HOME/Library/Application\ Support/Code/User/settings.json
 	ln -sf $$HOME/.config/vscode/mcp.json $$HOME/Library/Application\ Support/Code/User/mcp.json
+	ln -sf $$HOME/dotfiles/.config/claude $$HOME/.claude
 	@echo "Creating XDG directories..."
 	mkdir -p $$HOME/.cache $$HOME/.cursor $$HOME/.local $$HOME/.run
 	@echo "Setup complete!"
