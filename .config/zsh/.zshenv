@@ -36,7 +36,9 @@ export JAVA_HOME="/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home
 # ── Node / JS tooling ─────────────────────────────────────────────────────────
 export VOLTA_HOME="$XDG_DATA_HOME/volta"
 export PNPM_HOME="$XDG_DATA_HOME/pnpm"
+export BUN_INSTALL="$XDG_DATA_HOME/bun"
 export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm"
 export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
 
 # ── Rust ───────────────────────────────────────────────────────────────────────
@@ -48,7 +50,7 @@ export FVM_CACHE_PATH="$XDG_DATA_HOME/fvm"
 export PUB_CACHE="$XDG_CACHE_HOME/pub-cache"
 export ANDROID_SDK_HOME="$XDG_DATA_HOME/android"
 export ANDROID_HOME="$ANDROID_SDK_HOME"
-export ANDROID_AVD_HOME="$HOME/.android/avd"
+export ANDROID_AVD_HOME="$ANDROID_SDK_HOME/avd"
 export ANDROID_NDK_HOME="$ANDROID_SDK_HOME/ndk"
 
 # ── Ruby / CocoaPods ──────────────────────────────────────────────────────────
@@ -69,9 +71,6 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 # ── Build / cache tools ───────────────────────────────────────────────────────
 export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
 export CCACHE_DIR="$XDG_CACHE_HOME/ccache"
-
-# ── GPG / security ────────────────────────────────────────────────────────────
-export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 
 # ── Misc tools ────────────────────────────────────────────────────────────────
 export WAKATIME_HOME="$XDG_CONFIG_HOME/wakatime"

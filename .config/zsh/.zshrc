@@ -59,8 +59,7 @@ if [[ -z "${__ZSH_INTERACTIVE_PATH_BUILT:-}" ]]; then
   path=(
     "$HOMEBREW_PREFIX/opt/ccache/libexec"
     "$XDG_DATA_HOME/cargo/bin"
-    "$HOME/.yarn/bin"
-    "$XDG_CACHE_HOME/.bun/bin"
+    "$BUN_INSTALL/bin"
     "$XDG_DATA_HOME/fvm/default/bin"
     "$PUB_CACHE/bin"
     "$HOME/Library/Application Support/JetBrains/Toolbox/scripts"
