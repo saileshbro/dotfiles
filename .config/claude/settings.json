@@ -1,57 +1,14 @@
 {
-  "includeCoAuthoredBy": false,
-  "effortLevel":"medium",
-  "enabledPlugins": {
-    "chrome-devtools-mcp@chrome-devtools-plugins": true
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_CODE_EFFORT_LEVEL": "high",
+    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
+    "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
+    "MAX_THINKING_TOKENS": "31999"
   },
-  "extraKnownMarketplaces": {
-    "chrome-devtools-plugins": {
-      "source": {
-        "source": "github",
-        "repo": "ChromeDevTools/chrome-devtools-mcp"
-      }
-    }
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "bunx -y ccstatusline@latest",
-    "padding": 0
-  },
-   "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Edit|MultiEdit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "# Prevent editing on main branch\n[ \"$(git branch --show-current)\" != \"main\" ] || { echo '{\"block\": true, \"message\": \"Cannot edit files on main branch. Create a feature branch first.\"}' >&2; exit 2; }",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Edit|MultiEdit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "# Auto-install dependencies when package.json changes\nif [[ \"$CLAUDE_TOOL_INPUT_FILE_PATH\" =~ package\\.json$ ]]; then\n  echo '{\"feedback\": \"Installing dependencies...\"}' >&2\n  npm install >/dev/null 2>&1 && echo '{\"feedback\": \"Dependencies installed.\", \"suppressOutput\": true}' || {\n    echo '{\"feedback\": \"Failed to install dependencies.\"}' >&2\n    exit 1\n  }\nfi",
-            "timeout": 60
-          }
-        ]
-      },
-      {
-        "matcher": "Edit|MultiEdit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "# Type-check TypeScript files\nif [[ \"$CLAUDE_TOOL_INPUT_FILE_PATH\" =~ \\.(ts|tsx)$ ]]; then\n  echo '{\"feedback\": \"Checking TypeScript types...\"}' >&2\n  output=$(npx tsc --noEmit 2>&1)\n  exit_code=$?\n  if [ $exit_code -eq 0 ]; then\n    echo '{\"feedback\": \"No TypeScript errors.\", \"suppressOutput\": true}'\n  else\n    errors=$(echo \"$output\" | grep -A 2 \"error TS\" | head -30)\n    if [ -n \"$errors\" ]; then\n      echo '{\"feedback\": \"TypeScript found type errors:\"}' >&2\n      echo \"$errors\" >&2\n    fi\n  fi\n  # Non-blocking\n  exit 0\nfi",
-            "timeout": 30
-          }
-        ]
-      }
-    ]
+  "attribution": {
+    "commit": "",
+    "pr": ""
   },
   "permissions": {
     "allow": [
@@ -80,7 +37,19 @@
       "Bash(which:*)",
       "Bash(type:*)",
       "Bash(tee:*)",
-      "WebFetch"
+      "WebFetch",
+      "Bash(/bin/ls /Users/saileshbro/dotfiles/)",
+      "Bash(sed -n '1525,1537p' /Users/saileshbro/Projects/solas/solas-frontend/src/i18n/locales/pt-PT.ts)",
+      "Bash(sed -n '1378,1390p' /Users/saileshbro/Projects/solas/solas-frontend/src/i18n/locales/el-GR.ts)",
+      "Bash(yarn remove:*)",
+      "Bash(yarn add:*)",
+      "Bash(yarn lint:*)",
+      "mcp__plane__retrieve_work_item_by_identifier",
+      "Bash(yarn i18n:check *)",
+      "Bash(python3 -c \"import sys,json; p=json.load\\(sys.stdin\\); deps={**p.get\\('dependencies',{}\\), **p.get\\('devDependencies',{}\\)}; [print\\(k,deps[k]\\) for k in ['tsx','chalk','i18next-cli'] if k in deps]\")",
+      "Bash(python3 -c \"import sys,json; p=json.load\\(sys.stdin\\); s=p.get\\('scripts',{}\\); [print\\(k,v\\) for k,v in s.items\\(\\) if 'i18n' in k]\")",
+      "Bash(python3 -c \"import sys,json; p=json.load\\(sys.stdin\\); all_deps={**p.get\\('dependencies',{}\\), **p.get\\('devDependencies',{}\\)}; print\\('tsx:', 'tsx' in all_deps\\); print\\('chalk:', 'chalk' in all_deps\\); print\\('i18next-cli:', 'i18next-cli' in all_deps\\)\")",
+      "Bash(python3 -c \"import sys,json; p=json.load\\(sys.stdin\\); s=p.get\\('scripts',{}\\); [print\\(k+': '+v\\) for k,v in s.items\\(\\)]\")"
     ],
     "deny": [
       "Bash(sudo:*)",
@@ -101,6 +70,53 @@
       "Read(**/.ssh/**)",
       "Read(**/secrets/**)",
       "Read(**/node_modules/**)"
+    ],
+    "defaultMode": "acceptEdits"
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "# Auto-install dependencies when package.json changes\nif [[ \"$CLAUDE_TOOL_INPUT_FILE_PATH\" =~ package\\.json$ ]]; then\n  echo '{\"feedback\": \"Installing dependencies...\"}' >&2\n  npm install >/dev/null 2>&1 && echo '{\"feedback\": \"Dependencies installed.\", \"suppressOutput\": true}' || {\n    echo '{\"feedback\": \"Failed to install dependencies.\"}' >&2\n    exit 1\n  }\nfi",
+            "timeout": 60
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "# Type-check TypeScript files\nif [[ \"$CLAUDE_TOOL_INPUT_FILE_PATH\" =~ \\.(ts|tsx)$ ]]; then\n  echo '{\"feedback\": \"Checking TypeScript types...\"}' >&2\n  output=$(npx tsc --noEmit 2>&1)\n  exit_code=$?\n  if [ $exit_code -eq 0 ]; then\n    echo '{\"feedback\": \"No TypeScript errors.\", \"suppressOutput\": true}'\n  else\n    errors=$(echo \"$output\" | grep -A 2 \"error TS\" | head -30)\n    if [ -n \"$errors\" ]; then\n      echo '{\"feedback\": \"TypeScript found type errors:\"}' >&2\n      echo \"$errors\" >&2\n    fi\n  fi\n  # Non-blocking\n  exit 0\nfi",
+            "timeout": 30
+          }
+        ]
+      }
     ]
-  }
+  },
+  "enabledPlugins": {
+    "chrome-devtools-mcp@chrome-devtools-plugins": false,
+    "caveman@caveman": true
+  },
+  "extraKnownMarketplaces": {
+    "chrome-devtools-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "ChromeDevTools/chrome-devtools-mcp"
+      }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      },
+      "autoUpdate": true
+    }
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "medium",
+  "awaySummaryEnabled": false
 }

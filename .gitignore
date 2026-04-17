@@ -55,3 +55,10 @@
 
 .config/copilot/*
 !.config/copilot/config.json
+
+# SSH - exclude private keys and runtime files
+.config/ssh/id_*
+!.config/ssh/id_*.pub
+.config/ssh/agent
+.config/ssh/*.sock
+.config/ssh/known_hosts

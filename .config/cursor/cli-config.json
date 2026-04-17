@@ -15,7 +15,12 @@
       "Shell(yarn typecheck)",
       "Shell(yarn build)",
       "Shell(zsh)",
-      "WebFetch(ghostty.org)"
+      "WebFetch(ghostty.org)",
+      "Shell(git branch)",
+      "Shell(echo)",
+      "Shell(git diff)",
+      "Shell(git symbolic-ref)",
+      "Shell(git rev-parse)"
     ],
     "deny": []
   },
@@ -45,7 +50,7 @@
   "privacyCache": {
     "ghostMode": true,
     "privacyMode": 2,
-    "updatedAt": 1775811570253
+    "updatedAt": 1776072096360
   },
   "authInfo": {
     "email": "sailesh6524@student.ku.edu.np",
@@ -56,5 +61,10 @@
   "network": {
     "useHttp1ForAgent": false
   },
+  "approvalMode": "unrestricted",
+  "sandbox": {
+    "mode": "disabled"
+  },
+  "showSandboxIntro": false,
   "runEverythingSettingsPromptStreak": 0
 }
