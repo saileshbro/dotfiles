@@ -50,6 +50,7 @@ export FVM_CACHE_PATH="$XDG_DATA_HOME/fvm"
 export PUB_CACHE="$XDG_CACHE_HOME/pub-cache"
 export ANDROID_SDK_HOME="$XDG_DATA_HOME/android"
 export ANDROID_HOME="$ANDROID_SDK_HOME"
+export ANDROID_USER_HOME="$XDG_DATA_HOME/android"
 export ANDROID_AVD_HOME="$ANDROID_SDK_HOME/avd"
 export ANDROID_NDK_HOME="$ANDROID_SDK_HOME/ndk"
 
@@ -71,6 +72,9 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 # ── Build / cache tools ───────────────────────────────────────────────────────
 export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
 export CCACHE_DIR="$XDG_CACHE_HOME/ccache"
+
+# ── Python ────────────────────────────────────────────────────────────────────
+export MPLCONFIGDIR="$XDG_CONFIG_HOME/matplotlib"
 
 # ── Misc tools ────────────────────────────────────────────────────────────────
 export WAKATIME_HOME="$XDG_CONFIG_HOME/wakatime"
