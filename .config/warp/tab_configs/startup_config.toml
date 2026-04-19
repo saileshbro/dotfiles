@@ -1,0 +1,8 @@
+name = "New tab: saileshbro"
+
+[[panes]]
+id = "main"
+type = "agent"
+directory = "/Users/saileshbro"
+
+[params]

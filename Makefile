@@ -28,6 +28,8 @@ setup-aliases:
 	ln -sf $$HOME/.config/vscode/mcp.json $$HOME/Library/Application\ Support/Code/User/mcp.json
 	ln -sf $$HOME/dotfiles/.config/claude $$HOME/.claude
 	ln -sf $$HOME/dotfiles/.config/copilot $$HOME/.copilot
+	@echo "Creating symlink for Warp configuration..."
+	ln -sfn $$HOME/.config/warp $$HOME/.warp
 	@echo "Creating symlink for SSH configuration..."
 	chmod 700 $$HOME/.config/ssh
 	ln -sfn $$HOME/.config/ssh $$HOME/.ssh

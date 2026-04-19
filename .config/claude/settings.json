@@ -99,7 +99,8 @@
   },
   "enabledPlugins": {
     "chrome-devtools-mcp@chrome-devtools-plugins": false,
-    "caveman@caveman": true
+    "caveman@caveman": true,
+    "warp@claude-code-warp": true
   },
   "extraKnownMarketplaces": {
     "chrome-devtools-plugins": {
@@ -114,9 +115,15 @@
         "repo": "JuliusBrussee/caveman"
       },
       "autoUpdate": true
+    },
+    "claude-code-warp": {
+      "source": {
+        "source": "github",
+        "repo": "warpdotdev/claude-code-warp"
+      }
     }
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "medium",
+  "effortLevel": "high",
   "awaySummaryEnabled": false
 }

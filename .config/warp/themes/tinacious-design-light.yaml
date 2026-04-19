@@ -1,0 +1,25 @@
+name: Tinacious Design (Light)
+accent: '#ff3399'
+cursor: '#ff3399'
+background: '#f8f8ff'
+foreground: '#44425e'
+details: lighter
+terminal_colors:
+  normal:
+    black: '#2c2c3e'
+    red: '#ff3399'
+    green: '#00b253'
+    yellow: '#FFAA00'
+    blue: '#01a9e1'
+    magenta: '#CC66FF'
+    cyan: '#00CED1'
+    white: '#ffffff'
+  bright:
+    black: '#3d3d56'
+    red: '#ff3399'
+    green: '#00b253'
+    yellow: '#FFAA00'
+    blue: '#01a9e1'
+    magenta: '#CC66FF'
+    cyan: '#00CED1'
+    white: '#ffffff'

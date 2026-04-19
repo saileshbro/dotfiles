@@ -58,3 +58,8 @@
 .config/ssh/agent
 .config/ssh/*.sock
 .config/ssh/known_hosts
+
+# .config/warp/
+.config/warp/*
+!.config/warp/themes/
+!.config/warp/tab_configs/

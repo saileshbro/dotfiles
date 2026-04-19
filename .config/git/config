@@ -44,3 +44,7 @@
 	clean = git-lfs clean -- %f
 [advice]
 	skippedCherryPicks = false
+[credential "https://github.com"]
+  helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+  helper = !/opt/homebrew/bin/gh auth git-credential

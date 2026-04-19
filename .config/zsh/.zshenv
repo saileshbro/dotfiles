@@ -48,11 +48,10 @@ export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 # ── Flutter / Dart / Android ───────────────────────────────────────────────────
 export FVM_CACHE_PATH="$XDG_DATA_HOME/fvm"
 export PUB_CACHE="$XDG_CACHE_HOME/pub-cache"
-export ANDROID_SDK_HOME="$XDG_DATA_HOME/android"
-export ANDROID_HOME="$ANDROID_SDK_HOME"
+export ANDROID_HOME="$XDG_DATA_HOME/android"
 export ANDROID_USER_HOME="$XDG_DATA_HOME/android"
-export ANDROID_AVD_HOME="$ANDROID_SDK_HOME/avd"
-export ANDROID_NDK_HOME="$ANDROID_SDK_HOME/ndk"
+export ANDROID_AVD_HOME="$ANDROID_USER_HOME/avd"
+export ANDROID_NDK_HOME="$ANDROID_HOME/ndk"
 
 # ── Ruby / CocoaPods ──────────────────────────────────────────────────────────
 export RBENV_ROOT="$XDG_DATA_HOME/rbenv"
