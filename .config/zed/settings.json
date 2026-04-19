@@ -30,7 +30,7 @@
     "tool_permissions": {
       "default": "confirm",
       "tools": {
-        "web_search": {
+        "search_web": {
           "default": "allow",
         },
         "fetch": {
@@ -72,6 +72,6 @@
     "dark": "Zed (Default)",
   },
   "vim_mode": true,
-  "theme": "One Dark",
+  "theme": "Tinacious Design",
   "ui_font_family": "Operator Mono SSm Lig",
 }
