@@ -1,11 +1,5 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "env": {
-    "CLAUDE_CODE_EFFORT_LEVEL": "high",
-    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
-    "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
-    "MAX_THINKING_TOKENS": "31999"
-  },
   "attribution": {
     "commit": "",
     "pr": ""
@@ -15,63 +9,62 @@
       "Read(*)",
       "Write(*)",
       "Edit(*)",
-      "Bash(bun:*)",
-      "Bash(npm:*)",
-      "Bash(npx:*)",
-      "Bash(bunx:*)",
-      "Bash(node:*)",
-      "Bash(git log:*)",
-      "Bash(git status:*)",
-      "Bash(git diff:*)",
-      "Bash(git show:*)",
-      "Bash(git branch:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(ls:*)",
-      "Bash(mkdir:*)",
-      "Bash(pwd:*)",
-      "Bash(cd:*)",
-      "Bash(touch:*)",
-      "Bash(source:*)",
-      "Bash(open:*)",
-      "Bash(which:*)",
-      "Bash(type:*)",
-      "Bash(tee:*)",
       "WebFetch",
-      "Bash(/bin/ls /Users/saileshbro/dotfiles/)",
-      "Bash(sed -n '1525,1537p' /Users/saileshbro/Projects/solas/solas-frontend/src/i18n/locales/pt-PT.ts)",
-      "Bash(sed -n '1378,1390p' /Users/saileshbro/Projects/solas/solas-frontend/src/i18n/locales/el-GR.ts)",
-      "Bash(yarn remove:*)",
-      "Bash(yarn add:*)",
-      "Bash(yarn lint:*)",
-      "mcp__plane__retrieve_work_item_by_identifier",
-      "Bash(yarn i18n:check *)",
-      "Bash(python3 -c \"import sys,json; p=json.load\\(sys.stdin\\); deps={**p.get\\('dependencies',{}\\), **p.get\\('devDependencies',{}\\)}; [print\\(k,deps[k]\\) for k in ['tsx','chalk','i18next-cli'] if k in deps]\")",
-      "Bash(python3 -c \"import sys,json; p=json.load\\(sys.stdin\\); s=p.get\\('scripts',{}\\); [print\\(k,v\\) for k,v in s.items\\(\\) if 'i18n' in k]\")",
-      "Bash(python3 -c \"import sys,json; p=json.load\\(sys.stdin\\); all_deps={**p.get\\('dependencies',{}\\), **p.get\\('devDependencies',{}\\)}; print\\('tsx:', 'tsx' in all_deps\\); print\\('chalk:', 'chalk' in all_deps\\); print\\('i18next-cli:', 'i18next-cli' in all_deps\\)\")",
-      "Bash(python3 -c \"import sys,json; p=json.load\\(sys.stdin\\); s=p.get\\('scripts',{}\\); [print\\(k+': '+v\\) for k,v in s.items\\(\\)]\")"
+      "Bash(bun *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(bunx *)",
+      "Bash(node *)",
+      "Bash(yarn *)",
+      "Bash(python3 *)",
+      "Bash(git log *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git show *)",
+      "Bash(git branch *)",
+      "Bash(git add *)",
+      "Bash(ls *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(cat *)",
+      "Bash(echo *)",
+      "Bash(sed *)",
+      "Bash(awk *)",
+      "Bash(mkdir *)",
+      "Bash(pwd)",
+      "Bash(cd *)",
+      "Bash(touch *)",
+      "Bash(cp *)",
+      "Bash(source *)",
+      "Bash(open *)",
+      "Bash(which *)",
+      "Bash(type *)",
+      "Bash(tee *)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(ssh *)",
+      "mcp__plane__retrieve_work_item_by_identifier"
     ],
-    "deny": [
-      "Bash(sudo:*)",
-      "Bash(su:*)",
-      "Bash(curl:*)",
-      "Bash(wget:*)",
-      "Bash(ssh:*)",
-      "Bash(git push:*)",
-      "Bash(git reset:*)",
-      "Bash(git rebase:*)",
-      "Bash(git checkout:*)",
-      "Bash(git clean:*)",
-      "Bash(rm:*)",
+    "deny": [],
+    "ask": [
+      "Bash(rm *)",
+      "Bash(mv *)",
+      "Bash(sudo *)",
+      "Bash(su *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git reset *)",
+      "Bash(git rebase *)",
+      "Bash(git checkout *)",
+      "Bash(git clean *)",
       "Read(**/.env)",
       "Read(**/.env.*)",
       "Read(**/*.key)",
       "Read(**/*.pem)",
       "Read(**/.ssh/**)",
-      "Read(**/secrets/**)",
-      "Read(**/node_modules/**)"
+      "Read(**/secrets/**)"
     ],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "auto"
   },
   "hooks": {
     "PostToolUse": [
@@ -95,19 +88,36 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
     ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash /Users/saileshbro/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
     "chrome-devtools-mcp@chrome-devtools-plugins": false,
     "caveman@caveman": true,
-    "warp@claude-code-warp": true
+    "warp@claude-code-warp": true,
+    "skills@swmansion": true
   },
   "extraKnownMarketplaces": {
     "chrome-devtools-plugins": {
       "source": {
         "source": "github",
         "repo": "ChromeDevTools/chrome-devtools-mcp"
-      }
+      },
+      "autoUpdate": true
     },
     "caveman": {
       "source": {
@@ -120,10 +130,36 @@
       "source": {
         "source": "github",
         "repo": "warpdotdev/claude-code-warp"
-      }
+      },
+      "autoUpdate": true
+    },
+    "swmansion": {
+      "source": {
+        "source": "github",
+        "repo": "software-mansion-labs/skills"
+      },
+      "autoUpdate": true
+    },
+    "callstack-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "callstackincubator/agent-skills"
+      },
+      "autoUpdate": true
+    },
+    "expo-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "expo/skills"
+      },
+      "autoUpdate": true
     }
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
-  "awaySummaryEnabled": false
+  "effortLevel": "xhigh",
+  "awaySummaryEnabled": false,
+  "theme": "dark-daltonized",
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true
 }

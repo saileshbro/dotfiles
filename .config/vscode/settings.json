@@ -642,7 +642,7 @@
   "html.format.enable": true,
   "html.format.preserveNewLines": true,
   // ─── DIFF EDITOR ──────────────────────────────────────────────────────────────
-  "diffEditor.ignoreTrimWhitespace": false,
+  "diffEditor.ignoreTrimWhitespace": true,
   "diffEditor.codeLens": true,
   // ─── EXPLORER ─────────────────────────────────────────────────────────────────
   "explorer.confirmDragAndDrop": false,
@@ -687,5 +687,11 @@
   "claudeCode.preferredLocation": "panel",
   "claudeCode.useTerminal": true,
   "terminal.integrated.suggest.inlineSuggestion": "off",
-  "terminal.integrated.suggest.enabled": false
+  "terminal.integrated.suggest.enabled": false,
+  "[tailwindcss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

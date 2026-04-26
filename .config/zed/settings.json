@@ -1,4 +1,16 @@
 {
+  "project_panel": {
+    "dock": "left"
+  },
+  "outline_panel": {
+    "dock": "left"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "left"
+  },
   "agent_servers": {
     "github-copilot-cli": {
       "type": "registry",
@@ -27,6 +39,7 @@
     },
   },
   "agent": {
+    "dock": "right",
     "tool_permissions": {
       "default": "confirm",
       "tools": {
