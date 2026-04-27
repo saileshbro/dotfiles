@@ -49,3 +49,11 @@ alias npm='bun'
 alias npx='bunx'
 alias avd='emulator -list-avds'
 alias adb='HOME="$ANDROID_USER_HOME" adb'
+
+# ── RTK token-optimized proxies ───────────────────────────────────────────────
+alias git='rtk git'
+alias gh='rtk gh'
+alias grep='rtk grep'
+alias find='rtk find'
+alias diff='rtk diff'
+alias tree='rtk tree'

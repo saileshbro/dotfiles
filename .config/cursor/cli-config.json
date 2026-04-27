@@ -41,7 +41,8 @@
   "hasChangedDefaultModel": true,
   "maxMode": false,
   "modelParameters": {
-    "default": []
+    "default": [],
+    "composer-2": []
   },
   "selectedModel": {
     "modelId": "default",
@@ -50,7 +51,17 @@
   "privacyCache": {
     "ghostMode": true,
     "privacyMode": 2,
-    "updatedAt": 1776072096360
+    "updatedAt": 1776853249439
+  },
+  "serverConfigCache": {
+    "backendUrl": "https://api2.cursor.sh",
+    "authCacheKey": "auth:google-oauth2|user_01JTM547NW94J4S808GTYGKN3P",
+    "agentUrlConfig": {
+      "agentUrl": "https://agentn.global.api5.cursor.sh",
+      "agentnUrl": "https://agentn.global.api5.cursor.sh"
+    },
+    "cliSandboxDefaultEnabled": false,
+    "updatedAt": 1776838763964
   },
   "authInfo": {
     "email": "sailesh6524@student.ku.edu.np",
