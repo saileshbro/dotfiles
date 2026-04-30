@@ -40,10 +40,17 @@
       "Bash(which *)",
       "Bash(type *)",
       "Bash(tee *)",
+      "Read(/tmp/**)",
+      "Write(/tmp/**)",
+      "Edit(/tmp/**)",
+      "Bash(rtk *)",
       "Bash(curl *)",
       "Bash(wget *)",
       "Bash(ssh *)",
-      "mcp__plane__retrieve_work_item_by_identifier"
+      "mcp__plane__retrieve_work_item_by_identifier",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(git stash show *)"
     ],
     "deny": [],
     "ask": [
@@ -66,7 +73,6 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
   "hooks": {
     "PostToolUse": [
       {
@@ -162,5 +168,6 @@
   "theme": "dark-daltonized",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "model": "sonnet"
 }

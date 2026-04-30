@@ -13,7 +13,6 @@
   "workbench.layoutControl.enabled": false,
   "workbench.navigationControl.enabled": false,
   "workbench.activityBar.orientation": "vertical",
-  "workbench.colorTheme": "Tinacious Design",
   "workbench.colorCustomizations": {},
   "window.nativeTabs": true,
   "window.openFilesInNewWindow": "off",
@@ -693,5 +692,6 @@
   },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "workbench.colorTheme": "Tinacious Design"
 }

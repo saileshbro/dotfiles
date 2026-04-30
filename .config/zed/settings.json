@@ -1,4 +1,8 @@
 {
+  "vim": {
+    "toggle_relative_line_numbers": true
+  },
+  "cli_default_open_behavior": "new_window",
   "project_panel": {
     "dock": "left"
   },
@@ -77,6 +81,9 @@
     },
     "favorite_models": [],
     "model_parameters": [],
+  },
+  "terminal": {
+    "image_protocol": "kitty"
   },
   "base_keymap": "VSCode",
   "icon_theme": {

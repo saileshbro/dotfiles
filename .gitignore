@@ -63,3 +63,5 @@
 .config/warp/*
 !.config/warp/themes/
 !.config/warp/tab_configs/
+.config/mole/clean-list.txt
+.config/opencode/package-lock.json
