@@ -1,12 +1,37 @@
 # Dotfiles Management with GNU Stow
 # This Makefile handles symlinking dotfiles and managing aliases
 
-.PHONY: all delete setup-aliases clean-aliases setup setup-with-aliases clean install-fonts
+.PHONY: all delete setup-aliases clean-aliases setup setup-with-aliases clean install-fonts sync-themes setup-terminal
+
+THEME_DIR := $(HOME)/Projects/tinacious-theme
 
 # Main target: complete fresh machine setup
-all: setup-aliases install-fonts
+all: setup-aliases install-fonts sync-themes setup-terminal
 	stow --verbose --target=$$HOME --restow .
 	@echo "Fresh machine setup complete!"
+
+# Build themes from tinacious-theme project and sync into dotfiles
+sync-themes:
+	@echo "Building tinacious themes..."
+	@cd $(THEME_DIR) && npm run build
+	@echo "Syncing Ghostty themes..."
+	@mkdir -p .config/ghostty/themes
+	@cp $(THEME_DIR)/dist/ghostty/* .config/ghostty/themes/
+	@echo "Syncing Warp themes..."
+	@mkdir -p .config/warp/themes
+	@cp $(THEME_DIR)/dist/warp/* .config/warp/themes/
+	@echo "Syncing Terminal.app script..."
+	@mkdir -p .config/terminal
+	@cp $(THEME_DIR)/dist/terminal/setup-profile.applescript .config/terminal/setup-profile.applescript
+	@echo "Themes synced."
+
+# Create Terminal.app "Tinacious Design Dark" profile and set as default
+setup-terminal:
+	@echo "Setting up Terminal.app profile..."
+	@osascript .config/terminal/setup-profile.applescript
+	@defaults write com.apple.Terminal "Default Window Settings" -string "Tinacious Design Dark"
+	@defaults write com.apple.Terminal "Startup Window Settings" -string "Tinacious Design Dark"
+	@echo "Terminal profile set. Restart Terminal.app to apply."
 
 # Install fonts to ~/Library/Fonts
 install-fonts:

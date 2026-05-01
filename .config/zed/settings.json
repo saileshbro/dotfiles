@@ -82,6 +82,7 @@
     "favorite_models": [],
     "model_parameters": [],
   },
+  "buffer_font_family": "Operator Mono",
   "terminal": {
     "font_family": "Operator Mono",
     "image_protocol": "kitty"

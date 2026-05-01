@@ -73,6 +73,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "sonnet",
   "hooks": {
     "PostToolUse": [
       {
@@ -113,26 +114,9 @@
     "command": "bash /Users/saileshbro/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
-    "chrome-devtools-mcp@chrome-devtools-plugins": false,
-    "caveman@caveman": true,
-    "warp@claude-code-warp": true,
     "skills@swmansion": true
   },
   "extraKnownMarketplaces": {
-    "chrome-devtools-plugins": {
-      "source": {
-        "source": "github",
-        "repo": "ChromeDevTools/chrome-devtools-mcp"
-      },
-      "autoUpdate": true
-    },
-    "caveman": {
-      "source": {
-        "source": "github",
-        "repo": "JuliusBrussee/caveman"
-      },
-      "autoUpdate": true
-    },
     "claude-code-warp": {
       "source": {
         "source": "github",
@@ -168,6 +152,5 @@
   "theme": "dark-daltonized",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true,
-  "model": "sonnet"
+  "skipAutoPermissionPrompt": true
 }
