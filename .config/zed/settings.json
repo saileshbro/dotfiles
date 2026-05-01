@@ -83,6 +83,7 @@
     "model_parameters": [],
   },
   "terminal": {
+    "font_family": "Operator Mono",
     "image_protocol": "kitty"
   },
   "base_keymap": "VSCode",

@@ -1,12 +1,18 @@
 # Dotfiles Management with GNU Stow
 # This Makefile handles symlinking dotfiles and managing aliases
 
-.PHONY: all delete setup-aliases clean-aliases setup setup-with-aliases clean
+.PHONY: all delete setup-aliases clean-aliases setup setup-with-aliases clean install-fonts
 
 # Main target: complete fresh machine setup
-all: setup-aliases
+all: setup-aliases install-fonts
 	stow --verbose --target=$$HOME --restow .
 	@echo "Fresh machine setup complete!"
+
+# Install fonts to ~/Library/Fonts
+install-fonts:
+	@echo "Installing fonts..."
+	@cp -f fonts/*.otf $$HOME/Library/Fonts/
+	@echo "Fonts installed."
 
 # Remove all symlinks
 delete:

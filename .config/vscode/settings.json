@@ -21,7 +21,7 @@
   "window.commandCenter": false,
   "window.newWindowProfile": "Default",
   // ─── EDITOR — CORE ────────────────────────────────────────────────────────────
-  "editor.fontFamily": "Operator Mono SSm Lig",
+  "editor.fontFamily": "Operator Mono",
   "editor.fontSize": 13,
   "editor.lineHeight": 25,
   "editor.letterSpacing": 0.5,
@@ -105,7 +105,7 @@
     "**/bower_components": true
   },
   // ─── TERMINAL ─────────────────────────────────────────────────────────────────
-  "terminal.integrated.fontFamily": "Operator Mono SSm Lig",
+  "terminal.integrated.fontFamily": "Operator Mono",
   "terminal.integrated.fontSize": 14,
   "terminal.integrated.localEchoStyle": "dim",
   "terminal.integrated.localEchoLatencyThreshold": 30,
