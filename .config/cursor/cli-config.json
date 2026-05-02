@@ -54,7 +54,7 @@
   "privacyCache": {
     "ghostMode": true,
     "privacyMode": 2,
-    "updatedAt": 1777699518744
+    "updatedAt": 1777699886602
   },
   "serverConfigCache": {
     "backendUrl": "https://api2.cursor.sh",
@@ -64,7 +64,7 @@
       "agentnUrl": "https://agentn.global.api5.cursor.sh"
     },
     "cliSandboxDefaultEnabled": false,
-    "updatedAt": 1777698675564
+    "updatedAt": 1777699807545
   },
   "authInfo": {
     "email": "sailesh6524@student.ku.edu.np",
@@ -80,5 +80,9 @@
     "mode": "disabled"
   },
   "showSandboxIntro": false,
-  "runEverythingSettingsPromptStreak": 0
+  "runEverythingSettingsPromptStreak": 0,
+  "attribution": {
+    "attributeCommitsToAgent": false,
+    "attributePRsToAgent": false
+  }
 }
