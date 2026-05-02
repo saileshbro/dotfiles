@@ -54,7 +54,7 @@
   "privacyCache": {
     "ghostMode": true,
     "privacyMode": 2,
-    "updatedAt": 1777699886602
+    "updatedAt": 1777727938597
   },
   "serverConfigCache": {
     "backendUrl": "https://api2.cursor.sh",
@@ -64,7 +64,8 @@
       "agentnUrl": "https://agentn.global.api5.cursor.sh"
     },
     "cliSandboxDefaultEnabled": false,
-    "updatedAt": 1777699807545
+    "serverHttp2Config": 0,
+    "updatedAt": 1777727133864
   },
   "authInfo": {
     "email": "sailesh6524@student.ku.edu.np",

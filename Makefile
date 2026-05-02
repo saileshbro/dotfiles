@@ -4,11 +4,12 @@
 .PHONY: all delete setup-aliases clean-aliases setup setup-with-aliases clean install-fonts sync-themes setup-terminal install-vscode-theme
 
 THEME_DIR := themes/tinacious-theme
+THEME_VERSION := $(shell node -p "require('./$(THEME_DIR)/package.json').version" 2>/dev/null)
+THEME_VSIX := $(CURDIR)/$(THEME_DIR)/theme-tinaciousdesign-$(THEME_VERSION).vsix
 
-# Main target: complete fresh machine setup
-# install-vscode-theme is intentionally NOT part of `all` — run it manually
-# after VS Code / Cursor / Antigravity are installed on the machine.
-all: setup-aliases install-fonts sync-themes setup-terminal
+# Main target: complete fresh machine setup (includes local Tinacious theme for
+# VS Code, Cursor, and Antigravity — see install-vscode-theme).
+all: setup-aliases install-fonts sync-themes install-vscode-theme setup-terminal
 	stow --verbose --target=$$HOME --restow .
 	@echo "Fresh machine setup complete!"
 
@@ -30,20 +31,27 @@ sync-themes:
 	@cp $(THEME_DIR)/dist/terminal/setup-profile.applescript .config/terminal/setup-profile.applescript
 	@echo "Themes synced."
 
-# Symlink theme submodule as a local extension into VS Code, Cursor, and Antigravity.
-# Also purges any conflicting marketplace installs from both the filesystem and
-# each editor's extensions.json registry (stale entries break Cursor on restart).
+# Package the submodule as a .vsix and install with each product's CLI. VS Code only
+# accepts extension IDs or .vsix paths on the CLI — not an unpacked folder (see
+# https://code.visualstudio.com/docs/editor/command-line#_working-with-extensions).
+# Symlinking alone is not registered in extensions.json for profile-aware installs.
 install-vscode-theme:
-	@echo "Installing Tinacious Design theme from submodule..."
+	@echo "Packaging and installing Tinacious Design theme from submodule..."
+	@test -n "$(THEME_VERSION)" || (echo "Missing $(THEME_DIR)/package.json"; exit 1)
+	@cd $(CURDIR)/$(THEME_DIR) && npm exec -- vsce package --no-dependencies
 	@mkdir -p $$HOME/.vscode/extensions $$HOME/.cursor/extensions $$HOME/.antigravity/extensions
-	@code    --uninstall-extension tinaciousdesign.theme-tinaciousdesign 2>/dev/null; true
-	@cursor  --uninstall-extension tinaciousdesign.theme-tinaciousdesign 2>/dev/null; true
-	@cursor  --uninstall-extension hoyame.yungythem-theme-tinaciousdesign2 2>/dev/null; true
-	@antigravity --uninstall-extension tinaciousdesign.theme-tinaciousdesign 2>/dev/null; true
-	@ln -sfn $$HOME/dotfiles/$(THEME_DIR) $$HOME/.vscode/extensions/tinaciousdesign.theme-tinaciousdesign-local
-	@ln -sfn $$HOME/dotfiles/$(THEME_DIR) $$HOME/.cursor/extensions/tinaciousdesign.theme-tinaciousdesign-local
-	@ln -sfn $$HOME/dotfiles/$(THEME_DIR) $$HOME/.antigravity/extensions/tinaciousdesign.theme-tinaciousdesign-local
-	@echo "Theme linked from submodule in VS Code, Cursor, and Antigravity."
+	@for bin in code cursor antigravity; do \
+		command -v $$bin >/dev/null 2>&1 || continue; \
+		$$bin --uninstall-extension tinaciousdesign.theme-tinaciousdesign 2>/dev/null; true; \
+		$$bin --uninstall-extension hoyame.yungythem-theme-tinaciousdesign2 2>/dev/null; true; \
+		$$bin --install-extension $(THEME_VSIX) --force || \
+			printf 'warning: %s failed to install the VSIX (check CLI supports --install-extension)\n' "$$bin" >&2; \
+	done
+	@rm -f $$HOME/.vscode/extensions/tinaciousdesign.theme-tinaciousdesign-local \
+		$$HOME/.cursor/extensions/tinaciousdesign.theme-tinaciousdesign-local \
+		$$HOME/.antigravity/extensions/tinaciousdesign.theme-tinaciousdesign-local 2>/dev/null; true
+	@find "$$HOME/Library/Application Support/Cursor/CachedProfilesData" -name "extensions.user.cache" -delete 2>/dev/null; true
+	@echo "Theme installed from $(THEME_VSIX) (re-run after editing the theme to refresh)."
 
 # Create Terminal.app "Tinacious Design Dark" profile and set as default
 setup-terminal:

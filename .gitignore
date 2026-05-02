@@ -27,6 +27,7 @@
 .config/**/tool_state
 .vscode/*
 .antigravity/*
+themes/tinacious-theme/*.vsix
 .cache/*
 .cursor/*
 .local/*
