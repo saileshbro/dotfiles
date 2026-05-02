@@ -36,21 +36,10 @@ sync-themes:
 install-vscode-theme:
 	@echo "Installing Tinacious Design theme from submodule..."
 	@mkdir -p $$HOME/.vscode/extensions $$HOME/.cursor/extensions $$HOME/.antigravity/extensions
-	@find $$HOME/.vscode/extensions    -maxdepth 1 \( -name "tinaciousdesign.theme-tinaciousdesign-*" -o -name "*yungythem*" \) ! -name "*-local" -exec rm -rf {} + 2>/dev/null; true
-	@find $$HOME/.cursor/extensions    -maxdepth 1 \( -name "*tinaciousdesign*"                       -o -name "*yungythem*" \) ! -name "*-local" -exec rm -rf {} + 2>/dev/null; true
-	@find $$HOME/.antigravity/extensions -maxdepth 1 \( -name "tinaciousdesign.theme-tinaciousdesign-*" -o -name "*yungythem*" \) ! -name "*-local" -exec rm -rf {} + 2>/dev/null; true
-	@for f in \
-		$$HOME/.vscode/extensions/extensions.json \
-		$$HOME/.cursor/extensions/extensions.json \
-		$$HOME/.antigravity/extensions/extensions.json; do \
-		[ -f "$$f" ] && python3 -c "\
-import json; \
-path='$$f'; \
-data=json.load(open(path)); \
-keep=[e for e in data if 'tinaciousdesign' not in e.get('id','').lower() and 'yungythem' not in e.get('id','').lower()]; \
-open(path,'w').write(json.dumps(keep,indent=2)+'\n') \
-" 2>/dev/null; true; \
-	done
+	@code    --uninstall-extension tinaciousdesign.theme-tinaciousdesign 2>/dev/null; true
+	@cursor  --uninstall-extension tinaciousdesign.theme-tinaciousdesign 2>/dev/null; true
+	@cursor  --uninstall-extension hoyame.yungythem-theme-tinaciousdesign2 2>/dev/null; true
+	@antigravity --uninstall-extension tinaciousdesign.theme-tinaciousdesign 2>/dev/null; true
 	@ln -sfn $$HOME/dotfiles/$(THEME_DIR) $$HOME/.vscode/extensions/tinaciousdesign.theme-tinaciousdesign-local
 	@ln -sfn $$HOME/dotfiles/$(THEME_DIR) $$HOME/.cursor/extensions/tinaciousdesign.theme-tinaciousdesign-local
 	@ln -sfn $$HOME/dotfiles/$(THEME_DIR) $$HOME/.antigravity/extensions/tinaciousdesign.theme-tinaciousdesign-local
