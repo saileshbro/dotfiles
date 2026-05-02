@@ -15,20 +15,20 @@ tell application "Terminal"
         set font name to "OperatorMono-Book"
         set font size to 16
         set |ANSI black color| to {11308, 11308, 15934}
-        set |ANSI red color| to {65535, 13107, 39321}
-        set |ANSI green color| to {0, 54227, 25700}
-        set |ANSI yellow color| to {65535, 52428, 26214}
-        set |ANSI blue color| to {0, 49087, 65535}
-        set |ANSI magenta color| to {52428, 26214, 65535}
-        set |ANSI cyan color| to {0, 52942, 53713}
-        set |ANSI white color| to {65535, 65535, 65535}
         set |ANSI bright black color| to {15677, 15677, 22102}
+        set |ANSI red color| to {65535, 13107, 39321}
         set |ANSI bright red color| to {65535, 13107, 39321}
+        set |ANSI green color| to {0, 54227, 25700}
         set |ANSI bright green color| to {0, 54227, 25700}
+        set |ANSI yellow color| to {65535, 52428, 26214}
         set |ANSI bright yellow color| to {65535, 52428, 26214}
+        set |ANSI blue color| to {0, 49087, 65535}
         set |ANSI bright blue color| to {0, 49087, 65535}
+        set |ANSI magenta color| to {52428, 26214, 65535}
         set |ANSI bright magenta color| to {52428, 26214, 65535}
+        set |ANSI cyan color| to {0, 52942, 53713}
         set |ANSI bright cyan color| to {0, 52942, 53713}
+        set |ANSI white color| to {65535, 65535, 65535}
         set |ANSI bright white color| to {65535, 65535, 65535}
     end tell
 
@@ -45,20 +45,20 @@ tell application "Terminal"
         set font name to "OperatorMono-Book"
         set font size to 16
         set |ANSI black color| to {11308, 11308, 15934}
-        set |ANSI red color| to {65535, 13107, 39321}
-        set |ANSI green color| to {0, 45746, 21331}
-        set |ANSI yellow color| to {65535, 43690, 0}
-        set |ANSI blue color| to {257, 43433, 57825}
-        set |ANSI magenta color| to {52428, 26214, 65535}
-        set |ANSI cyan color| to {0, 52942, 53713}
-        set |ANSI white color| to {65535, 65535, 65535}
         set |ANSI bright black color| to {15677, 15677, 22102}
+        set |ANSI red color| to {65535, 13107, 39321}
         set |ANSI bright red color| to {65535, 13107, 39321}
+        set |ANSI green color| to {0, 45746, 21331}
         set |ANSI bright green color| to {0, 45746, 21331}
+        set |ANSI yellow color| to {65535, 43690, 0}
         set |ANSI bright yellow color| to {65535, 43690, 0}
+        set |ANSI blue color| to {257, 43433, 57825}
         set |ANSI bright blue color| to {257, 43433, 57825}
+        set |ANSI magenta color| to {52428, 26214, 65535}
         set |ANSI bright magenta color| to {52428, 26214, 65535}
+        set |ANSI cyan color| to {0, 52942, 53713}
         set |ANSI bright cyan color| to {0, 52942, 53713}
+        set |ANSI white color| to {65535, 65535, 65535}
         set |ANSI bright white color| to {65535, 65535, 65535}
     end tell
 end tell

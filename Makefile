@@ -1,22 +1,25 @@
 # Dotfiles Management with GNU Stow
 # This Makefile handles symlinking dotfiles and managing aliases
 
-.PHONY: all delete setup-aliases clean-aliases setup setup-with-aliases clean install-fonts sync-themes setup-terminal
+.PHONY: all delete setup-aliases clean-aliases setup setup-with-aliases clean install-fonts sync-themes setup-terminal install-vscode-theme
 
-THEME_DIR := $(HOME)/Projects/tinacious-theme
+THEME_DIR := themes/tinacious-theme
 
 # Main target: complete fresh machine setup
-all: setup-aliases install-fonts sync-themes setup-terminal
+all: setup-aliases install-fonts sync-themes setup-terminal install-vscode-theme
 	stow --verbose --target=$$HOME --restow .
 	@echo "Fresh machine setup complete!"
 
-# Build themes from tinacious-theme project and sync into dotfiles
+# Build themes from the submodule and sync into dotfiles
 sync-themes:
+	@echo "Initialising theme submodule..."
+	@git submodule update --init themes/tinacious-theme
 	@echo "Building tinacious themes..."
-	@cd $(THEME_DIR) && npm run build
+	@cd $(THEME_DIR) && npm install --silent && npm run build
 	@echo "Syncing Ghostty themes..."
 	@mkdir -p .config/ghostty/themes
-	@cp $(THEME_DIR)/dist/ghostty/* .config/ghostty/themes/
+	@cp $(THEME_DIR)/dist/ghostty/tinacious-design-dark $(THEME_DIR)/dist/ghostty/tinacious-design-light .config/ghostty/themes/
+	@cp $(THEME_DIR)/dist/ghostty/app-config .config/ghostty/app-config
 	@echo "Syncing Warp themes..."
 	@mkdir -p .config/warp/themes
 	@cp $(THEME_DIR)/dist/warp/* .config/warp/themes/
@@ -24,6 +27,18 @@ sync-themes:
 	@mkdir -p .config/terminal
 	@cp $(THEME_DIR)/dist/terminal/setup-profile.applescript .config/terminal/setup-profile.applescript
 	@echo "Themes synced."
+
+# Symlink theme submodule as a local extension into VS Code, Cursor, and Antigravity
+# Removes any marketplace installs that would conflict on the same theme label
+install-vscode-theme:
+	@echo "Installing Tinacious Design theme from submodule..."
+	@find $$HOME/.vscode/extensions -maxdepth 1 -name "tinaciousdesign.theme-tinaciousdesign-*" ! -name "*-local" -exec rm -rf {} + 2>/dev/null; true
+	@find $$HOME/.cursor/extensions -maxdepth 1 -name "*tinaciousdesign*" ! -name "*-local" -exec rm -rf {} + 2>/dev/null; true
+	@find $$HOME/.antigravity/extensions -maxdepth 1 -name "tinaciousdesign.theme-tinaciousdesign-*" ! -name "*-local" -exec rm -rf {} + 2>/dev/null; true
+	@ln -sfn $$HOME/dotfiles/$(THEME_DIR) $$HOME/.vscode/extensions/tinaciousdesign.theme-tinaciousdesign-local
+	@ln -sfn $$HOME/dotfiles/$(THEME_DIR) $$HOME/.cursor/extensions/tinaciousdesign.theme-tinaciousdesign-local
+	@ln -sfn $$HOME/dotfiles/$(THEME_DIR) $$HOME/.antigravity/extensions/tinaciousdesign.theme-tinaciousdesign-local
+	@echo "Theme linked from submodule in VS Code, Cursor, and Antigravity."
 
 # Create Terminal.app "Tinacious Design Dark" profile and set as default
 setup-terminal:

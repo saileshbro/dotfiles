@@ -1,0 +1,3 @@
+[submodule "themes/tinacious-theme"]
+	path = themes/tinacious-theme
+	url = https://github.com/saileshbro/tinacious-theme.git
