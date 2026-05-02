@@ -28,6 +28,9 @@
   "editor": {
     "vimMode": false
   },
+  "notifications": true,
+  "rewind": true,
+  "suggestNextPrompt": true,
   "model": {
     "modelId": "default",
     "displayModelId": "auto",
@@ -51,7 +54,7 @@
   "privacyCache": {
     "ghostMode": true,
     "privacyMode": 2,
-    "updatedAt": 1777456739593
+    "updatedAt": 1777699518744
   },
   "serverConfigCache": {
     "backendUrl": "https://api2.cursor.sh",
@@ -61,7 +64,7 @@
       "agentnUrl": "https://agentn.global.api5.cursor.sh"
     },
     "cliSandboxDefaultEnabled": false,
-    "updatedAt": 1777450573781
+    "updatedAt": 1777698675564
   },
   "authInfo": {
     "email": "sailesh6524@student.ku.edu.np",

@@ -114,7 +114,13 @@
     "command": "bash /Users/saileshbro/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
-    "skills@swmansion": true
+    "skills@swmansion": true,
+    "expo@expo-plugins": true,
+    "expo-app-design@expo-plugins": true,
+    "expo-deployment@expo-plugins": true,
+    "github-actions@callstack-agent-skills": true,
+    "react-native-best-practices@callstack-agent-skills": true,
+    "upgrading-react-native@callstack-agent-skills": true
   },
   "extraKnownMarketplaces": {
     "claude-code-warp": {
