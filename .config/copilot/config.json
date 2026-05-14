@@ -1,5 +1,6 @@
+// User settings belong in settings.json.
+// This file is managed automatically.
 {
-  "banner": "never",
   "trusted_folders": [
     "/Users/saileshbro/Projects/personal/finy.dev",
     "/Users/saileshbro/Projects/ipo-notifier",
@@ -8,13 +9,5 @@
     "/Users/saileshbro/dotfiles",
     "/Users/saileshbro/Projects/rayu.ai/apps/native"
   ],
-  "firstLaunchAt": "2026-03-11T00:00:00.000Z",
-  "allowedUrls": [
-    "https://raw.githubusercontent.com",
-    "https://starship.rs"
-  ],
-  "model": "gpt-5.3-codex",
-  "disabledSkills": [],
-  "show_reasoning": false,
-  "effortLevel": "low"
+  "firstLaunchAt": "2026-03-11T00:00:00.000Z"
 }

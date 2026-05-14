@@ -1,0 +1,15 @@
+# .functions — larger named functions
+# Sourced from .zshrc after conf.d/ so compinit and aliases are already available.
+
+# Print the local LAN IP (192.168.x.x) of this machine.
+# Adds a trailing newline only when stdout is a terminal, so piping to
+# pbcopy / xargs / etc. yields a clean address with no trailing whitespace.
+ipaddress() {
+  local ip
+  ip=$(ifconfig | awk '/inet 192\.168\./ {print $2; exit}')
+  if [[ -t 1 ]]; then
+    print -- "$ip"
+  else
+    printf '%s' "$ip"
+  fi
+}

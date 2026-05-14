@@ -1,19 +1,22 @@
 {
-  "vim": {
-    "toggle_relative_line_numbers": true
+  "use_system_window_tabs": true,
+  "session": {
+    "trust_all_worktrees": true,
   },
-  "cli_default_open_behavior": "new_window",
+  "vim": {
+    "toggle_relative_line_numbers": true,
+  },
   "project_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "outline_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "collaboration_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "git_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "agent_servers": {
     "github-copilot-cli": {
@@ -41,11 +44,22 @@
         "context7_api_key": "ctx7sk-b8b7f943-551d-4d60-b0c1-b0992cfff753",
       },
     },
+    "argent": {
+      "source": "custom",
+      "command": "argent",
+      "args": [
+        "mcp"
+      ],
+      "env": {
+        "ARGENT_MCP_LOG": "/Users/saileshbro/.argent/mcp-calls.log"
+      }
+    },
   },
   "agent": {
+    "sidebar_side": "left",
     "dock": "right",
     "tool_permissions": {
-      "default": "confirm",
+      "default": "allow",
       "tools": {
         "search_web": {
           "default": "allow",
@@ -85,7 +99,6 @@
   "buffer_font_family": "Operator Mono",
   "terminal": {
     "font_family": "Operator Mono",
-    "image_protocol": "kitty"
   },
   "base_keymap": "VSCode",
   "icon_theme": {

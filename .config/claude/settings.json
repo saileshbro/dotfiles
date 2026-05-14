@@ -50,7 +50,12 @@
       "mcp__plane__retrieve_work_item_by_identifier",
       "mcp__context7__resolve-library-id",
       "mcp__context7__query-docs",
-      "Bash(git stash show *)"
+      "Bash(git stash show *)",
+      "Bash(dart analyze *)",
+      "Bash(fvm flutter analyze *)",
+      "Bash(pdfinfo *)",
+      "Bash(xargs '-I{}' sh -c ' *)",
+      "mcp__argent"
     ],
     "deny": [],
     "ask": [
@@ -73,7 +78,6 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
   "hooks": {
     "PostToolUse": [
       {
@@ -113,50 +117,30 @@
     "type": "command",
     "command": "bash /Users/saileshbro/.claude/statusline-command.sh"
   },
-  "enabledPlugins": {
-    "skills@swmansion": true,
-    "expo@expo-plugins": true,
-    "expo-app-design@expo-plugins": true,
-    "expo-deployment@expo-plugins": true,
-    "github-actions@callstack-agent-skills": true,
-    "react-native-best-practices@callstack-agent-skills": true,
-    "upgrading-react-native@callstack-agent-skills": true
-  },
+  "enabledPlugins": {},
   "extraKnownMarketplaces": {
-    "claude-code-warp": {
-      "source": {
-        "source": "github",
-        "repo": "warpdotdev/claude-code-warp"
-      },
-      "autoUpdate": true
-    },
-    "swmansion": {
-      "source": {
-        "source": "github",
-        "repo": "software-mansion-labs/skills"
-      },
-      "autoUpdate": true
-    },
-    "callstack-agent-skills": {
-      "source": {
-        "source": "github",
-        "repo": "callstackincubator/agent-skills"
-      },
-      "autoUpdate": true
-    },
     "expo-plugins": {
       "source": {
         "source": "github",
         "repo": "expo/skills"
-      },
-      "autoUpdate": true
+      }
     }
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
   "awaySummaryEnabled": false,
-  "theme": "dark-daltonized",
+  "tui": "default",
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
+  "theme": "dark",
+  "editorMode": "normal",
+  "verbose": false,
+  "preferredNotifChannel": "iterm2_with_bell",
   "remoteControlAtStartup": true,
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true
 }
