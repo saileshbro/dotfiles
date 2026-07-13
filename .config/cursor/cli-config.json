@@ -28,7 +28,14 @@
   "editor": {
     "vimMode": false
   },
+  "display": {
+    "showLineNumbers": false,
+    "showThinkingBlocks": false,
+    "showStatusIndicators": false,
+    "showStatusLineRunningTime": false
+  },
   "notifications": true,
+  "hints": true,
   "rewind": true,
   "suggestNextPrompt": true,
   "model": {
@@ -45,7 +52,8 @@
   "maxMode": false,
   "modelParameters": {
     "default": [],
-    "composer-2": []
+    "composer-2": [],
+    "composer-2-fast": []
   },
   "selectedModel": {
     "modelId": "default",
@@ -54,7 +62,7 @@
   "privacyCache": {
     "ghostMode": true,
     "privacyMode": 2,
-    "updatedAt": 1777727938597
+    "updatedAt": 1783427067184
   },
   "serverConfigCache": {
     "backendUrl": "https://api2.cursor.sh",
@@ -65,7 +73,7 @@
     },
     "cliSandboxDefaultEnabled": false,
     "serverHttp2Config": 0,
-    "updatedAt": 1777727133864
+    "updatedAt": 1783423127746
   },
   "authInfo": {
     "email": "sailesh6524@student.ku.edu.np",

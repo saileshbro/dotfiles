@@ -1,13 +1,16 @@
 // User settings belong in settings.json.
 // This file is managed automatically.
 {
-  "trusted_folders": [
+  "trustedFolders": [
     "/Users/saileshbro/Projects/personal/finy.dev",
     "/Users/saileshbro/Projects/ipo-notifier",
     "/Users/saileshbro/Projects/sambad-app",
     "/Users/saileshbro/Projects/sambad",
     "/Users/saileshbro/dotfiles",
-    "/Users/saileshbro/Projects/rayu.ai/apps/native"
+    "/Users/saileshbro/Projects/rayu.ai/apps/native",
+    "/Users/saileshbro/Projects/Sajilo/sajilo-expo"
   ],
-  "firstLaunchAt": "2026-03-11T00:00:00.000Z"
+  "firstLaunchAt": "2026-03-11T00:00:00.000Z",
+  "appTipShown": true,
+  "reasoningSummariesCleanupDone": true
 }
