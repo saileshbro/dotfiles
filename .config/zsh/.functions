@@ -13,3 +13,87 @@ ipaddress() {
     printf '%s' "$ip"
   fi
 }
+
+# git switch, worktree-aware: if a worktree already checks out the target
+# branch, cd there instead of switching in place (git refuses to check out
+# a branch that's already held by another worktree, so this is the natural
+# escape hatch when your worktrees live outside the current repo dir).
+# \git bypasses the rtk proxy alias for this plumbing-only invocation.
+gsw() {
+  if [[ -z "$1" ]]; then
+    echo "usage: gsw <branch>" >&2
+    return 1
+  fi
+  if ! \git rev-parse --is-inside-work-tree &>/dev/null; then
+    echo "gsw: not inside a git repository" >&2
+    return 1
+  fi
+
+  local branch="$1" wt_path
+  wt_path=$(\git worktree list --porcelain | awk -v b="refs/heads/$branch" '
+    /^worktree / { path = substr($0, 10) }
+    /^branch /   { if ($2 == b) print path }
+  ')
+
+  if [[ -n "$wt_path" ]]; then
+    cd -- "$wt_path" || return 1
+    echo "gsw: switched to worktree for '$branch' → $wt_path"
+  else
+    \git switch "$branch"
+  fi
+}
+(( $+functions[compdef] )) && compdef _git gsw=git-switch
+
+# Remove the worktree checked out for a branch. Prompts for confirmation
+# unless -f is passed (which also forces removal of a dirty worktree, same
+# spirit as `rm -f`). Hops out to the main worktree first if your shell's
+# cwd is inside the one being removed, so you aren't left in a deleted dir.
+gwrm() {
+  local force=false OPTIND opt
+  while getopts "f" opt; do
+    case "$opt" in
+      f) force=true ;;
+      *) echo "usage: gwrm [-f] <branch>" >&2; return 1 ;;
+    esac
+  done
+  shift $((OPTIND - 1))
+
+  if [[ -z "$1" ]]; then
+    echo "usage: gwrm [-f] <branch>" >&2
+    return 1
+  fi
+  if ! \git rev-parse --is-inside-work-tree &>/dev/null; then
+    echo "gwrm: not inside a git repository" >&2
+    return 1
+  fi
+
+  local branch="$1" wt_path
+  wt_path=$(\git worktree list --porcelain | awk -v b="refs/heads/$branch" '
+    /^worktree / { path = substr($0, 10) }
+    /^branch /   { if ($2 == b) print path }
+  ')
+
+  if [[ -z "$wt_path" ]]; then
+    echo "gwrm: no worktree found for branch '$branch'" >&2
+    return 1
+  fi
+
+  if [[ "$force" != true ]]; then
+    printf "gwrm: remove worktree for '%s' at %s? [y/N] " "$branch" "$wt_path"
+    read -r reply
+    [[ "$reply" == [yY] ]] || { echo "gwrm: aborted"; return 1; }
+  fi
+
+  if [[ "$PWD" == "$wt_path" || "$PWD" == "$wt_path"/* ]]; then
+    local main_wt
+    main_wt=$(\git worktree list --porcelain | awk '/^worktree /{print substr($0,10); exit}')
+    cd -- "$main_wt" || return 1
+  fi
+
+  if [[ "$force" == true ]]; then
+    \git worktree remove --force -- "$wt_path"
+  else
+    \git worktree remove -- "$wt_path"
+  fi
+}
+(( $+functions[compdef] )) && compdef _git gwrm=git-branch

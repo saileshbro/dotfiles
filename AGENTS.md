@@ -258,6 +258,20 @@ Single canonical file: `~/.local/state/zsh/history`
 
 ---
 
+## Custom Git Helpers
+
+Defined in `.functions` (worktree-aware, so they need real shell logic — not
+plain aliases). Both bypass the `rtk git` proxy alias internally via `\git`.
+
+| Command | Usage | Behavior |
+|---|---|---|
+| `gsw` | `gsw <branch>` | Switches to `<branch>`. If another worktree already has it checked out, `cd`s into that worktree instead of switching in place. |
+| `gwrm` | `gwrm [-f] <branch>` | Removes the worktree checked out for `<branch>`. Prompts for confirmation unless `-f` is passed (`-f` also forces removal of a dirty worktree, git's `--force`). If your shell is currently inside the worktree being removed, hops back to the main worktree first so you aren't left in a deleted directory. |
+
+Neither command deletes the git branch itself — only the worktree.
+
+---
+
 ## XDG Compliance
 
 | Variable | Path |
