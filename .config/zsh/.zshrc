@@ -136,3 +136,17 @@ zsh-bench() {
   echo ""
   echo "Tip: run 'zsh -i -c zprof' to see a per-function breakdown."
 }
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/saileshbro/.lmstudio/bin"
+# End of LM Studio CLI section
+
+
+# Added by Antigravity IDE
+export PATH="/Users/saileshbro/.antigravity-ide/antigravity-ide/bin:$PATH"
+
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+fpath=(~/.grok/completions/zsh $fpath)
+autoload -Uz compinit && compinit -C
+# <<< grok installer <<<
