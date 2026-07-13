@@ -1,4 +1,5 @@
 {
+  "cli_default_open_behavior": "existing_window",
   "use_system_window_tabs": true,
   "session": {
     "trust_all_worktrees": true,
@@ -34,14 +35,14 @@
       "enabled": true,
       "remote": false,
       "settings": {
-        "exa_api_key": "cf5fa263-054b-4b33-93fe-b7930804f9bf",
+        "exa_api_key": "",
       },
     },
     "mcp-server-context7": {
       "enabled": true,
       "remote": false,
       "settings": {
-        "context7_api_key": "ctx7sk-b8b7f943-551d-4d60-b0c1-b0992cfff753",
+        "context7_api_key": "",
       },
     },
     "argent": {
@@ -49,10 +50,7 @@
       "command": "argent",
       "args": [
         "mcp"
-      ],
-      "env": {
-        "ARGENT_MCP_LOG": "/Users/saileshbro/.argent/mcp-calls.log"
-      }
+      ]
     },
   },
   "agent": {
@@ -102,11 +100,15 @@
   },
   "base_keymap": "VSCode",
   "icon_theme": {
-    "mode": "system",
+    "mode": "dark",
     "light": "Material Icon Theme",
     "dark": "Zed (Default)",
   },
   "vim_mode": true,
-  "theme": "Tinacious Design",
+  "theme": {
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "One Dark"
+  },
   "ui_font_family": ".SystemUIFont",
 }

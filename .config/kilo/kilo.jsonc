@@ -55,11 +55,28 @@
       "voice *": "allow",
       "_layout.tsx *": "allow",
       "cp *": "allow",
-      "rmdir *": "allow"
+      "rmdir *": "allow",
+      "rg *": "allow",
+      "sed *": "allow",
+      "gh issue view *": "allow",
+      "bunx *": "allow",
+      "bun run lint *": "allow",
+      "bun run test *": "allow",
+      "which *": "allow",
+      "xcrun *": "allow",
+      "grep *": "allow",
+      "adb *": "allow",
+      "argent *": "allow",
+      "true *": "allow",
+      "lsof *": "allow",
+      "sleep *": "allow",
+      "jq *": "allow",
+      "awk *": "allow"
     },
     "external_directory": {
       "/Users/saileshbro/.opencode/plans/*": "allow",
-      "/Users/saileshbro/*": "allow"
+      "/Users/saileshbro/*": "allow",
+      "/tmp/*": "allow"
     },
     "read": {
       "*": "allow"
@@ -73,7 +90,7 @@
         "-y",
         "@upstash/context7-mcp",
         "--api-key",
-        "ctx7sk-e2e4a0a8-ce03-4c3f-9c87-4a5e57adcd66"
+        ""
       ]
     },
     "chrome-dev-tools": {
