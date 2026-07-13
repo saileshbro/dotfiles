@@ -78,7 +78,37 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "sonnet",
+  "skillOverrides": {
+    "argent-create-flow": "off",
+    "argent-metro-debugger": "off",
+    "argent-react-native-optimization": "off",
+    "argent-screenshot-diff": "off",
+    "diagnosing-bugs": "off",
+    "make-slides": "off",
+    "research-topic": "off",
+    "slides-with-research": "off",
+    "expo-api-routes": "off",
+    "expo-cicd-workflows": "off",
+    "expo-tailwind-setup": "off",
+    "frontend-design": "off",
+    "turborepo": "off",
+    "use-dom": "off",
+    "dataviz": "off"
+  },
   "hooks": {
+    "PermissionRequest": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/saileshbro/.claude/hooks/herdr-agent-state.sh' blocked",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|MultiEdit|Write",
@@ -110,6 +140,64 @@
             "command": "rtk hook claude"
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/saileshbro/.claude/hooks/herdr-agent-state.sh' working",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/saileshbro/.claude/hooks/herdr-agent-state.sh' release",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/saileshbro/.claude/hooks/herdr-agent-state.sh' idle",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/saileshbro/.claude/hooks/herdr-agent-state.sh' idle",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/saileshbro/.claude/hooks/herdr-agent-state.sh' working",
+            "timeout": 10
+          }
+        ]
       }
     ]
   },
@@ -117,23 +205,35 @@
     "type": "command",
     "command": "bash /Users/saileshbro/.claude/statusline-command.sh"
   },
-  "enabledPlugins": {},
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "expo@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": false,
+    "typescript-lsp@claude-plugins-official": false,
+    "exa@claude-plugins-official": true,
+    "firebase@claude-plugins-official": true,
+    "supabase@claude-plugins-official": true,
+    "cloudflare@cloudflare": false
+  },
   "extraKnownMarketplaces": {
-    "expo-plugins": {
+    "cloudflare": {
       "source": {
         "source": "github",
-        "repo": "expo/skills"
+        "repo": "cloudflare/skills"
       }
     }
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
+  "advisorModel": "opus",
   "awaySummaryEnabled": false,
-  "tui": "default",
+  "tui": "fullscreen",
   "voice": {
     "enabled": true,
     "mode": "hold"
   },
+  "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
   "theme": "dark",
   "editorMode": "normal",
   "verbose": false,
