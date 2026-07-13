@@ -76,3 +76,4 @@ themes/tinacious-theme/*.vsix
 .config/snyk/*.log
 .config/herdr/*.log
 .config/herdr/*.sock
+.config/fish/*
