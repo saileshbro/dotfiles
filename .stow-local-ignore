@@ -7,3 +7,5 @@ README.md
 RULES.md
 .cursor/
 .github/
+secrets
+secrets.example

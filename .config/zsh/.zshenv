@@ -1,5 +1,6 @@
 # .zshenv — loaded for EVERY zsh process (interactive, non-interactive, scripts).
-# Keep this file fast: no subprocesses, no sourcing, no mkdir calls.
+# Keep this file fast: no subprocesses (no $(cmd)), no mkdir calls.
+# Sourcing a flat file is fine — it's a shell builtin with no fork.
 
 # ── Disable macOS per-window session history ───────────────────────────────────
 # Without this, /etc/zshrc_Apple_Terminal fragments history into
@@ -80,3 +81,9 @@ export WAKATIME_HOME="$XDG_CONFIG_HOME/wakatime"
 export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
 export CHROME_EXECUTABLE="/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
+
+# ── Secrets ───────────────────────────────────────────────────────────────────
+# Sourced in .zshenv (not .zshrc) so env vars are available to ALL processes,
+# including GUI apps like Claude Code that don't spawn an interactive shell.
+# ~/dotfiles/secrets is git-ignored — see secrets.example for the template.
+[[ -f "$HOME/.secrets" ]] && source "$HOME/.secrets"

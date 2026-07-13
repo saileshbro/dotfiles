@@ -1,7 +1,7 @@
 # Dotfiles Management with GNU Stow
 # This Makefile handles symlinking dotfiles and managing aliases
 
-.PHONY: all delete setup-aliases clean-aliases setup setup-with-aliases clean install-fonts sync-themes setup-terminal install-vscode-theme
+.PHONY: all delete setup-aliases clean-aliases setup setup-with-aliases clean install-fonts sync-themes setup-terminal install-vscode-theme setup-secrets
 
 THEME_DIR := themes/tinacious-theme
 THEME_VERSION := $(shell node -p "require('./$(THEME_DIR)/package.json').version" 2>/dev/null)
@@ -71,8 +71,20 @@ install-fonts:
 delete:
 	stow --verbose --target=$$HOME --delete .
 
+# Symlink ~/dotfiles/secrets → ~/.secrets (git-ignored, never committed)
+# On a fresh machine: cp ~/dotfiles/secrets.example ~/dotfiles/secrets && fill in values
+setup-secrets:
+	@if [ -f $$HOME/dotfiles/secrets ]; then \
+		ln -sf $$HOME/dotfiles/secrets $$HOME/.secrets; \
+		echo "Symlinked ~/dotfiles/secrets → ~/.secrets"; \
+	else \
+		echo "Warning: ~/dotfiles/secrets not found."; \
+		echo "  Run: cp ~/dotfiles/secrets.example ~/dotfiles/secrets"; \
+		echo "  Then fill in your tokens and re-run make setup-aliases."; \
+	fi
+
 # Setup symlinks and XDG directories for CLI tools
-setup-aliases:
+setup-aliases: setup-secrets
 	@echo "Setting up symlinks and XDG directories..."
 	@echo "Creating symlinks for zsh configuration files..."
 	ln -sf $$HOME/.config/zsh/.zshenv $$HOME/.zshenv

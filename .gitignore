@@ -1,3 +1,4 @@
+secrets
 .DS_Store
 .config/docker/*
 .config/configstore/*
@@ -66,3 +67,12 @@ themes/tinacious-theme/*.vsix
 !.config/warp/tab_configs/
 .config/mole/clean-list.txt
 .config/opencode/package-lock.json
+.config/opencode/antigravity-accounts.json
+.config/zed/settings_backup.json
+.config/raycast-x/extensions/*
+.config/homebrew/trust.json
+.config/homebrew/trust.json.lock
+.config/matplotlib/*
+.config/snyk/*.log
+.config/herdr/*.log
+.config/herdr/*.sock
