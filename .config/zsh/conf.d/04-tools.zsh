@@ -102,6 +102,20 @@ j() {
 
 
 ######################################
+# fnm — Fast Node Manager
+######################################
+# `fnm env` mints a UNIQUE FNM_MULTISHELL_PATH (pid + timestamp) on every call.
+# That per-shell symlink is how `fnm use` keeps each terminal's active Node
+# version isolated. Caching it via _zsh_cache_eval would share one symlink
+# across all shells, so `fnm use` in one window would leak into every other —
+# hence a direct eval here. --use-on-cd registers a chpwd hook that auto-
+# switches Node on .node-version / .nvmrc, so it must run at startup too.
+if (( $+commands[fnm] )); then
+  eval "$(fnm env --use-on-cd)"
+fi
+
+
+######################################
 # Deferred integrations
 ######################################
 # Load slower/non-essential integrations only when the first command is run.

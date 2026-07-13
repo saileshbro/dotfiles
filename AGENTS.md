@@ -227,6 +227,7 @@ rm -rf ~/.cache/zsh && exec zsh
 | `brew --prefix` is slow (~25ms each call) | `HOMEBREW_PREFIX` hardcoded in `.zshenv` |
 | `compaudit` runs on every shell (was 93% of startup) | `compinit -C` when dump is <24h old |
 | `code --locate-shell-integration-path` outputs a path, not shell code | Custom logic in `04-tools.zsh` |
+| `fnm env` mints a unique per-shell `FNM_MULTISHELL_PATH` — caching it leaks `fnm use` across windows | Direct `eval "$(fnm env --use-on-cd)"`, **not** `_zsh_cache_eval`, in `04-tools.zsh` |
 | `compdef` not available when `.alias` loads | `.alias` sourced after `conf.d/` loop |
 | `$(command -v tool)` spawns a subshell | Use `$commands[tool]` instead |
 | Duplicate PATH entries | `typeset -U path PATH` deduplicates automatically |
