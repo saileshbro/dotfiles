@@ -1,0 +1,18 @@
+{
+  "theme": {
+    "name": "tinacious-design-dark"
+  },
+  "scroll": {
+    "speed": 3,
+    "acceleration": true
+  },
+  "diffs": {
+    "wrap": "word"
+  },
+  "session": {
+    "sidebar": "hide",
+    "scrollbar": false,
+    "thinking": "show"
+  },
+  "animations": true
+}

@@ -261,8 +261,7 @@ Single canonical file: `~/.local/state/zsh/history`
 ## Custom Git Helpers
 
 Defined in `.functions` (worktree-aware, so they need real shell logic — not
-plain aliases). Both bypass the `rtk git` proxy alias internally via `\git`.
-
+plain aliases).
 | Command | Usage | Behavior |
 |---|---|---|
 | `gsw` | `gsw <branch>` | Switches to `<branch>`. If another worktree already has it checked out, `cd`s into that worktree instead of switching in place. |

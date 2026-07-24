@@ -67,9 +67,11 @@ themes/tinacious-theme/*.vsix
 !.config/warp/tab_configs/
 .config/mole/clean-list.txt
 .config/opencode/package-lock.json
+.config/opencode/service-*.json
 .config/opencode/antigravity-accounts.json
 .config/zed/settings_backup.json
 .config/raycast-x/extensions/*
+.config/raycast-x/node-*/*
 .config/homebrew/trust.json
 .config/homebrew/trust.json.lock
 .config/matplotlib/*
@@ -77,3 +79,4 @@ themes/tinacious-theme/*.vsix
 .config/herdr/*.log
 .config/herdr/*.sock
 .config/fish/*
+.config/colab-cli/*
