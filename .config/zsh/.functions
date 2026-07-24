@@ -18,7 +18,6 @@ ipaddress() {
 # branch, cd there instead of switching in place (git refuses to check out
 # a branch that's already held by another worktree, so this is the natural
 # escape hatch when your worktrees live outside the current repo dir).
-# \git bypasses the rtk proxy alias for this plumbing-only invocation.
 gsw() {
   if [[ -z "$1" ]]; then
     echo "usage: gsw <branch>" >&2

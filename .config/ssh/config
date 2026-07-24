@@ -7,3 +7,10 @@ Include ~/.orbstack/ssh/config
 Host *
   SetEnv TERM=xterm-256color
 
+# Reuse one SSH connection across git + git-lfs (each push opens both) to
+# avoid paying the handshake round-trip latency to GitHub twice.
+Host github.com
+  ControlMaster auto
+  ControlPath ~/.ssh/sockets/%r@%h-%p
+  ControlPersist 10m
+
