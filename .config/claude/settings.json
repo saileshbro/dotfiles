@@ -45,7 +45,6 @@
       "Bash(tee *)",
       "Read(/tmp/**)",
       "Edit(/tmp/**)",
-      "Bash(rtk *)",
       "Bash(curl *)",
       "Bash(wget *)",
       "Bash(ssh *)",
@@ -53,8 +52,6 @@
       "mcp__context7__resolve-library-id",
       "mcp__context7__query-docs",
       "Bash(git stash show *)",
-      "Bash(dart analyze *)",
-      "Bash(fvm flutter analyze *)",
       "Bash(pdfinfo *)",
       "Bash(xargs '-I{}' sh -c ' *)",
       "mcp__argent",
@@ -72,7 +69,20 @@
       "Bash(gh pr comment *)",
       "Bash(git commit *)"
     ],
-    "deny": [],
+    "deny": [
+      "EnterPlanMode",
+      "ExitPlanMode",
+      "NotebookEdit",
+      "SendMessage",
+      "PushNotification",
+      "RemoteTrigger",
+      "ReportFindings",
+      "ScheduleWakeup",
+      "AskUserQuestion",
+      "CronCreate",
+      "CronDelete",
+      "CronList"
+    ],
     "ask": [
       "Bash(rm *)",
       "Bash(mv *)",
@@ -94,6 +104,7 @@
     "defaultMode": "auto"
   },
   "model": "sonnet",
+  "disableClaudeAiConnectors": true,
   "skillOverrides": {
     "argent-create-flow": "off",
     "argent-metro-debugger": "off",
@@ -111,111 +122,10 @@
     "use-dom": "off",
     "dataviz": "off"
   },
-  "hooks": {
-    "PermissionRequest": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/saileshbro/.claude/hooks/herdr-agent-state.sh' blocked",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Edit|MultiEdit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "# Auto-install dependencies when package.json changes\nif [[ \"$CLAUDE_TOOL_INPUT_FILE_PATH\" =~ package\\.json$ ]]; then\n  echo '{\"feedback\": \"Installing dependencies...\"}' >&2\n  npm install >/dev/null 2>&1 && echo '{\"feedback\": \"Dependencies installed.\", \"suppressOutput\": true}' || {\n    echo '{\"feedback\": \"Failed to install dependencies.\"}' >&2\n    exit 1\n  }\nfi",
-            "timeout": 60
-          }
-        ]
-      },
-      {
-        "matcher": "Edit|MultiEdit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "# Type-check TypeScript files\nif [[ \"$CLAUDE_TOOL_INPUT_FILE_PATH\" =~ \\.(ts|tsx)$ ]]; then\n  echo '{\"feedback\": \"Checking TypeScript types...\"}' >&2\n  output=$(npx tsc --noEmit 2>&1)\n  exit_code=$?\n  if [ $exit_code -eq 0 ]; then\n    echo '{\"feedback\": \"No TypeScript errors.\", \"suppressOutput\": true}'\n  else\n    errors=$(echo \"$output\" | grep -A 2 \"error TS\" | head -30)\n    if [ -n \"$errors\" ]; then\n      echo '{\"feedback\": \"TypeScript found type errors:\"}' >&2\n      echo \"$errors\" >&2\n    fi\n  fi\n  # Non-blocking\n  exit 0\nfi",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "rtk hook claude"
-          }
-        ]
-      },
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/saileshbro/.claude/hooks/herdr-agent-state.sh' working",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/saileshbro/.claude/hooks/herdr-agent-state.sh' release",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/saileshbro/.claude/hooks/herdr-agent-state.sh' idle",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/saileshbro/.claude/hooks/herdr-agent-state.sh' idle",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/saileshbro/.claude/hooks/herdr-agent-state.sh' working",
-            "timeout": 10
-          }
-        ]
-      }
-    ]
-  },
+  "disableBundledSkills": true,
+  "disableRemoteControl": true,
+  "disableWorkflows": true,
+  "disableArtifact": true,
   "statusLine": {
     "type": "command",
     "command": "bash /Users/saileshbro/.claude/statusline-command.sh"
@@ -223,40 +133,23 @@
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
     "expo@claude-plugins-official": true,
-    "swift-lsp@claude-plugins-official": false,
-    "typescript-lsp@claude-plugins-official": false,
-    "exa@claude-plugins-official": true,
-    "firebase@claude-plugins-official": true,
-    "supabase@claude-plugins-official": true,
-    "cloudflare@cloudflare": false,
-    "vercel@claude-plugins-official": true
-  },
-  "extraKnownMarketplaces": {
-    "cloudflare": {
-      "source": {
-        "source": "github",
-        "repo": "cloudflare/skills"
-      }
-    }
+    "exa@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "advisorModel": "opus",
   "awaySummaryEnabled": false,
   "tui": "fullscreen",
-  "voice": {
-    "enabled": true,
-    "mode": "hold"
-  },
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
   "theme": "dark",
   "editorMode": "normal",
   "verbose": false,
   "preferredNotifChannel": "iterm2_with_bell",
-  "remoteControlAtStartup": true,
+  "remoteControlAtStartup": false,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true
+  "voiceEnabled": false,
+  "autoCompactEnabled": true
 }
