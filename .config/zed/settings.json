@@ -2,56 +2,56 @@
   "cli_default_open_behavior": "existing_window",
   "use_system_window_tabs": true,
   "session": {
-    "trust_all_worktrees": true,
+    "trust_all_worktrees": true
   },
   "vim": {
-    "toggle_relative_line_numbers": true,
+    "toggle_relative_line_numbers": true
   },
   "project_panel": {
-    "dock": "left",
+    "dock": "left"
   },
   "outline_panel": {
-    "dock": "left",
+    "dock": "left"
   },
   "collaboration_panel": {
-    "dock": "left",
+    "dock": "left"
   },
   "git_panel": {
-    "dock": "left",
+    "dock": "left"
   },
   "agent_servers": {
     "github-copilot-cli": {
-      "type": "registry",
+      "type": "registry"
     },
     "gemini": {
-      "type": "registry",
+      "type": "registry"
     },
     "cursor": {
-      "type": "registry",
-    },
+      "type": "registry"
+    }
   },
   "context_servers": {
     "mcp-server-exa-search": {
+      "source": "custom",
       "enabled": true,
-      "remote": false,
-      "settings": {
-        "exa_api_key": "",
-      },
+      "command": {
+        "path": "npx",
+        "args": ["-y", "exa-mcp-server"]
+      }
     },
     "mcp-server-context7": {
+      "source": "custom",
       "enabled": true,
-      "remote": false,
-      "settings": {
-        "context7_api_key": "",
-      },
+      "command": {
+        "path": "bunx",
+        "args": ["-y", "@upstash/context7-mcp"]
+      }
     },
     "argent": {
       "source": "custom",
       "command": "argent",
-      "args": [
-        "mcp"
-      ]
-    },
+      "args": ["mcp"]
+    }
   },
   "agent": {
     "sidebar_side": "left",
@@ -60,49 +60,49 @@
       "default": "allow",
       "tools": {
         "search_web": {
-          "default": "allow",
+          "default": "allow"
         },
         "fetch": {
           "always_allow": [
             {
-              "pattern": "^https?://pub\\.dev",
+              "pattern": "^https?://pub\\.dev"
             },
             {
-              "pattern": "^https?://github\\.com",
-            },
+              "pattern": "^https?://github\\.com"
+            }
           ],
-          "default": "allow",
+          "default": "allow"
         },
         "terminal": {
           "always_allow": [
             {
-              "pattern": "^ls\\b",
+              "pattern": "^ls\\b"
             },
             {
-              "pattern": "^which\\s+flutterfire(\\s|$)",
-            },
-          ],
-        },
-      },
+              "pattern": "^which\\s+flutterfire(\\s|$)"
+            }
+          ]
+        }
+      }
     },
     "default_model": {
       "provider": "zed.dev",
       "model": "claude-sonnet-4-6",
       "enable_thinking": true,
-      "effort": "high",
+      "effort": "high"
     },
     "favorite_models": [],
-    "model_parameters": [],
+    "model_parameters": []
   },
   "buffer_font_family": "Operator Mono",
   "terminal": {
-    "font_family": "Operator Mono",
+    "font_family": "Operator Mono"
   },
   "base_keymap": "VSCode",
   "icon_theme": {
     "mode": "dark",
     "light": "Material Icon Theme",
-    "dark": "Zed (Default)",
+    "dark": "Zed (Default)"
   },
   "vim_mode": true,
   "theme": {
@@ -110,5 +110,5 @@
     "light": "One Light",
     "dark": "One Dark"
   },
-  "ui_font_family": ".SystemUIFont",
+  "ui_font_family": ".SystemUIFont"
 }
