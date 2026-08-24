@@ -12,5 +12,4 @@ quit-after-last-window-closed = true
 window-save-state = always
 shell-integration-features = ssh-terminfo,ssh-env,sudo
 
-unfocused-split-opacity = 0.7
 config-file = app-config
