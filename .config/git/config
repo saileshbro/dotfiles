@@ -52,3 +52,6 @@
 	helper = !/opt/homebrew/bin/gh auth git-credential
 [lfs]
 	sshtransfer = never
+[url "https://github.com/"]
+	insteadOf = ssh://git@github.com/
+	insteadOf = git@github.com:
