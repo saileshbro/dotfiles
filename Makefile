@@ -1,7 +1,7 @@
 # Dotfiles Management with GNU Stow
 # This Makefile handles symlinking dotfiles and managing aliases
 
-.PHONY: all delete setup-aliases clean-aliases setup setup-with-aliases clean install-fonts sync-themes setup-terminal install-vscode-theme setup-secrets
+.PHONY: all delete setup-aliases clean-aliases setup setup-with-aliases clean install-fonts sync-themes setup-terminal install-vscode-theme setup-secrets setup-mcp-env setup-hermes clean-hermes
 
 THEME_DIR := themes/tinacious-theme
 THEME_VERSION := $(shell node -p "require('./$(THEME_DIR)/package.json').version" 2>/dev/null)
@@ -71,20 +71,64 @@ install-fonts:
 delete:
 	stow --verbose --target=$$HOME --delete .
 
-# Symlink ~/dotfiles/secrets → ~/.secrets (git-ignored, never committed)
-# On a fresh machine: cp ~/dotfiles/secrets.example ~/dotfiles/secrets && fill in values
+# Link the canonical dotenv file to ~/.secrets for zsh compatibility.
+# On a fresh machine: cp ~/dotfiles/.env.example ~/dotfiles/.env and fill in values.
+# The legacy ~/dotfiles/secrets file remains supported.
 setup-secrets:
-	@if [ -f $$HOME/dotfiles/secrets ]; then \
-		ln -sf $$HOME/dotfiles/secrets $$HOME/.secrets; \
-		echo "Symlinked ~/dotfiles/secrets → ~/.secrets"; \
+	@if [ -f $$HOME/dotfiles/.env ]; then \
+		chmod 600 $$HOME/dotfiles/.env; \
+		ln -sf $$HOME/dotfiles/.env $$HOME/.secrets; \
+		echo "Linked ~/dotfiles/.env → ~/.secrets"; \
+	elif [ -f $$HOME/dotfiles/secrets ]; then \
+		chmod 600 $$HOME/dotfiles/secrets; \
+		ln -sfn $$HOME/dotfiles/secrets $$HOME/dotfiles/.env; \
+		ln -sf $$HOME/dotfiles/.env $$HOME/.secrets; \
+		echo "Linked legacy ~/dotfiles/secrets through ~/dotfiles/.env → ~/.secrets"; \
 	else \
-		echo "Warning: ~/dotfiles/secrets not found."; \
-		echo "  Run: cp ~/dotfiles/secrets.example ~/dotfiles/secrets"; \
-		echo "  Then fill in your tokens and re-run make setup-aliases."; \
+		echo "Warning: ~/dotfiles/.env not found."; \
+		echo "  Run: cp ~/dotfiles/.env.example ~/dotfiles/.env"; \
+		echo "  Then fill in values and re-run make setup-aliases."; \
 	fi
 
+# Export shared MCP/tool credentials to launchd so GUI-launched harnesses can
+# resolve the same env-backed values as shell-launched CLIs. No secret is printed.
+setup-mcp-env: setup-secrets
+	@if command -v launchctl >/dev/null 2>&1 && [ -f $$HOME/dotfiles/.env ]; then \
+		set -a; . $$HOME/dotfiles/.env; set +a; \
+		if [ -n "$$CWB_MCP_TOKEN" ]; then \
+			launchctl setenv CWB_MCP_TOKEN "$$CWB_MCP_TOKEN"; \
+		fi; \
+		if [ -n "$$EXA_API_KEY" ]; then launchctl setenv EXA_API_KEY "$$EXA_API_KEY"; fi; \
+		if [ -n "$$CONTEXT7_API_KEY" ]; then launchctl setenv CONTEXT7_API_KEY "$$CONTEXT7_API_KEY"; fi; \
+		if [ -n "$$FIRECRAWL_API_KEY" ]; then launchctl setenv FIRECRAWL_API_KEY "$$FIRECRAWL_API_KEY"; fi; \
+		if [ -n "$$STITCH_API_KEY" ]; then launchctl setenv STITCH_API_KEY "$$STITCH_API_KEY"; fi; \
+		echo "Exported configured shared credentials to the user launchd session."; \
+	fi
+
+# Hermes Agent: symlink ~/.hermes → the in-repo home (.config/hermes).
+# Hermes stores secrets in .env and runtime state next to config.yaml; both are
+# git-ignored. Only config.yaml, SOUL.md, and skills/ are tracked.
+# Idempotent: if ~/.hermes is already a symlink to the right place, do nothing.
+setup-hermes:
+	@echo "Setting up Hermes Agent home..."
+	@if [ -L $$HOME/.hermes ] && [ "$$(readlink $$HOME/.hermes)" = "$$HOME/dotfiles/.config/hermes" ]; then \
+		echo "  ~/.hermes already linked to .config/hermes — skipping"; \
+	elif [ -e $$HOME/.hermes ] && [ ! -L $$HOME/.hermes ]; then \
+		echo "  Warning: ~/.hermes exists as a real directory; move it manually to track it via dotfiles:"; \
+		echo "    mv ~/.hermes ~/.dotfiles/.config/hermes && ln -sfn ~/.dotfiles/.config/hermes ~/.hermes"; \
+	else \
+		ln -sfn $$HOME/dotfiles/.config/hermes $$HOME/.hermes; \
+		echo "  Linked ~/.hermes → .config/hermes"; \
+	fi
+
+# Remove the Hermes symlink (leaves the in-repo home in place)
+clean-hermes:
+	@echo "Removing Hermes symlink..."
+	@[ -L $$HOME/.hermes ] && rm -f $$HOME/.hermes && echo "  Removed ~/.hermes symlink" || echo "  Nothing to remove"
+	@echo "Hermes cleanup done."
+
 # Setup symlinks and XDG directories for CLI tools
-setup-aliases: setup-secrets
+setup-aliases: setup-secrets setup-mcp-env setup-hermes
 	@echo "Setting up symlinks and XDG directories..."
 	@echo "Creating symlinks for zsh configuration files..."
 	ln -sf $$HOME/.config/zsh/.zshenv $$HOME/.zshenv
@@ -123,5 +167,5 @@ setup-with-aliases: all setup-aliases
 	@echo "Full setup with aliases complete!"
 
 # Full cleanup: remove symlinks and aliases
-clean: delete clean-aliases
+clean: delete clean-aliases clean-hermes
 	@echo "Full cleanup complete!"

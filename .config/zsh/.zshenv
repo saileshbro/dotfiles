@@ -85,5 +85,6 @@ export CHROME_EXECUTABLE="/Applications/Brave Browser.app/Contents/MacOS/Brave B
 # ── Secrets ───────────────────────────────────────────────────────────────────
 # Sourced in .zshenv (not .zshrc) so env vars are available to ALL processes,
 # including GUI apps like Claude Code that don't spawn an interactive shell.
-# ~/dotfiles/secrets is git-ignored — see secrets.example for the template.
+# ~/dotfiles/.env (or the legacy secrets target) is git-ignored — see
+# .env.example for the template.
 [[ -f "$HOME/.secrets" ]] && source "$HOME/.secrets"

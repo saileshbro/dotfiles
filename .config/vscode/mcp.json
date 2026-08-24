@@ -1,5 +1,15 @@
 {
 	"servers": {
+		"argent": {
+			"type": "stdio",
+			"command": "argent",
+			"args": ["mcp"]
+		},
+		"shadcn": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "shadcn@latest", "mcp"]
+		},
 		"context7": {
 			"type": "stdio",
 			"command": "npx",
@@ -17,6 +27,71 @@
 			"url": "https://mcp.codewithbeto.dev",
 			"headers": {
 				"Authorization": "Bearer ${env:CWB_MCP_TOKEN}"
+			}
+		},
+		"chrome-devtools": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"chrome-devtools-mcp@latest",
+				"-e",
+				"/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
+			]
+		},
+		"deepwiki": {
+			"type": "http",
+			"url": "https://mcp.deepwiki.com/mcp"
+		},
+		"notebooklm": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "notebooklm-mcp@latest"]
+		},
+		"exa": {
+			"type": "http",
+			"url": "https://mcp.exa.ai/mcp",
+			"headers": {
+				"x-api-key": "${env:EXA_API_KEY}"
+			}
+		},
+		"plane": {
+			"type": "http",
+			"url": "https://mcp.plane.so/http/mcp"
+		},
+		"cloudflare-api": {
+			"type": "http",
+			"url": "https://mcp.cloudflare.com/mcp"
+		},
+		"cloudflare-bindings": {
+			"type": "http",
+			"url": "https://bindings.mcp.cloudflare.com/mcp"
+		},
+		"cloudflare-builds": {
+			"type": "http",
+			"url": "https://builds.mcp.cloudflare.com/mcp"
+		},
+		"cloudflare-docs": {
+			"type": "http",
+			"url": "https://docs.mcp.cloudflare.com/mcp"
+		},
+		"cloudflare-observability": {
+			"type": "http",
+			"url": "https://observability.mcp.cloudflare.com/mcp"
+		},
+		"expo": {
+			"type": "http",
+			"url": "https://mcp.expo.dev/mcp"
+		},
+		"figma": {
+			"type": "http",
+			"url": "https://mcp.figma.com/mcp"
+		},
+		"stitch": {
+			"type": "http",
+			"url": "https://stitch.googleapis.com/mcp",
+			"headers": {
+				"X-Goog-Api-Key": "${env:STITCH_API_KEY}"
 			}
 		}
 	}

@@ -283,3 +283,52 @@ Neither command deletes the git branch itself — only the worktree.
 
 All tool homes (Cargo, Volta, Flutter, Android, Ruby, etc.) are redirected to XDG
 paths in `.zshenv`. See that file for the full list.
+
+---
+
+## Hermes Agent
+
+Hermes's home is relocated into this repo and symlinked, exactly like `.claude`:
+
+```
+~/.hermes  →  ~/dotfiles/.config/hermes   (real home, inside the repo)
+~/.config is itself a symlink → ~/dotfiles/.config
+```
+
+`make setup-aliases` (which now runs `setup-hermes`) creates the symlink. The
+launchd plist (`~/Library/LaunchAgents/ai.hermes.gateway.plist`) hardcodes
+`/Users/saileshbro/.hermes/...` in three places, but every path resolves
+*through* the symlink, so moving the home requires no plist edits. To relocate
+the home again: stop the gateway (`launchctl unload ~/Library/LaunchAgents/ai.hermes.gateway.plist`),
+move the directory, recreate the symlink, then `launchctl load` it.
+
+### What is tracked vs. ignored
+
+`.gitignore` ignores everything under `.config/hermes/` and re-includes only:
+
+| Tracked | Ignored |
+|---|---|
+| `config.yaml` (settings — **no secrets, no machine paths**) | `.env` (API keys), `auth.json` (OAuth tokens) |
+| `SOUL.md` (persona) | `state.db`, `sessions/`, `logs/`, `cron/`, `cache/`, `kanban.db` |
+| `skills/` (SKILL.md + references only) | `hermes-agent/` (1.8 GB agent source) |
+| | `skills/.*` runtime state (.usage.json, .curator_state, .bundled_manifest) |
+
+### Hard rules (do not violate)
+
+- **Never hand-edit `config.yaml`** — use `hermes config set <key> <val>`. A stray
+  indent corrupts the file and breaks the running gateway.
+- **Secrets live in `.env`, never `config.yaml`.** `config.yaml` is portable and
+  committed; `.env` is git-ignored and never committed.
+- **`hermes-agent/` is the agent source, not your config** — it is 1.8 GB and must
+  stay git-ignored. Do not `git add` it.
+- After editing a skill under `skills/`, commit it; the runtime `.` state files
+  regenerate automatically and stay ignored.
+
+### Re-linking on a fresh machine
+
+```zsh
+make setup-hermes          # idempotent: no-op if already linked
+# If ~/.hermes is already a real directory, move it first:
+#   mv ~/.hermes ~/dotfiles/.config/hermes && ln -sfn ~/dotfiles/.config/hermes ~/.hermes
+```
+
