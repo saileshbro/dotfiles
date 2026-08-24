@@ -90,10 +90,11 @@
       "command": [
         "bunx",
         "-y",
-        "@upstash/context7-mcp",
-        "--api-key",
-        ""
-      ]
+        "@upstash/context7-mcp"
+      ],
+      "environment": {
+        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
+      }
     },
     "chrome-dev-tools": {
       "type": "local",
