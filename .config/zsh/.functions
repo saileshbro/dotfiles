@@ -96,3 +96,175 @@ gwrm() {
   fi
 }
 (( $+functions[compdef] )) && compdef _git gwrm=git-branch
+
+# kp — free a TCP port by killing its listener *and every descendant*, so
+# nothing is left orphaned and re-parented to launchd.
+#   kp 3000        stop the tree, SIGTERM it, escalate to SIGKILL if needed
+#   kp 3000 8080   several ports in one go
+#   kp -9 3000     skip the polite phase, SIGKILL straight away
+# Nothing listening is not an error. PID 1, this shell, and every one of its
+# ancestors (your terminal included) are never signalled.
+kp() {
+  emulate -L zsh
+  setopt local_options no_nomatch
+
+  local first_sig=TERM
+  while [[ "$1" == -* ]]; do
+    case "$1" in
+      -9|--force) first_sig=KILL; shift ;;
+      -h|--help)  print -- "usage: kp [-9] <port> [port...]"; return 0 ;;
+      --)         shift; break ;;
+      *)          print -u2 -- "kp: unknown option '$1'"; return 1 ;;
+    esac
+  done
+
+  (( $+commands[lsof] )) || { print -u2 -- "kp: lsof not found"; return 1 }
+  (( $# ))               || { print -u2 -- "usage: kp [-9] <port> [port...]"; return 1 }
+
+  local -A _kp_kids _kp_ppid _kp_safe
+
+  # Snapshot the process table once, and mark everything we must not touch.
+  _kp_snapshot() {
+    _kp_kids=(); _kp_ppid=(); _kp_safe=( 1 1 )
+    local line; local -a f
+    for line in ${(f)"$(ps -axo pid=,ppid= 2>/dev/null)"}; do
+      f=(${=line})
+      [[ -n "$f[1]" && -n "$f[2]" ]] || continue
+      _kp_ppid[$f[1]]=$f[2]
+      _kp_kids[$f[2]]+="$f[1] "
+    done
+    local p=$$
+    while [[ -n "$p" && "$p" != 0 ]]; do
+      (( ${+_kp_safe[$p]} )) && break
+      _kp_safe[$p]=1
+      p=${_kp_ppid[$p]}
+    done
+  }
+
+  # Every pid in the given trees, parents before children, no duplicates.
+  _kp_tree() {
+    local -a queue out; local -A seen; local cur
+    queue=($@)
+    while (( ${#queue} )); do
+      cur=$queue[1]; shift queue
+      (( ${+seen[$cur]} )) && continue
+      seen[$cur]=1
+      out+=$cur
+      queue+=(${=_kp_kids[$cur]})
+    done
+    print -- $out
+  }
+
+  _kp_listeners() { lsof -tiTCP:"$1" -sTCP:LISTEN 2>/dev/null | sort -un }
+
+  # The "who/what is this" view, shown before killing and again on failure.
+  _kp_show() {
+    (( $# )) || return 0
+    local l
+    for l in ${(f)"$(ps -o pid=,ppid=,user=,command= -p ${(j:,:)@} 2>/dev/null)"}; do
+      print -- "    ${l##[[:space:]]#}"
+    done
+  }
+
+  _kp_wait_free() {   # give the port up to ~2s to be released
+    local i
+    for i in {1..20}; do
+      [[ -z "$(_kp_listeners $1)" ]] && return 0
+      sleep 0.1
+    done
+    return 1
+  }
+
+  local port rc=0 p i reply
+  local -a listeners targets skipped
+
+  for port in "$@"; do
+    if [[ "$port" != <-> ]] || (( port < 1 || port > 65535 )); then
+      print -u2 -- "kp: '$port' is not a valid port"; rc=1; continue
+    fi
+
+    listeners=(${(f)"$(_kp_listeners $port)"})
+    if (( ! ${#listeners} )); then
+      print -- "kp: nothing listening on :$port"
+      continue
+    fi
+
+    _kp_snapshot
+    targets=(); skipped=()
+    for p in ${=$(_kp_tree $listeners)}; do
+      if (( ${+_kp_safe[$p]} )); then skipped+=$p; else targets+=$p; fi
+    done
+    (( ${#skipped} )) && print -u2 -- "kp: refusing to signal protected pid(s): $skipped"
+    if (( ! ${#targets} )); then
+      print -u2 -- "kp: nothing safe to kill on :$port"; rc=1; continue
+    fi
+
+    print -- "kp: :$port — ${#targets} process(es)"
+    _kp_show $targets
+
+    if [[ "$first_sig" == TERM ]]; then
+      # Freeze the whole tree first so nothing forks away mid-signal, deliver
+      # TERM while it is stopped, then resume so handlers actually run.
+      kill -STOP $targets 2>/dev/null
+      kill -TERM $targets 2>/dev/null
+      kill -CONT $targets 2>/dev/null
+    else
+      kill -KILL $targets 2>/dev/null
+    fi
+    _kp_wait_free $port
+
+    # Survivors: re-derive the tree, since children may have been re-parented.
+    listeners=(${(f)"$(_kp_listeners $port)"})
+    if (( ${#listeners} )); then
+      _kp_snapshot
+      targets=()
+      for p in ${=$(_kp_tree $listeners)}; do
+        (( ${+_kp_safe[$p]} )) || targets+=$p
+      done
+      if (( ${#targets} )); then
+        print -- "kp: :$port still held — SIGKILL"
+        kill -KILL $targets 2>/dev/null
+        _kp_wait_free $port
+      fi
+    fi
+
+    listeners=(${(f)"$(_kp_listeners $port)"})
+    if (( ! ${#listeners} )); then
+      print -- "kp: :$port is free"
+      continue
+    fi
+
+    # Still held — almost always another user or root. Show what is holding it
+    # rather than failing silently, and ask before escalating. Protected pids
+    # are excluded from the escalation: sudo would happily kill your terminal.
+    rc=1
+    print -u2 -- "kp: could not free :$port — still held by:"
+    _kp_show $listeners
+    _kp_snapshot
+    targets=()
+    for p in $listeners; do
+      kill -0 $p 2>/dev/null || continue      # already gone, just stale lsof output
+      (( ${+_kp_safe[$p]} )) || targets+=$p
+    done
+    if (( ! ${#targets} )); then
+      print -u2 -- "kp: the holder is this shell or one of its ancestors — not touching it"
+      continue
+    fi
+    if [[ ! -t 0 ]]; then
+      print -u2 -- "kp: try: sudo kill -9 $targets"
+      continue
+    fi
+    printf 'kp: retry as root (sudo kill -9 %s)? [y/N] ' "$targets"
+    read -r reply
+    [[ "$reply" == [yY] ]] || { print -- "kp: left alone"; continue }
+    sudo kill -9 $targets 2>/dev/null
+    if _kp_wait_free $port; then
+      print -- "kp: :$port is free"; rc=0
+    else
+      print -u2 -- "kp: :$port still held; giving up"
+    fi
+  done
+
+  unfunction _kp_snapshot _kp_tree _kp_listeners _kp_show _kp_wait_free 2>/dev/null
+  return $rc
+}
