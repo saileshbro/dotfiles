@@ -133,12 +133,22 @@
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
     "expo@claude-plugins-official": true,
-    "exa@claude-plugins-official": true
+    "exa@claude-plugins-official": true,
+    "figma@claude-plugins-official": false,
+    "mattpocock-skills@claude-plugins-official": true,
+    "cloudflare@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    }
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
+  "effortLevel": "medium",
   "advisorModel": "opus",
-  "awaySummaryEnabled": false,
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
@@ -146,10 +156,10 @@
   "editorMode": "normal",
   "verbose": false,
   "preferredNotifChannel": "iterm2_with_bell",
+  "autoCompactEnabled": true,
   "remoteControlAtStartup": false,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": false,
-  "autoCompactEnabled": true
+  "voiceEnabled": false
 }
