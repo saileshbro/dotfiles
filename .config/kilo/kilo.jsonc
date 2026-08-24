@@ -71,7 +71,9 @@
       "lsof *": "allow",
       "sleep *": "allow",
       "jq *": "allow",
-      "awk *": "allow"
+      "awk *": "allow",
+      "./node_modules/.bin/shadcn *": "allow",
+      "node *": "allow"
     },
     "external_directory": {
       "/Users/saileshbro/.opencode/plans/*": "allow",

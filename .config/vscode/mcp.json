@@ -7,7 +7,14 @@
 				"-y",
 				"@upstash/context7-mcp@latest"
 			],
-      "gallery": true
-    }
+			"gallery": true
+		},
+		"codewithbeto.dev": {
+			"type": "http",
+			"url": "https://mcp.codewithbeto.dev",
+			"headers": {
+				"Authorization": "Bearer ${env:CWB_MCP_TOKEN}"
+			}
+		}
 	}
 }
