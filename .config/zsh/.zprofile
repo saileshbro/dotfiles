@@ -10,6 +10,7 @@ path=(
   $HOMEBREW_PREFIX/bin
   $HOMEBREW_PREFIX/sbin
   $JAVA_HOME/bin
+  $BUN_INSTALL/bin
   /usr/local/bin
   /usr/bin
   /bin
