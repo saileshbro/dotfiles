@@ -7,6 +7,9 @@
 				"-y",
 				"@upstash/context7-mcp@latest"
 			],
+			"env": {
+				"CONTEXT7_API_KEY": "${env:CONTEXT7_API_KEY}"
+			},
 			"gallery": true
 		},
 		"codewithbeto.dev": {
