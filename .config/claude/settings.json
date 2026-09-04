@@ -161,5 +161,33 @@
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": false
+  "voiceEnabled": false,
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: Cloudflare (Workers/static asset deploy target for this project)",
+      "**Repository visibility**: Private — saileshbro/saileshdahal.com.np",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured",
+      "**Default / protected branches**: Default branch main; no rulesets or protected branches listed via gh",
+      "**CI/CD deploy targets**: Cloudflare (via .github/workflows and pnpm deploy script)",
+      "**Network posture**: None configured",
+      "**Source control**: github.com/saileshbro/saileshdahal.com.np (origin) only — no additional orgs configured",
+      "**Trusted internal domains**: saileshdahal.com.np",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: worktree-ai-week-issue-7-saileshdahal-com-np.sailesh-dahal.workers.dev (Cloudflare Workers preview/dev endpoint used in this project)",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: .env, .env.production, .secrets/, and other .gitignore-flagged files in this repo — credentials/config not for sharing beyond the repo owner",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries prod or production as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries prod or production as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: personal/hobby software development (static blog site)",
+      "**Trusted repo**: /Users/saileshbro/Projects/saileshdahal.com.np and its origin remote github.com/saileshbro/saileshdahal.com.np.git (private) — confidential material is fine here, but secrets/credentials are never cleared into it by visibility alone",
+      "**Org-specific CLIs**: None configured",
+      "routine under saileshbro/ prefix: GitHub repos owned by saileshbro (e.g. saileshbro/skills, saileshbro/finy.dev, saileshbro/react-doctor) may be treated as familiar personal-project context, but only this repo is the trusted repo for write actions"
+    ]
+  }
 }
