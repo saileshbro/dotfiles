@@ -3,12 +3,18 @@
 		"argent": {
 			"type": "stdio",
 			"command": "argent",
-			"args": ["mcp"]
+			"args": [
+				"mcp"
+			]
 		},
 		"shadcn": {
 			"type": "stdio",
 			"command": "npx",
-			"args": ["-y", "shadcn@latest", "mcp"]
+			"args": [
+				"-y",
+				"shadcn@latest",
+				"mcp"
+			]
 		},
 		"context7": {
 			"type": "stdio",
@@ -46,7 +52,10 @@
 		"notebooklm": {
 			"type": "stdio",
 			"command": "npx",
-			"args": ["-y", "notebooklm-mcp@latest"]
+			"args": [
+				"-y",
+				"notebooklm-mcp@latest"
+			]
 		},
 		"exa": {
 			"type": "http",
@@ -92,6 +101,13 @@
 			"url": "https://stitch.googleapis.com/mcp",
 			"headers": {
 				"X-Goog-Api-Key": "${env:STITCH_API_KEY}"
+			}
+		},
+		"firecrawl": {
+			"type": "http",
+			"url": "https://mcp.firecrawl.dev/v2/mcp",
+			"headers": {
+				"Authorization": "Bearer ${env:FIRECRAWL_API_KEY}"
 			}
 		}
 	}

@@ -265,6 +265,8 @@ plain aliases).
 | Command | Usage | Behavior |
 |---|---|---|
 | `gsw` | `gsw <branch>` | Switches to `<branch>`. If another worktree already has it checked out, `cd`s into that worktree instead of switching in place. |
+| `gswm` | `gswm` | Shortcut for `gsw main`. |
+| `gsws` | `gsws` | Shortcut for `gsw staging`. |
 | `gwrm` | `gwrm [-f] <branch>` | Removes the worktree checked out for `<branch>`. Prompts for confirmation unless `-f` is passed (`-f` also forces removal of a dirty worktree, git's `--force`). If your shell is currently inside the worktree being removed, hops back to the main worktree first so you aren't left in a deleted directory. |
 
 Neither command deletes the git branch itself — only the worktree.
@@ -331,4 +333,3 @@ make setup-hermes          # idempotent: no-op if already linked
 # If ~/.hermes is already a real directory, move it first:
 #   mv ~/.hermes ~/dotfiles/.config/hermes && ln -sfn ~/dotfiles/.config/hermes ~/.hermes
 ```
-

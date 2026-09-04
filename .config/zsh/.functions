@@ -43,6 +43,10 @@ gsw() {
 }
 (( $+functions[compdef] )) && compdef _git gsw=git-switch
 
+# Shortcuts for the repository's primary branches.
+gswm() { gsw main "$@"; }
+gsws() { gsw staging "$@"; }
+
 # Remove the worktree checked out for a branch. Prompts for confirmation
 # unless -f is passed (which also forces removal of a dirty worktree, same
 # spirit as `rm -f`). Hops out to the main worktree first if your shell's
