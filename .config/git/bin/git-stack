@@ -22,9 +22,12 @@
 # its base, so fast-forwarding each lower branch to the top's commit lands the
 # whole run at once — no merge commits, no squash, the history exactly as
 # reviewed. `land` refuses unless BASE is an ancestor of top (a true
-# fast-forward), asks before pushing, and pushes BASE last. Landing on the
-# integration branch bypasses required checks and merge queues, so only do it
-# where a plain push to that branch is the team's actual merge path.
+# fast-forward) and asks before pushing. It works top-down — the branch just
+# under top first, then each one below it, BASE last — so the PRs close
+# highest-first, and an interrupted land leaves the upper PRs merged with BASE
+# untouched. Landing on the integration branch bypasses required checks and
+# merge queues, so only do it where a plain push to that branch is the team's
+# actual merge path.
 #
 # Conflicts: the rebase STOPS mid-way, nothing is pushed, and the stack refs are
 # untouched until the rebase completes (git restores them on --abort). Resolve,
@@ -153,12 +156,15 @@ cmd_land() {
      ! git merge-base --is-ancestor "origin/$base" "$top"; then
     die "origin/$base has commits $top does not — rebase onto origin/$base first"
   fi
-  local between
+  # The landing chain, highest first: the branch just under $top, then each one
+  # below it, with $base last. stack_branches lists bottom → top, so $base goes
+  # in FRONT of it and the whole list is reversed (no `tac` on macOS).
+  local between chain
   between=$(stack_branches "$top" "$base" | grep -vx "$top" || true)
-  printf 'landing %s onto %s — these branches fast-forward to %s:
+  chain=$(printf '%s\n' "$base" $between | sed '1!G;h;$!d')
+  printf 'landing %s onto %s — these branches fast-forward to %s, in this order:
 ' "$top" "$base" "$(git rev-parse --short "$top")"
-  printf '%s
-' $between "$base" | sed 's/^/  /'
+  printf '%s\n' $chain | sed 's/^/  /'
   printf 'every open PR whose head is one of these (and %s itself) will be marked MERGED on push.
 ' "$top"
   if [ "$yes" != 1 ]; then
@@ -170,8 +176,7 @@ cmd_land() {
   # so there is nothing to replay), and it is pushed before the next pair —
   # so a failure part-way leaves a shorter, still-consistent landing, and the
   # base moves last. That is the same sequence you would type by hand.
-  local chain upper lower
-  chain=$(printf '%s\n' $between "$base" | sed '1!G;h;$!d')   # reversed: nearest-to-top first … base (no tac on macOS)
+  local upper lower
   upper=$top
   for lower in $chain; do
     ff_local_branch "$lower" "$upper"
