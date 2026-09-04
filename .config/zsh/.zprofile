@@ -11,6 +11,7 @@ path=(
   $HOMEBREW_PREFIX/sbin
   $JAVA_HOME/bin
   $BUN_INSTALL/bin
+  $HOME/.config/git/bin   # git subcommands (git stack)
   /usr/local/bin
   /usr/bin
   /bin

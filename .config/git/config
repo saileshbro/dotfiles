@@ -16,8 +16,12 @@
 	prune = true
 [rebase]
 	autoStash = true
+	# A rebase from the top of a stack moves every branch on the line (git stack).
+	updateRefs = true
 [rerere]
 	enabled = true
+	# A remembered conflict resolution is staged, so --continue just works.
+	autoUpdate = true
 [diff]
 	algorithm = histogram
 [merge]

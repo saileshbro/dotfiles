@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+# git stack — rebase and push a linear stack of branches as one unit.
+#
+#   git stack ls     [top]            branches on the stack, bottom → top
+#   git stack rebase [top] [--onto B] rebase every branch on the line onto B
+#   git stack rebase --continue|--abort
+#   git stack push   [top]            force-with-lease each stack branch, by name
+#   git stack sync   [top] [--onto B] rebase, then push
+#
+# `top` defaults to the current branch. `B` defaults to origin/<default branch>
+# (origin/HEAD; run `git remote set-head origin -a` once if unset).
+#
+# How it works: every branch tip in a stack sits on one linear line between the
+# base and the top, so `git rebase --update-refs` from the top moves all of them
+# in one pass. Pushing is one `--force-with-lease` per branch, by name — never a
+# tool that pushes the integration branch too.
+#
+# Conflicts: the rebase STOPS mid-way, nothing is pushed, and the stack refs are
+# untouched until the rebase completes (git restores them on --abort). Resolve,
+# `git add`, then `git stack rebase --continue`; or `git stack rebase --abort`
+# to put every branch back exactly where it was. rerere replays a resolution
+# you have made before, so the same conflict is not resolved twice.
+set -euo pipefail
+
+die() { printf 'git stack: %s\n' "$*" >&2; exit 1; }
+
+default_base() {
+  local head
+  head=$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null) ||
+    die "origin/HEAD is unset — run: git remote set-head origin -a"
+  printf '%s' "$head"
+}
+
+# Branches whose tip lies on the line base..top, bottom first.
+stack_branches() {
+  local top=$1 base=$2 b
+  for b in $(git for-each-ref --format='%(refname:short)' refs/heads); do
+    git merge-base --is-ancestor "$b" "$top" 2>/dev/null || continue
+    git merge-base --is-ancestor "$b" "$base" 2>/dev/null && continue
+    printf '%s\n' "$b"
+  done | while read -r b; do printf '%s %s\n' "$(git rev-list --count "$base..$b")" "$b"; done \
+    | sort -n | cut -d' ' -f2
+}
+
+rebase_in_progress() { [ -d "$(git rev-parse --git-path rebase-merge)" ] || [ -d "$(git rev-parse --git-path rebase-apply)" ]; }
+
+report_conflict() {
+  printf '\n%s\n' "git stack: the rebase stopped on a conflict. Nothing was pushed; every stack branch is still where it was." >&2
+  printf '%s\n' "  conflicting:" >&2
+  git diff --name-only --diff-filter=U | sed 's/^/    /' >&2
+  printf '%s\n' "  resolve them, then:  git add <files> && git stack rebase --continue" >&2
+  printf '%s\n' "  or give up:          git stack rebase --abort" >&2
+  exit 1
+}
+
+finish_report() {
+  local top=$1 base=$2
+  printf 'stack on %s, bottom → top:\n' "$base"
+  stack_branches "$top" "$base" | sed 's/^/  /'
+}
+
+cmd_ls() {
+  local top=${1:-$(git branch --show-current)} base=${2:-$(default_base)}
+  finish_report "$top" "$base"
+}
+
+cmd_rebase() {
+  local top="" base="" arg
+  while [ $# -gt 0 ]; do
+    arg=$1; shift
+    case $arg in
+      --continue)
+        rebase_in_progress || die "no rebase in progress"
+        git rebase --continue || report_conflict
+        finish_report "$(git branch --show-current)" "$(default_base)"; return ;;
+      --abort)
+        rebase_in_progress || die "no rebase in progress"
+        git rebase --abort && printf 'git stack: aborted — every branch is back where it was.\n'; return ;;
+      --onto) base=$1; shift ;;
+      -*) die "unknown flag $arg" ;;
+      *) top=$arg ;;
+    esac
+  done
+  top=${top:-$(git branch --show-current)}
+  base=${base:-$(default_base)}
+  rebase_in_progress && die "a rebase is already in progress — --continue or --abort it first"
+  [ -z "$(git status --porcelain)" ] || die "working tree is not clean"
+  git rev-parse -q --verify "refs/heads/$top" >/dev/null || die "no local branch $top"
+  git fetch -q origin
+  git switch -q "$top"
+  printf 'rebasing onto %s:\n' "$base"
+  stack_branches "$top" "$base" | sed 's/^/  /'
+  git rebase --update-refs "$base" || report_conflict
+  printf 'done.\n'
+  finish_report "$top" "$base"
+}
+
+cmd_push() {
+  local top=${1:-$(git branch --show-current)} base=${2:-$(default_base)} b
+  rebase_in_progress && die "a rebase is in progress — finish it before pushing"
+  local base_branch=${base#origin/}
+  for b in $(stack_branches "$top" "$base"); do
+    [ "$b" = "$base_branch" ] && die "refusing to push the base branch $b"
+    git push --force-with-lease origin "$b"
+  done
+}
+
+cmd_sync() {
+  local top="" base="" arg
+  while [ $# -gt 0 ]; do
+    arg=$1; shift
+    case $arg in --onto) base=$1; shift ;; -*) die "unknown flag $arg" ;; *) top=$arg ;; esac
+  done
+  top=${top:-$(git branch --show-current)}
+  base=${base:-$(default_base)}
+  cmd_rebase "$top" --onto "$base"
+  cmd_push "$top" "$base"
+}
+
+case ${1:-} in
+  ls) shift; cmd_ls "$@" ;;
+  rebase) shift; cmd_rebase "$@" ;;
+  push) shift; cmd_push "$@" ;;
+  sync) shift; cmd_sync "$@" ;;
+  *) sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+esac
