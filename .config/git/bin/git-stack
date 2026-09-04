@@ -9,6 +9,7 @@
 #   git stack land   [top] BASE [--yes] fast-forward BASE and every branch
 #                                     between it and top to top's commit, and
 #                                     push them — GitHub marks each PR merged
+#   git stack land   [top] BASE --dry print that merge order and stop
 #
 # `top` defaults to the current branch. `B` defaults to origin/<default branch>
 # (origin/HEAD; run `git remote set-head origin -a` once if unset).
@@ -131,19 +132,62 @@ cmd_sync() {
   cmd_push "$top" "$base"
 }
 
+# "<head-branch> <number>" for every open PR, fetched once. gh is optional: with
+# no gh, no network, or no GitHub remote this prints nothing and the plan simply
+# omits the numbers — the branch order it describes is unaffected.
+open_prs() {
+  command -v gh >/dev/null 2>&1 || return 0
+  gh pr list --state open --limit 200 --json number,headRefName \
+    --jq '.[] | "\(.headRefName) \(.number)"' 2>/dev/null || true
+}
+
+# The landing plan, one line per push, in the order they happen. Each step
+# fast-forwards a lower branch to the branch above it, which puts that upper
+# branch's head inside its own PR base — so that PR is the one GitHub marks
+# merged at that step. Highest PR first, base last.
+land_plan() {
+  local top=$1 base=$2; shift 2
+  local chain="$*" prs upper lower n step w1=0 w2=0
+  upper=$top
+  for lower in $chain; do
+    if [ ${#lower} -gt "$w1" ]; then w1=${#lower}; fi
+    if [ ${#upper} -gt "$w2" ]; then w2=${#upper}; fi
+    upper=$lower
+  done
+  prs=$(open_prs)
+  printf 'landing %s onto %s (%s). merge order, highest first:\n' \
+    "$top" "$base" "$(git rev-parse --short "$top")"
+  upper=$top; step=0
+  for lower in $chain; do
+    step=$((step + 1))
+    n=$(printf '%s\n' "$prs" | awk -v h="$upper" '$1 == h { print $2; exit }')
+    if [ -n "$n" ]; then
+      printf '  %d. push %-*s  fast-forwarded to %-*s  → closes #%s\n' \
+        "$step" "$w1" "$lower" "$w2" "$upper" "$n"
+    else
+      printf '  %d. push %-*s  fast-forwarded to %s\n' \
+        "$step" "$w1" "$lower" "$upper"
+    fi
+    upper=$lower
+  done
+  [ -n "$prs" ] || printf '%s\n' \
+    "  (no PR numbers here — each push marks the PR whose head is the branch on the right as MERGED.)"
+}
+
 cmd_land() {
-  local top="" base="" yes=0 arg
+  local top="" base="" yes=0 dry=0 arg
   while [ $# -gt 0 ]; do
     arg=$1; shift
     case $arg in
       --yes|-y) yes=1 ;;
+      --dry|--dry-run|-n) dry=1 ;;
       -*) die "unknown flag $arg" ;;
       *) if [ -z "$top" ]; then top=$arg; elif [ -z "$base" ]; then base=$arg; else die "too many arguments"; fi ;;
     esac
   done
   # One positional means BASE (top defaults to the current branch).
   if [ -n "$top" ] && [ -z "$base" ]; then base=$top; top=$(git branch --show-current); fi
-  [ -n "$base" ] || die "usage: git stack land [top] BASE [--yes]"
+  [ -n "$base" ] || die "usage: git stack land [top] BASE [--yes|--dry]"
   base=${base#origin/}
   rebase_in_progress && die "a rebase is in progress — finish it first"
   [ -z "$(git status --porcelain)" ] || die "working tree is not clean"
@@ -162,11 +206,11 @@ cmd_land() {
   local between chain
   between=$(stack_branches "$top" "$base" | grep -vx "$top" || true)
   chain=$(printf '%s\n' "$base" $between | sed '1!G;h;$!d')
-  printf 'landing %s onto %s — these branches fast-forward to %s, in this order:
-' "$top" "$base" "$(git rev-parse --short "$top")"
-  printf '%s\n' $chain | sed 's/^/  /'
-  printf 'every open PR whose head is one of these (and %s itself) will be marked MERGED on push.
-' "$top"
+  land_plan "$top" "$base" $chain
+  if [ "$dry" = 1 ]; then
+    printf 'dry run — nothing was pushed.\n'
+    return
+  fi
   if [ "$yes" != 1 ]; then
     printf 'continue? [y/N] '; read -r ans
     [ "$ans" = y ] || [ "$ans" = Y ] || die "aborted — nothing changed"
@@ -213,5 +257,5 @@ case ${1:-} in
   rebase) shift; cmd_rebase "$@" ;;
   push) shift; cmd_push "$@" ;;
   sync) shift; cmd_sync "$@" ;;
-  *) sed -n '2,36p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+  *) sed -n '2,37p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
 esac
