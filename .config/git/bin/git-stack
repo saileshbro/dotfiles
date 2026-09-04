@@ -166,13 +166,35 @@ cmd_land() {
     [ "$ans" = y ] || [ "$ans" = Y ] || die "aborted — nothing changed"
   fi
   git switch -q "$top"
+  # Origin is what marks the PRs merged, so land there directly: a plain
+  # (fast-forward) push of top's commit to each branch, base last. Then bring
+  # the local refs along where that is safe — a local ref is never moved
+  # before its push has succeeded, so a failure part-way leaves nothing to undo.
   local b
-  for b in $between; do git branch -f "$b" "$top"; done
-  git branch -f "$base" "$top"
-  for b in $between; do git push --force-with-lease origin "$b"; done
-  git push --force-with-lease origin "$base"
-  printf 'landed. %s now points at %s; the intermediate branches equal it and can be deleted once GitHub shows their PRs merged.
-' "$base" "$(git rev-parse --short "$top")"
+  for b in $between; do git push origin "$top:refs/heads/$b"; done
+  git push origin "$top:refs/heads/$base"
+  for b in $between "$base"; do ff_local_branch "$b" "$top"; done
+  printf 'landed. origin/%s now points at %s; the intermediate branches equal it and can be deleted once GitHub shows their PRs merged.\n' "$base" "$(git rev-parse --short "$top")"
+}
+
+# Fast-forward a LOCAL branch to $2. A branch checked out in another worktree
+# cannot be moved with `branch -f`; fast-forward it in that worktree instead
+# when its tree is clean, and otherwise leave it and say so — origin already
+# has the landing, so that worktree only needs a `git pull --ff-only`.
+ff_local_branch() {
+  local b=$1 to=$2 wt
+  wt=$(git worktree list --porcelain | awk -v ref="branch refs/heads/$b" \
+        '/^worktree /{w=substr($0,10)} $0==ref{print w; exit}')
+  if [ -z "$wt" ]; then
+    git branch -f "$b" "$to"
+  elif [ "$wt" = "$(git rev-parse --show-toplevel)" ]; then
+    die "$b is checked out here — land from the top branch"
+  elif [ -z "$(git -C "$wt" status --porcelain)" ]; then
+    git -C "$wt" merge -q --ff-only "$to" &&
+      printf 'fast-forwarded %s in its worktree %s\n' "$b" "$wt"
+  else
+    printf 'left local %s where it was: its worktree %s has uncommitted changes. origin/%s is landed; run `git pull --ff-only` there.\n' "$b" "$wt" "$b" >&2
+  fi
 }
 
 case ${1:-} in
