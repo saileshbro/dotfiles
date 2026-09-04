@@ -6,6 +6,9 @@
 #   git stack rebase --continue|--abort
 #   git stack push   [top]            force-with-lease each stack branch, by name
 #   git stack sync   [top] [--onto B] rebase, then push
+#   git stack land   [top] BASE [--yes] fast-forward BASE and every branch
+#                                     between it and top to top's commit, and
+#                                     push them — GitHub marks each PR merged
 #
 # `top` defaults to the current branch. `B` defaults to origin/<default branch>
 # (origin/HEAD; run `git remote set-head origin -a` once if unset).
@@ -14,6 +17,14 @@
 # base and the top, so `git rebase --update-refs` from the top moves all of them
 # in one pass. Pushing is one `--force-with-lease` per branch, by name — never a
 # tool that pushes the integration branch too.
+#
+# Landing: a PR is marked merged the moment its head commit is contained in
+# its base, so fast-forwarding each lower branch to the top's commit lands the
+# whole run at once — no merge commits, no squash, the history exactly as
+# reviewed. `land` refuses unless BASE is an ancestor of top (a true
+# fast-forward), asks before pushing, and pushes BASE last. Landing on the
+# integration branch bypasses required checks and merge queues, so only do it
+# where a plain push to that branch is the team's actual merge path.
 #
 # Conflicts: the rebase STOPS mid-way, nothing is pushed, and the stack refs are
 # untouched until the rebase completes (git restores them on --abort). Resolve,
@@ -117,10 +128,58 @@ cmd_sync() {
   cmd_push "$top" "$base"
 }
 
+cmd_land() {
+  local top="" base="" yes=0 arg
+  while [ $# -gt 0 ]; do
+    arg=$1; shift
+    case $arg in
+      --yes|-y) yes=1 ;;
+      -*) die "unknown flag $arg" ;;
+      *) if [ -z "$top" ]; then top=$arg; elif [ -z "$base" ]; then base=$arg; else die "too many arguments"; fi ;;
+    esac
+  done
+  # One positional means BASE (top defaults to the current branch).
+  if [ -n "$top" ] && [ -z "$base" ]; then base=$top; top=$(git branch --show-current); fi
+  [ -n "$base" ] || die "usage: git stack land [top] BASE [--yes]"
+  base=${base#origin/}
+  rebase_in_progress && die "a rebase is in progress — finish it first"
+  [ -z "$(git status --porcelain)" ] || die "working tree is not clean"
+  git rev-parse -q --verify "refs/heads/$top" >/dev/null || die "no local branch $top"
+  git rev-parse -q --verify "refs/heads/$base" >/dev/null || die "no local branch $base"
+  git fetch -q origin
+  git merge-base --is-ancestor "$base" "$top" ||
+    die "$base is not an ancestor of $top — rebase the stack onto it first (git stack rebase $top --onto $base)"
+  if git rev-parse -q --verify "refs/remotes/origin/$base" >/dev/null &&
+     ! git merge-base --is-ancestor "origin/$base" "$top"; then
+    die "origin/$base has commits $top does not — rebase onto origin/$base first"
+  fi
+  local between
+  between=$(stack_branches "$top" "$base" | grep -vx "$top" || true)
+  printf 'landing %s onto %s — these branches fast-forward to %s:
+' "$top" "$base" "$(git rev-parse --short "$top")"
+  printf '%s
+' $between "$base" | sed 's/^/  /'
+  printf 'every open PR whose head is one of these (and %s itself) will be marked MERGED on push.
+' "$top"
+  if [ "$yes" != 1 ]; then
+    printf 'continue? [y/N] '; read -r ans
+    [ "$ans" = y ] || [ "$ans" = Y ] || die "aborted — nothing changed"
+  fi
+  git switch -q "$top"
+  local b
+  for b in $between; do git branch -f "$b" "$top"; done
+  git branch -f "$base" "$top"
+  for b in $between; do git push --force-with-lease origin "$b"; done
+  git push --force-with-lease origin "$base"
+  printf 'landed. %s now points at %s; the intermediate branches equal it and can be deleted once GitHub shows their PRs merged.
+' "$base" "$(git rev-parse --short "$top")"
+}
+
 case ${1:-} in
   ls) shift; cmd_ls "$@" ;;
+  land) shift; cmd_land "$@" ;;
   rebase) shift; cmd_rebase "$@" ;;
   push) shift; cmd_push "$@" ;;
   sync) shift; cmd_sync "$@" ;;
-  *) sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+  *) sed -n '2,36p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
 esac
