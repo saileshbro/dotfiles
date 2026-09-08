@@ -83,27 +83,9 @@
       "CronDelete",
       "CronList"
     ],
-    "ask": [
-      "Bash(rm *)",
-      "Bash(mv *)",
-      "Bash(sudo *)",
-      "Bash(su *)",
-      "Bash(git push *)",
-      "Bash(git reset *)",
-      "Bash(git rebase *)",
-      "Bash(git checkout *)",
-      "Bash(git clean *)",
-      "Bash(git rm *)",
-      "Read(**/.env)",
-      "Read(**/.env.*)",
-      "Read(**/*.key)",
-      "Read(**/*.pem)",
-      "Read(**/.ssh/**)",
-      "Read(**/secrets/**)"
-    ],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
+  "model": "opus",
   "disableClaudeAiConnectors": true,
   "skillOverrides": {
     "argent-create-flow": "off",
@@ -148,6 +130,14 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "medium",
+  "modelSettings": {
+    "claude-opus-5": {
+      "effortLevel": "xhigh"
+    },
+    "claude-fable-5-1": {
+      "effortLevel": "high"
+    }
+  },
   "advisorModel": "opus",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
@@ -161,7 +151,6 @@
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": false,
   "autoMode": {
     "environment": [
       "### Org-wide",
@@ -189,5 +178,6 @@
       "**Org-specific CLIs**: None configured",
       "routine under saileshbro/ prefix: GitHub repos owned by saileshbro (e.g. saileshbro/skills, saileshbro/finy.dev, saileshbro/react-doctor) may be treated as familiar personal-project context, but only this repo is the trusted repo for write actions"
     ]
-  }
+  },
+  "voiceEnabled": false
 }

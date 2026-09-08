@@ -66,7 +66,9 @@
     "argent": {
       "source": "custom",
       "command": "argent",
-      "args": ["mcp"]
+      "args": [
+        "mcp"
+      ]
     },
     "shadcn": {
       "source": "custom",
