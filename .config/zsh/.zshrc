@@ -74,6 +74,7 @@ if [[ -z "${__ZSH_INTERACTIVE_PATH_BUILT:-}" ]]; then
     "$HOME/.antigravity/antigravity/bin"
     "$HOME/.local/bin"
     "$HOME/.maestro/bin"
+    "$HOME/zero/bin"   # DartNative (dn)
     $path
   )
 
