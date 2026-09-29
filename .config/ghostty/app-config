@@ -1,1 +1,19 @@
 split-divider-color = #ff3399
+unfocused-split-opacity = 1
+
+# Notify when a long command finishes in a window I'm not looking at
+notify-on-command-finish = unfocused
+notify-on-command-finish-action = bell,notify
+notify-on-command-finish-after = 15s
+
+# Keep a zoomed split zoomed when moving between splits
+split-preserve-zoom = navigation
+
+# Even padding on all four edges
+window-padding-balance = true
+
+# Copy on select also fills the system clipboard
+copy-on-select = clipboard
+
+# ~50 MB of scrollback per surface
+scrollback-limit = 50000000

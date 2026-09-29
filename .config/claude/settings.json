@@ -48,7 +48,6 @@
       "Bash(curl *)",
       "Bash(wget *)",
       "Bash(ssh *)",
-      "mcp__plane__retrieve_work_item_by_identifier",
       "mcp__context7__resolve-library-id",
       "mcp__context7__query-docs",
       "Bash(git stash show *)",
@@ -85,17 +84,9 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus",
+  "model": "sonnet",
   "disableClaudeAiConnectors": true,
   "skillOverrides": {
-    "argent-create-flow": "off",
-    "argent-metro-debugger": "off",
-    "argent-react-native-optimization": "off",
-    "argent-screenshot-diff": "off",
-    "diagnosing-bugs": "off",
-    "make-slides": "off",
-    "research-topic": "off",
-    "slides-with-research": "off",
     "expo-api-routes": "off",
     "expo-cicd-workflows": "off",
     "expo-tailwind-setup": "off",
@@ -117,14 +108,28 @@
     "expo@claude-plugins-official": true,
     "exa@claude-plugins-official": true,
     "figma@claude-plugins-official": false,
-    "mattpocock-skills@claude-plugins-official": true,
-    "cloudflare@claude-plugins-official": true
+    "mattpocock-skills@claude-plugins-official": false,
+    "cloudflare@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true,
+    "claude-api@anthropic-agent-skills": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
       "source": {
         "source": "github",
         "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "anthropic-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
+    },
+    "cloudflare": {
+      "source": {
+        "source": "github",
+        "repo": "cloudflare/skills"
       }
     }
   },
@@ -147,6 +152,7 @@
   "verbose": false,
   "preferredNotifChannel": "iterm2_with_bell",
   "autoCompactEnabled": true,
+  "switchModelsOnFlag": true,
   "remoteControlAtStartup": false,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,

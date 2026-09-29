@@ -47,35 +47,12 @@
         "args": ["-y", "@upstash/context7-mcp"]
       }
     },
-    "codewithbeto.dev": {
-      "source": "custom",
-      "enabled": true,
-      "command": {
-        "path": "npx",
-        "args": [
-          "-y",
-          "mcp-remote@latest",
-          "https://mcp.codewithbeto.dev",
-          "--transport",
-          "http-only",
-          "--header",
-          "Authorization:Bearer ${CWB_MCP_TOKEN}"
-        ]
-      }
-    },
     "argent": {
       "source": "custom",
       "command": "argent",
       "args": [
         "mcp"
       ]
-    },
-    "shadcn": {
-      "source": "custom",
-      "command": {
-        "path": "npx",
-        "args": ["-y", "shadcn@latest", "mcp"]
-      }
     },
     "chrome-devtools": {
       "source": "custom",
@@ -86,80 +63,35 @@
     },
     "deepwiki": {
       "source": "custom",
-      "command": {
-        "path": "npx",
-        "args": ["-y", "mcp-remote@latest", "https://mcp.deepwiki.com/mcp", "--transport", "http-only"]
-      }
-    },
-    "notebooklm": {
-      "source": "custom",
-      "command": {
-        "path": "npx",
-        "args": ["-y", "notebooklm-mcp@latest"]
-      }
-    },
-    "plane": {
-      "source": "custom",
-      "command": {
-        "path": "npx",
-        "args": ["-y", "mcp-remote@latest", "https://mcp.plane.so/http/mcp", "--transport", "http-only"]
-      }
+      "url": "https://mcp.deepwiki.com/mcp"
     },
     "cloudflare-api": {
       "source": "custom",
-      "command": {
-        "path": "npx",
-        "args": ["-y", "mcp-remote@latest", "https://mcp.cloudflare.com/mcp", "--transport", "http-only"]
-      }
+      "url": "https://mcp.cloudflare.com/mcp"
     },
     "cloudflare-bindings": {
       "source": "custom",
-      "command": {
-        "path": "npx",
-        "args": ["-y", "mcp-remote@latest", "https://bindings.mcp.cloudflare.com/mcp", "--transport", "http-only"]
-      }
+      "url": "https://bindings.mcp.cloudflare.com/mcp"
     },
     "cloudflare-builds": {
       "source": "custom",
-      "command": {
-        "path": "npx",
-        "args": ["-y", "mcp-remote@latest", "https://builds.mcp.cloudflare.com/mcp", "--transport", "http-only"]
-      }
+      "url": "https://builds.mcp.cloudflare.com/mcp"
     },
     "cloudflare-docs": {
       "source": "custom",
-      "command": {
-        "path": "npx",
-        "args": ["-y", "mcp-remote@latest", "https://docs.mcp.cloudflare.com/mcp", "--transport", "http-only"]
-      }
+      "url": "https://docs.mcp.cloudflare.com/mcp"
     },
     "cloudflare-observability": {
       "source": "custom",
-      "command": {
-        "path": "npx",
-        "args": ["-y", "mcp-remote@latest", "https://observability.mcp.cloudflare.com/mcp", "--transport", "http-only"]
-      }
+      "url": "https://observability.mcp.cloudflare.com/mcp"
     },
     "expo": {
       "source": "custom",
-      "command": {
-        "path": "npx",
-        "args": ["-y", "mcp-remote@latest", "https://mcp.expo.dev/mcp", "--transport", "http-only"]
-      }
+      "url": "https://mcp.expo.dev/mcp"
     },
     "figma": {
       "source": "custom",
-      "command": {
-        "path": "npx",
-        "args": ["-y", "mcp-remote@latest", "https://mcp.figma.com/mcp", "--transport", "http-only"]
-      }
-    },
-    "stitch": {
-      "source": "custom",
-      "command": {
-        "path": "npx",
-        "args": ["-y", "mcp-remote@latest", "https://stitch.googleapis.com/mcp", "--transport", "http-only"]
-      }
+      "url": "https://mcp.figma.com/mcp"
     }
   },
   "agent": {
