@@ -126,3 +126,4 @@ themes/tinacious-theme/*.vsix
 .config/opencode/service.json
 .config/sentry/cache/*
 .config/sentry/cli.db
+.config/rayu/*

@@ -34,7 +34,12 @@ setopt HIST_IGNORE_SPACE      # don't record commands that start with a space
 setopt HIST_SAVE_NO_DUPS      # don't write duplicates to the history file
 setopt HIST_VERIFY            # show the substituted command before running !! etc.
 setopt HIST_REDUCE_BLANKS     # strip superfluous whitespace before saving
-setopt AUTO_CD                # type a directory path to cd into it (enables ../somedir)
+
+
+######################################
+# Shell options
+######################################
+setopt AUTO_CD               # type a directory path to cd into it (enables ../somedir)
 setopt AUTO_PUSHD             # cd pushes the old directory onto the stack
 setopt PUSHD_IGNORE_DUPS      # don't push duplicate directories
 setopt PUSHD_SILENT           # don't print the directory stack after pushd/popd
@@ -49,6 +54,7 @@ setopt ALWAYS_TO_END          # move cursor to end of word after completion
 setopt COMPLETE_IN_WORD       # tab-complete from the middle of a word
 unsetopt FLOW_CONTROL         # disable Ctrl+S / Ctrl+Q terminal freeze
 setopt EXTENDED_GLOB          # ^pat (negate), pat# (zero+), **/*.dart (recursive glob)
+setopt NO_NOMATCH             # pass an unmatched glob through as-is (grep --include=*.ts) instead of erroring
 
 
 ######################################
@@ -71,10 +77,11 @@ if [[ -z "${__ZSH_INTERACTIVE_PATH_BUILT:-}" ]]; then
     "$VOLTA_HOME/bin"
     "$HOMEBREW_PREFIX/opt/ruby/bin"
     "$HOMEBREW_PREFIX/share/google-cloud-sdk/bin"
-    "$HOME/.antigravity/antigravity/bin"
+    "$HOME/.antigravity-ide/antigravity-ide/bin"
     "$HOME/.local/bin"
     "$HOME/.maestro/bin"
     "$HOME/zero/bin"   # DartNative (dn)
+    "$HOME/.lmstudio/bin"
     $path
   )
 
@@ -138,16 +145,10 @@ zsh-bench() {
   echo "Tip: run 'zsh -i -c zprof' to see a per-function breakdown."
 }
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/saileshbro/.lmstudio/bin"
-# End of LM Studio CLI section
 
-
-# Added by Antigravity IDE
-export PATH="/Users/saileshbro/.antigravity-ide/antigravity-ide/bin:$PATH"
-
-# >>> grok installer >>>
-export PATH="$HOME/.grok/bin:$PATH"
-fpath=(~/.grok/completions/zsh $fpath)
-autoload -Uz compinit && compinit -C
-# <<< grok installer <<<
+######################################
+# Late PATH overrides
+# Must run after conf.d: fnm prepends its multishell bin in 04-tools.zsh, which
+# carries an npm-global grok that would otherwise shadow the installer's one.
+######################################
+path=("$HOME/.grok/bin" $path)

@@ -75,10 +75,25 @@ fi
 # starship prompt
 ######################################
 if [[ "$TERM" != "dumb" ]] && [[ -o zle ]] && (( $+commands[starship] )); then
+  # The stock init forks `starship prompt --continuation` for PROMPT2 on every
+  # shell start (~10ms), and `starship prompt --right` on every prompt (~10ms)
+  # even when no right_format is set. Bake PROMPT2 into the cache and drop
+  # RPROMPT unless starship.toml defines right_format. The cache is dropped
+  # when starship.toml changes so either edit is picked up.
+  _zsh_starship_init() {
+    local -a lines=("${(@f)$(starship init zsh --print-full-init)}")
+    local cont="$(starship prompt --continuation)"
+    lines=("${(@)lines/#PROMPT2=*/PROMPT2=${(qq)cont}}")
+    [[ -n ${(M)${(f)"$(<$STARSHIP_CONFIG)"}:#right_format*} ]] \
+      || lines=("${(@)lines:#RPROMPT=*}")
+    print -rl -- $lines
+  }
+  [[ "$STARSHIP_CONFIG" -nt "$XDG_CACHE_HOME/zsh/starship_init.zsh" ]] \
+    && rm -f "$XDG_CACHE_HOME/zsh/starship_init.zsh"
   _zsh_cache_eval \
     "$XDG_CACHE_HOME/zsh/starship_init.zsh" \
     "$commands[starship]" \
-    starship init zsh
+    _zsh_starship_init
 fi
 
 
@@ -107,11 +122,29 @@ j() {
 # `fnm env` mints a UNIQUE FNM_MULTISHELL_PATH (pid + timestamp) on every call.
 # That per-shell symlink is how `fnm use` keeps each terminal's active Node
 # version isolated. Caching it via _zsh_cache_eval would share one symlink
-# across all shells, so `fnm use` in one window would leak into every other —
-# hence a direct eval here. --use-on-cd registers a chpwd hook that auto-
-# switches Node on .node-version / .nvmrc, so it must run at startup too.
+# across all shells, so `fnm use` in one window would leak into every other.
+#
+# So split it: the static part of `fnm env` (FNM_DIR etc. and the --use-on-cd
+# chpwd hook) is cached, and the per-shell symlink is minted here with the
+# zf_ln builtin — the same thing `fnm env` does, without its ~15ms fork.
 if (( $+commands[fnm] )); then
-  eval "$(fnm env --use-on-cd)"
+  _zsh_fnm_static_env() {
+    fnm env --use-on-cd | grep -v -e '^export PATH=' -e '^export FNM_MULTISHELL_PATH='
+  }
+  _zsh_cache_eval \
+    "$XDG_CACHE_HOME/zsh/fnm_env.zsh" \
+    "$commands[fnm]" \
+    _zsh_fnm_static_env
+
+  zmodload zsh/datetime
+  zmodload -F zsh/files b:zf_ln b:zf_mkdir
+  export FNM_MULTISHELL_PATH="$XDG_RUNTIME_DIR/fnm_multishells/${$}_${EPOCHREALTIME/./}"
+  zf_mkdir -p "${FNM_MULTISHELL_PATH:h}"
+  if zf_ln -s "$FNM_DIR/aliases/default" "$FNM_MULTISHELL_PATH" 2>/dev/null; then
+    path=("$FNM_MULTISHELL_PATH/bin" $path)
+  else
+    eval "$(fnm env --use-on-cd)"   # fallback: let fnm do it
+  fi
 fi
 
 
@@ -128,7 +161,13 @@ _zsh_load_deferred_integrations() {
   _zsh_deferred_integrations_loaded=1
 
   [[ -f "$HOME/.orbstack/shell/init.zsh" ]] && source "$HOME/.orbstack/shell/init.zsh" 2>/dev/null
-  [[ -f "$HOME/.vite-plus/env" ]] && source "$HOME/.vite-plus/env"
+  # Vite+ env prepends ~/.vite-plus/bin, whose node/npm/npx are `vp` shims
+  # (~9ms slower per call than fnm's direct symlink). Keep `vp`/`vpx` and the
+  # `vp env use` wrapper, but move the dir to the back so fnm owns node.
+  if [[ -f "$HOME/.vite-plus/env" ]]; then
+    source "$HOME/.vite-plus/env"
+    path=(${path:#$HOME/.vite-plus/bin} "$HOME/.vite-plus/bin")
+  fi
 }
 add-zsh-hook preexec _zsh_load_deferred_integrations
 

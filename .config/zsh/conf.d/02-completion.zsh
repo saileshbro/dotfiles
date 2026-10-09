@@ -7,6 +7,8 @@
 ######################################
 # Extend FPATH with brew-managed completions before compinit sees it.
 FPATH="$HOMEBREW_PREFIX/share/zsh-completions:$HOMEBREW_PREFIX/share/zsh/site-functions:$FPATH"
+# User-installed completions: sentry-cli writes to XDG site-functions, grok ships its own.
+fpath=("$XDG_DATA_HOME/zsh/site-functions" "$HOME/.grok/completions/zsh" $fpath)
 
 autoload -Uz compinit
 
@@ -26,6 +28,9 @@ _zsh_init_completion_system() {
   fi
   local _compinit_status=$?
   (( _compinit_status == 0 )) || return _compinit_status
+  # compinit sources the dump with `.`, which prefers a newer .zwc — compiled
+  # bytecode loads ~5ms faster than parsing the 2k-line dump.
+  [[ "$_zcompdump.zwc" -nt "$_zcompdump" ]] || zcompile "$_zcompdump" 2>/dev/null
   _zsh_completion_inited=1
 
   ######################################
@@ -47,10 +52,11 @@ _zsh_init_completion_system() {
   [[ -f "$XDG_CONFIG_HOME/.dart-cli-completion/zsh-config.zsh" ]] \
     && source "$XDG_CONFIG_HOME/.dart-cli-completion/zsh-config.zsh"
 
-  # Bun — glob instead of $(bun --version) subprocess
+  # Bun — `bun completions` writes to $BUN_INSTALL; fall back to the brew keg.
+  # Glob instead of $(bun --version) subprocess.
   () {
-    local f=("$HOMEBREW_PREFIX/Cellar/bun"/*/share/zsh/site-functions/_bun(N[1]))
-    [[ -f "$f" ]] && source "$f"
+    local f=("$BUN_INSTALL/_bun"(N) "$HOMEBREW_PREFIX/Cellar/bun"/*/share/zsh/site-functions/_bun(N))
+    [[ -n "$f[1]" ]] && source "$f[1]"
   }
 
   # ngrok — cached; only regenerated when the binary changes
