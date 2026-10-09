@@ -84,7 +84,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
+  "model": "opus",
   "disableClaudeAiConnectors": true,
   "skillOverrides": {
     "expo-api-routes": "off",
@@ -96,6 +96,19 @@
     "dataviz": "off"
   },
   "disableBundledSkills": true,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/block-dangerous-git.sh"
+          }
+        ]
+      }
+    ]
+  },
   "disableRemoteControl": true,
   "disableWorkflows": true,
   "disableArtifact": true,
@@ -107,11 +120,12 @@
     "context7@claude-plugins-official": true,
     "expo@claude-plugins-official": true,
     "exa@claude-plugins-official": true,
-    "figma@claude-plugins-official": false,
-    "mattpocock-skills@claude-plugins-official": false,
     "cloudflare@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "claude-api@anthropic-agent-skills": true
+    "mattpocock-skills@synced": false,
+    "humanizer@skills-dir": false,
+    "cowork-plugin-management@synced": false,
+    "mattpocock-skills@mattpocock": true
   },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
@@ -120,16 +134,10 @@
         "repo": "anthropics/claude-plugins-official"
       }
     },
-    "anthropic-agent-skills": {
+    "mattpocock": {
       "source": {
         "source": "github",
-        "repo": "anthropics/skills"
-      }
-    },
-    "cloudflare": {
-      "source": {
-        "source": "github",
-        "repo": "cloudflare/skills"
+        "repo": "mattpocock/skills"
       }
     }
   },
@@ -143,7 +151,7 @@
       "effortLevel": "high"
     }
   },
-  "advisorModel": "opus",
+  "advisorModel": "fable",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
