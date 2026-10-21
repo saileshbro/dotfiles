@@ -49,6 +49,9 @@ themes/tinacious-theme/*.vsix
 !.config/claude/CLAUDE.md
 !.config/claude/keybindings.json
 !.config/claude/settings.json
+!.config/claude/hooks/
+.config/claude/hooks/*
+!.config/claude/hooks/block-dangerous-git.sh
 
 # Hermes Agent home (lives at ~/.hermes → symlink to .config/hermes).
 # Secrets, runtime state, generated data, and the Hermes source must NEVER be
