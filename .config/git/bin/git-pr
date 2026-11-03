@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+# git pr — local stand-in for `gh pr merge --rebase`.
+#
+#   git pr merge <number> [--dry]
+#
+# What it does, in order:
+#   1. gh pr view     read the PR's head and base branch names
+#   2. git fetch      origin, so everything below sees current remotes
+#   3. git rebase     origin/<base> <head>  (head is created from origin/<head>
+#                     if you have no local copy; rebase.autostash covers a dirty tree)
+#   4. git push       <head> with --force-with-lease, so the PR head is the rebased tip
+#   5. git push       <head>:<base>, fast-forward only. GitHub marks the PR merged
+#                     the moment its head commit is contained in its base. No merge
+#                     commit, no squash: history lands exactly as reviewed.
+#   6. update the local <base> to origin/<base>
+#
+# Always rebase, always fast-forward. If the base moved between step 3 and 5 the
+# push is rejected (never forced); run it again.
+#
+# Branches checked out in another worktree are handled by running the git
+# commands inside that worktree.
+set -euo pipefail
+
+die() { printf 'git pr: %s\n' "$*" >&2; exit 1; }
+say() { printf 'git pr: %s\n' "$*"; }
+
+usage() {
+  cat >&2 <<'EOF'
+usage: git pr merge <number> [--dry]
+EOF
+  exit 2
+}
+
+# Path of the worktree that has branch $1 checked out, or empty.
+worktree_of() {
+  git worktree list --porcelain | awk -v b="refs/heads/$1" '
+    /^worktree /{p=substr($0,10)}
+    $0=="branch " b {print p; exit}'
+}
+
+[ $# -ge 1 ] || usage
+cmd=$1; shift
+[ "$cmd" = merge ] || usage
+
+num= dry=0
+for a in "$@"; do
+  case $a in
+    --dry) dry=1 ;;
+    -*) usage ;;
+    *) [ -z "$num" ] && num=$a || usage ;;
+  esac
+done
+[[ $num =~ ^[0-9]+$ ]] || usage
+
+command -v gh >/dev/null || die "gh is not installed"
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || die "not inside a git repository"
+
+info=$(gh pr view "$num" --json state,headRefName,baseRefName,headRepositoryOwner,isCrossRepository \
+  --jq '[.state, .headRefName, .baseRefName, (.isCrossRepository|tostring)] | @tsv') ||
+  die "could not read PR #$num"
+IFS=$'\t' read -r state head base cross <<<"$info"
+
+[ "$state" = OPEN ] || die "PR #$num is $state, not OPEN"
+[ "$cross" = false ] || die "PR #$num comes from a fork; push access to its branch is not assumed"
+
+say "PR #$num: $head -> $base"
+
+if [ "$dry" = 1 ]; then
+  cat <<EOF
+git fetch origin
+git rebase origin/$base $head
+git push --force-with-lease origin $head
+git push origin $head:$base
+(update local $base to origin/$base)
+EOF
+  exit 0
+fi
+
+orig_branch=$(git symbolic-ref -q --short HEAD || true)
+
+git fetch origin
+
+# Local head branch: create from origin when missing, otherwise it is "pulled"
+# by the rebase below (rebase onto base replays any local-only commits too).
+if ! git show-ref --verify --quiet "refs/heads/$head"; then
+  git branch --track "$head" "origin/$head"
+fi
+
+# If the local head is behind origin, bring it up first so we never rebase a stale copy.
+if ! git merge-base --is-ancestor "origin/$head" "$head"; then
+  if git merge-base --is-ancestor "$head" "origin/$head"; then
+    wt=$(worktree_of "$head")
+    if [ -n "$wt" ]; then
+      git -C "$wt" pull --ff-only origin "$head"
+    else
+      git branch -f "$head" "origin/$head"
+    fi
+  else
+    die "local $head and origin/$head have diverged; reconcile them first"
+  fi
+fi
+
+wt=$(worktree_of "$head")
+if [ -n "$wt" ]; then
+  git -C "$wt" rebase "origin/$base" "$head"
+else
+  git rebase "origin/$base" "$head"
+  wt=$(pwd)
+fi
+
+git push --force-with-lease origin "$head"
+git push origin "$head:$base"   # plain push: fails rather than forcing if not a fast-forward
+
+# Update local base without merging: fast-forward only.
+git fetch origin
+base_wt=$(worktree_of "$base")
+if [ -n "$base_wt" ]; then
+  git -C "$base_wt" merge --ff-only "origin/$base" >/dev/null
+elif git show-ref --verify --quiet "refs/heads/$base"; then
+  git branch -f "$base" "origin/$base"
+fi
+
+# Leave the checkout somewhere sensible if the merged branch is the one we were on.
+if [ "$orig_branch" = "$head" ] && [ -z "$base_wt" ] && git show-ref --verify --quiet "refs/heads/$base"; then
+  git switch "$base" >/dev/null 2>&1 || true
+fi
+
+say "merged #$num: $head fast-forwarded into $base and pushed"
+say "the remote branch and local worktree/branch are left alone; clean up with gwrm / git branch -d"
