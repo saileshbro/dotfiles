@@ -167,3 +167,8 @@ themes/tinacious-theme/*.vsix
 # that file is never read; tracked files are added with `git add -f`.
 .config/cursor-home/
 
+# CLI state: Google Workspace CLI auth/cache, Cloudflare login + update checks
+.config/gws/*
+.config/cloudflare/config/default.json
+.config/cloudflare/cache/update-check-beta.json
+.config/cloudflare/state.json
