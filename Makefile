@@ -1,7 +1,7 @@
 # Dotfiles Management with GNU Stow
 # This Makefile handles symlinking dotfiles and managing aliases
 
-.PHONY: all delete setup-aliases clean-aliases setup setup-with-aliases clean install-fonts sync-themes setup-terminal install-vscode-theme setup-secrets setup-mcp-env setup-hermes clean-hermes
+.PHONY: all delete setup-aliases clean-aliases setup setup-with-aliases clean install-fonts sync-themes setup-terminal install-vscode-theme setup-secrets setup-mcp-env setup-hermes clean-hermes setup-agent-homes clean-agent-homes
 
 THEME_DIR := themes/tinacious-theme
 THEME_VERSION := $(shell node -p "require('./$(THEME_DIR)/package.json').version" 2>/dev/null)
@@ -127,8 +127,38 @@ clean-hermes:
 	@[ -L $$HOME/.hermes ] && rm -f $$HOME/.hermes && echo "  Removed ~/.hermes symlink" || echo "  Nothing to remove"
 	@echo "Hermes cleanup done."
 
+# Agent homes: tools that hard-code ~/.<tool> (Codex, Gemini, Cursor, Factory,
+# Grok, Windsurf) keep their real home under .config/ and get a symlink, the
+# same way as ~/.hermes. Each entry is <name in ~ without dot>:<dir in .config>.
+# Cursor maps to cursor-home because .config/cursor is the cursor-agent CLI's
+# own XDG config. .gitignore tracks only the portable files of each.
+# Idempotent; a real directory already in ~ is reported, never overwritten.
+AGENT_HOMES := codex:codex gemini:gemini cursor:cursor-home factory:factory grok:grok codeium:codeium
+
+setup-agent-homes:
+	@echo "Linking agent homes..."
+	@for pair in $(AGENT_HOMES); do \
+		name=$${pair%%:*}; dir=$${pair##*:}; \
+		src=$$HOME/.$$name; dst=$$HOME/dotfiles/.config/$$dir; \
+		if [ -L $$src ] && [ "$$(readlink $$src)" = "$$dst" ]; then \
+			echo "  ~/.$$name already linked — skipping"; \
+		elif [ -e $$src ] && [ ! -L $$src ]; then \
+			echo "  Warning: ~/.$$name is a real directory; quit the app, then:"; \
+			echo "    mv ~/.$$name $$dst && ln -s $$dst ~/.$$name"; \
+		else \
+			mkdir -p $$dst && ln -sfn $$dst $$src && echo "  Linked ~/.$$name → .config/$$dir"; \
+		fi; \
+	done
+
+# Remove the agent-home symlinks (leaves the in-repo homes in place)
+clean-agent-homes:
+	@for pair in $(AGENT_HOMES); do \
+		name=$${pair%%:*}; \
+		[ -L $$HOME/.$$name ] && rm -f $$HOME/.$$name && echo "  Removed ~/.$$name symlink"; \
+	done; true
+
 # Setup symlinks and XDG directories for CLI tools
-setup-aliases: setup-secrets setup-mcp-env setup-hermes
+setup-aliases: setup-secrets setup-mcp-env setup-hermes setup-agent-homes
 	@echo "Setting up symlinks and XDG directories..."
 	@echo "Creating symlinks for zsh configuration files..."
 	ln -sf $$HOME/.config/zsh/.zshenv $$HOME/.zshenv
@@ -167,5 +197,5 @@ setup-with-aliases: all setup-aliases
 	@echo "Full setup with aliases complete!"
 
 # Full cleanup: remove symlinks and aliases
-clean: delete clean-aliases clean-hermes
+clean: delete clean-aliases clean-hermes clean-agent-homes
 	@echo "Full cleanup complete!"

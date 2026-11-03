@@ -130,3 +130,40 @@ themes/tinacious-theme/*.vsix
 .config/sentry/cache/*
 .config/sentry/cli.db
 .config/rayu/*
+
+# Agent homes moved out of ~ (see `make setup-agent-homes`): ~/.<tool> is a
+# symlink to .config/<dir>. Track portable config only; auth, sessions, caches,
+# sqlite state and plugin bundles stay ignored.
+.config/codex/*
+!.config/codex/config.toml
+!.config/codex/AGENTS.md
+!.config/codex/hooks.json
+!.config/codex/keybindings.json
+!.config/codex/rules/
+!.config/codex/agents/
+
+.config/gemini/*
+!.config/gemini/settings.json
+!.config/gemini/GEMINI.md
+!.config/gemini/rules/
+!.config/gemini/hooks/
+!.config/gemini/agents/
+
+.config/factory/*
+!.config/factory/settings.json
+!.config/factory/droids/
+
+.config/grok/*
+!.config/grok/config.toml
+
+.config/codeium/*
+!.config/codeium/windsurf/
+.config/codeium/windsurf/*
+!.config/codeium/windsurf/mcp_config.json
+
+# ~/.cursor ships its own .gitignore whose `!plugins/**` and
+# `!projects/*/agent-transcripts/**` would override any rule here (a deeper
+# .gitignore wins). Ignoring the directory itself stops git from descending, so
+# that file is never read; tracked files are added with `git add -f`.
+.config/cursor-home/
+
