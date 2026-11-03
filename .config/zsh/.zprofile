@@ -19,6 +19,10 @@ path=(
   /sbin
   $path
 )
+# Stand-in for /etc/zprofile's path_helper (GLOBAL_RCS is off, see .zshenv):
+# same files, same order, read with $(<file) which doesn't fork.
+for _f in /etc/paths /etc/paths.d/*(N); do path+=(${(f)"$(<$_f)"}); done
+unset _f
 
 # ── Homebrew env (skip the slow `brew shellenv` subprocess) ───────────────────
 # These are the only vars brew shellenv would add beyond what .zshenv covers.

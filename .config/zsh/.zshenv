@@ -8,6 +8,13 @@
 # Ctrl+R only ever searches the current window's past, not your full history.
 export SHELL_SESSIONS_DISABLE=1
 
+# ── Skip /etc/zprofile, /etc/zshrc, /etc/zlogin ───────────────────────────────
+# They cost ~10ms per shell (path_helper and `locale` forks) for things we
+# redo forklessly ourselves: /etc/paths* in .zprofile, COMBINING_CHARS and
+# `disable log` in .zshrc, terminfo Home/End/Delete keys in 03-keybindings.zsh.
+# The only other thing /etc/zshrc does is the Terminal.app hook, unused here.
+unsetopt GLOBAL_RCS
+
 # ── Core XDG dirs ─────────────────────────────────────────────────────────────
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"

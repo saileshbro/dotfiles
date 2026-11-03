@@ -55,6 +55,8 @@ setopt COMPLETE_IN_WORD       # tab-complete from the middle of a word
 unsetopt FLOW_CONTROL         # disable Ctrl+S / Ctrl+Q terminal freeze
 setopt EXTENDED_GLOB          # ^pat (negate), pat# (zero+), **/*.dart (recursive glob)
 setopt NO_NOMATCH             # pass an unmatched glob through as-is (grep --include=*.ts) instead of erroring
+setopt COMBINING_CHARS        # render UTF-8 combining characters (was set by /etc/zshrc)
+disable log                   # free `log` for /usr/bin/log (was done by /etc/zshrc)
 
 
 ######################################

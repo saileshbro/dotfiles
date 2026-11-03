@@ -39,13 +39,13 @@ Each file is sourced in this order on every interactive shell start:
 ```
 /etc/zshenv
 ~/.zshenv           (.zshenv — env vars, no subprocesses)
-  └─ sets ZDOTDIR=$HOME/.config/zsh
+  ├─ sets ZDOTDIR=$HOME/.config/zsh
+  └─ unsetopt GLOBAL_RCS  → /etc/zprofile, /etc/zshrc, /etc/zlogin are skipped
 
-/etc/zprofile
-~/.config/zsh/.zprofile   (login shells only)
+~/.config/zsh/.zprofile   (login shells only; reads /etc/paths* itself, no path_helper fork)
 
-/etc/zshrc          ← resets HISTFILE + HISTSIZE — we override this in .zshrc
-~/.config/zsh/.zshrc
+~/.config/zsh/.zshrc      (COMBINING_CHARS + `disable log` from /etc/zshrc live here;
+                           its terminfo Home/End/Delete/Up/Down keys are in 03-keybindings.zsh)
   ├── sets HISTFILE, HISTSIZE, setopts
   ├── builds PATH
   ├── sets GPG_TTY, CC/CXX
