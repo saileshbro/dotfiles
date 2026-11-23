@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# git pr — local stand-in for `gh pr merge --rebase`.
+# git pr — local stand-in for `gh pr merge --rebase`, plus a sync.
 #
-#   git pr merge <number> [--dry]
+#   git pr merge <number>... [--dry]   several PRs run in order, stopping at the first failure
+#   git pr sync  <number>... [--dry]   steps 1-4 only: rebase the PR branch onto
+#                                   its base and force-with-lease push it
 #
 # What it does, in order:
 #   1. gh pr view     read the PR's head and base branch names
@@ -26,7 +28,7 @@ say() { printf 'git pr: %s\n' "$*"; }
 
 usage() {
   cat >&2 <<'EOF'
-usage: git pr merge <number> [--dry]
+usage: git pr merge|sync <number>... [--dry]
 EOF
   exit 2
 }
@@ -40,17 +42,32 @@ worktree_of() {
 
 [ $# -ge 1 ] || usage
 cmd=$1; shift
-[ "$cmd" = merge ] || usage
+case $cmd in merge|sync) ;; *) usage ;; esac
 
-num= dry=0
+nums=() dry=0
 for a in "$@"; do
   case $a in
     --dry) dry=1 ;;
     -*) usage ;;
-    *) [ -z "$num" ] && num=$a || usage ;;
+    *) [[ $a =~ ^[0-9]+$ ]] || usage; nums+=("$a") ;;
   esac
 done
-[[ $num =~ ^[0-9]+$ ]] || usage
+[ ${#nums[@]} -ge 1 ] || usage
+
+# Several PRs: run them one at a time, in the order given, stop at the first failure.
+if [ ${#nums[@]} -gt 1 ]; then
+  flags=(); [ "$dry" = 1 ] && flags+=(--dry)
+  done_list=()
+  for n in "${nums[@]}"; do
+    say "--- #$n ---"
+    "$0" "$cmd" "$n" ${flags[@]+"${flags[@]}"} ||
+      die "stopped at #$n; done: ${done_list[*]:-none}; not run: ${nums[*]:${#done_list[@]}+1}"
+    done_list+=("$n")
+  done
+  say "all done: ${nums[*]}"
+  exit 0
+fi
+num=${nums[0]}
 
 command -v gh >/dev/null || die "gh is not installed"
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || die "not inside a git repository"
@@ -70,6 +87,9 @@ if [ "$dry" = 1 ]; then
 git fetch origin
 git rebase origin/$base $head
 git push --force-with-lease origin $head
+EOF
+  [ "$cmd" = sync ] && exit 0
+  cat <<EOF
 git push origin $head:$base
 (update local $base to origin/$base)
 EOF
@@ -109,6 +129,15 @@ else
 fi
 
 git push --force-with-lease origin "$head"
+
+if [ "$cmd" = sync ]; then
+  # A rebase outside a worktree checks out $head; go back where we were.
+  if [ -n "$orig_branch" ] && [ "$orig_branch" != "$head" ] && [ "$wt" = "$(pwd)" ]; then
+    git switch "$orig_branch" >/dev/null 2>&1 || true
+  fi
+  say "synced #$num: $head rebased onto origin/$base and pushed"
+  exit 0
+fi
 git push origin "$head:$base"   # plain push: fails rather than forcing if not a fast-forward
 
 # Update local base without merging: fast-forward only.

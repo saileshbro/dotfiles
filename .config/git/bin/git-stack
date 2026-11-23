@@ -10,6 +10,13 @@
 #                                     between it and top to top's commit, and
 #                                     push them — GitHub marks each PR merged
 #   git stack land   [top] BASE --dry print that merge order and stop
+#   git stack merge  [top] [--yes]    the gh stack that holds top: gh stack
+#                                     checkout, gh stack sync, check every
+#                                     layer matches origin, then land it on
+#                                     the stack's trunk (git pr merge, for a
+#                                     whole stack)
+#   git stack merge  [top] --dry      print the trunk, the steps and the merge
+#                                     order; checks out, syncs and pushes nothing
 #
 # `top` defaults to the current branch. `B` defaults to origin/<default branch>
 # (origin/HEAD; run `git remote set-head origin -a` once if unset).
@@ -29,6 +36,25 @@
 # untouched. Landing on the integration branch bypasses required checks and
 # merge queues, so only do it where a plain push to that branch is the team's
 # actual merge path.
+#
+# Merging: run `merge` from anywhere in the repo, on any branch, in any
+# worktree, dirty or not; only a worktree that holds top must be clean. It
+# works there, or, when no worktree holds top, in a temporary worktree with
+# hooks off that is removed after, so your checkout is never touched.
+# `gh stack sync` rebases the stack onto its trunk and pushes it atomically;
+# merge then refuses unless every open layer equals origin, and lands with the
+# same top-down fast-forwards and confirmation as `land`. The trunk comes from
+# gh stack (`gh stack view --json`), never origin/HEAD. `--dry` replays the
+# stack onto the trunk in memory first and previews any conflict the sync
+# would hit.
+#
+# Failure reports, written for whoever has to fix it (a person or an agent):
+# every stop prints a block between `===== git stack: ... =====` lines with
+# the worktree, the branch and commit, the conflicting files, git's CONFLICT
+# messages, the text between the markers with line numbers, the trunk commits
+# that touched each file, and the exact commands to resolve or give up. A
+# failed sync is replayed in memory to find the layer and commit that
+# conflict; a stopped land says which PRs already merged and which did not.
 #
 # Conflicts: the rebase STOPS mid-way, nothing is pushed, and the stack refs are
 # untouched until the rebase completes (git restores them on --abort). Resolve,
@@ -59,13 +85,113 @@ stack_branches() {
 
 rebase_in_progress() { [ -d "$(git rev-parse --git-path rebase-merge)" ] || [ -d "$(git rev-parse --git-path rebase-apply)" ]; }
 
+# Everything needed to resolve a stopped rebase without re-running anything:
+# where, what was being replayed onto what, the files, and the conflicted text.
 report_conflict() {
-  printf '\n%s\n' "git stack: the rebase stopped on a conflict. Nothing was pushed; every stack branch is still where it was." >&2
-  printf '%s\n' "  conflicting:" >&2
-  git diff --name-only --diff-filter=U | sed 's/^/    /' >&2
-  printf '%s\n' "  resolve them, then:  git add <files> && git stack rebase --continue" >&2
-  printf '%s\n' "  or give up:          git stack rebase --abort" >&2
+  local gp head_name onto
+  gp=$(git rev-parse --git-path rebase-merge)
+  {
+    printf '\n===== git stack: REBASE CONFLICT =====\n'
+    printf 'Nothing was pushed. Every stack branch is still where it was until the rebase completes.\n'
+    printf 'worktree:    %s\n' "$(git rev-parse --show-toplevel)"
+    if [ -f "$gp/head-name" ]; then head_name=$(sed 's#^refs/heads/##' "$gp/head-name"); printf 'rebasing:    %s\n' "$head_name"; fi
+    if [ -f "$gp/onto" ]; then onto=$(cat "$gp/onto"); printf 'onto:        %s\n' "$(git log -1 --format='%h %s' "$onto")"; fi
+    if git rev-parse -q --verify REBASE_HEAD >/dev/null; then
+      printf 'stopped at:  %s\n' "$(git log -1 --format='%h %s' REBASE_HEAD)"
+      printf '             (the commit being replayed; its own change is the "theirs" side)\n'
+    fi
+    if [ -f "$gp/msgnum" ] && [ -f "$gp/end" ]; then printf 'progress:    commit %s of %s\n' "$(cat "$gp/msgnum")" "$(cat "$gp/end")"; fi
+    printf '\nconflicting files:\n'
+    git diff --name-only --diff-filter=U | sed 's/^/  /'
+    printf '\ngit status --short:\n'
+    git status --short | sed 's/^/  /'
+    printf '\nconflict hunks (git diff of the unmerged files, markers included):\n'
+    git --no-pager diff --diff-filter=U || true
+    printf '\nto resolve:\n'
+    printf '  edit the files above, then:  git add <files> && git stack rebase --continue\n'
+    printf '  or give up:                  git stack rebase --abort\n'
+    printf '===== end of conflict report =====\n'
+  } >&2
   exit 1
+}
+
+# The lines of a file's text (stdin) between conflict markers, numbered.
+conflicted_regions() {
+  awk '/^<<<<<<< /{on=1} on{printf "  %5d  %s\n", NR, $0} /^>>>>>>> /{on=0; print "  -----"}'
+}
+
+# Replay the stack onto origin/<trunk> in memory, commit by commit, as a
+# rebase would, and print the first commit that conflicts: layer, commit,
+# files, git's CONFLICT messages, the text between the markers, and the trunk
+# commits that touched each file. Nothing on disk or any ref changes.
+# Args: trunk, then the stack branches bottom → top. Returns 0 clean, 1 conflict, 2 unknown.
+replay_conflicts() {
+  local trunk=$1; shift
+  local new old b c out tree status files f
+  cd "$(git rev-parse --show-toplevel)"   # merge-tree prints paths relative to the cwd
+  new=$(git rev-parse "origin/$trunk")
+  old=$(git merge-base "origin/$trunk" "$1")
+  for b in "$@"; do
+    for c in $(git rev-list --reverse --no-merges "$old..$b"); do
+      status=0
+      out=$(git merge-tree --write-tree --name-only --messages --merge-base="$c^" "$new" "$c") || status=$?
+      tree=$(printf '%s\n' "$out" | head -n 1)
+      if [ "$status" = 1 ]; then
+        files=$(printf '%s\n' "$out" | sed -n '2,/^$/p' | sed '/^$/d')
+        printf '\nreplaying the stack onto origin/%s conflicts:\n' "$trunk"
+        printf '  layer:   %s\n' "$b"
+        printf '  commit:  %s\n' "$(git log -1 --format='%h %s' "$c")"
+        printf '\nconflicting files:\n'
+        printf '%s\n' "$files" | sed 's/^/  /'
+        printf '\ngit merge-tree messages:\n'
+        printf '%s\n' "$out" | sed '1,/^$/d' | sed 's/^/  /'
+        for f in $files; do
+          printf '\n%s (with conflict markers; first side = origin/%s plus the layers below, last side = %s):\n' "$f" "$trunk" "$(git rev-parse --short "$c")"
+          git cat-file -p "$tree:$f" 2>/dev/null | conflicted_regions || printf '  (no text: a delete, rename or binary conflict; see the messages above)\n'
+          printf '  commits on origin/%s since the stack forked that touch it:\n' "$trunk"
+          git log --format='    %h %s' "$(git merge-base "origin/$trunk" "$1")..origin/$trunk" -- "$f" | head -n 20
+        done
+        return 1
+      elif [ "$status" != 0 ]; then
+        printf '\ngit merge-tree failed on %s (exit %s); cannot locate the conflict.\n' "$(git rev-parse --short "$c")" "$status"
+        return 2
+      fi
+      new=$(git commit-tree "$tree" -p "$new" -m replay)
+    done
+    old=$b
+  done
+  return 0
+}
+
+resolve_hint() { # dir, trunk, top
+  printf '\nto resolve, in %s:\n' "$1"
+  printf '  gh stack rebase                  rebase the stack interactively, fixing each conflict\n'
+  printf '  (or) git stack rebase %s --onto origin/%s\n' "$3" "$2"
+  printf '  then run git stack merge %s again\n' "$3"
+}
+
+# After `gh stack sync` gave up (it puts every branch back): what it said, and
+# where the stack conflicts with the trunk, if it does.
+# Args: trunk, sync log path (or empty), then the stack branches bottom → top.
+report_sync_failure() {
+  local trunk=$1 log=$2 found=0; shift 2
+  {
+    printf '\n===== git stack: gh stack sync FAILED =====\n'
+    printf 'gh stack sync restores every branch when it gives up, so nothing moved and nothing was pushed.\n'
+    printf 'worktree:  %s\n' "$(git rev-parse --show-toplevel)"
+    printf 'trunk:     origin/%s at %s\n' "$trunk" "$(git log -1 --format='%h %s' "origin/$trunk")"
+    if [ -n "$log" ] && [ -s "$log" ]; then
+      printf '\nlast lines gh stack sync printed:\n'
+      tail -n 40 "$log" | sed 's/^/  | /'
+    fi
+    replay_conflicts "$trunk" "$@" || found=$?
+    if [ "$found" = 0 ]; then
+      printf '\nthe stack replays onto origin/%s with no conflict, so the sync failed for another reason: read its output above.\n' "$trunk"
+      printf 'common causes: the local and GitHub stacks diverged (sync prompts only in a terminal), a push was rejected, or gh lost auth.\n'
+    fi
+    resolve_hint "$(git rev-parse --show-toplevel)" "$trunk" "${*: -1}"
+    printf '===== end of sync failure report =====\n'
+  } >&2
 }
 
 finish_report() {
@@ -190,7 +316,8 @@ cmd_land() {
   [ -n "$base" ] || die "usage: git stack land [top] BASE [--yes|--dry]"
   base=${base#origin/}
   rebase_in_progress && die "a rebase is in progress — finish it first"
-  [ -z "$(git status --porcelain)" ] || die "working tree is not clean"
+  # A dry run reads only, so it runs in any tree; a real land checks branches out here.
+  [ "$dry" = 1 ] || [ -z "$(git status --porcelain)" ] || die "working tree is not clean"
   git rev-parse -q --verify "refs/heads/$top" >/dev/null || die "no local branch $top"
   git rev-parse -q --verify "refs/heads/$base" >/dev/null || die "no local branch $base"
   git fetch -q origin
@@ -220,11 +347,24 @@ cmd_land() {
   # so there is nothing to replay), and it is pushed before the next pair —
   # so a failure part-way leaves a shorter, still-consistent landing, and the
   # base moves last. That is the same sequence you would type by hand.
-  local upper lower
+  local upper lower landed=""
   upper=$top
   for lower in $chain; do
-    ff_local_branch "$lower" "$upper"
-    git push origin "$lower"
+    if ! ff_local_branch "$lower" "$upper" || ! git push origin "$lower"; then
+      {
+        printf '\n===== git stack: LAND STOPPED =====\n'
+        printf 'failed at: fast-forwarding %s to %s (%s) and pushing it.\n' "$lower" "$upper" "$(git rev-parse --short "$upper")"
+        printf 'already pushed, so their PRs are merged:%s\n' "${landed:- none}"
+        printf 'not pushed: %s and every branch below it, so origin/%s is unchanged.\n' "$lower" "$base"
+        printf 'local %s may already be fast-forwarded to %s; origin/%s is not.\n' "$lower" "$upper" "$lower"
+        printf 'why: the output just above. "rejected (non-fast-forward)" or "fetch first" means origin/%s moved (rebase the rest onto it, land again);\n' "$lower"
+        printf '     "declined" or "protected" means a server rule refused it; nothing was forced.\n'
+        printf 'to finish: fix the cause, then git stack land %s %s again (the pushed upper layers are no-ops).\n' "$top" "$base"
+        printf '===== end of land report =====\n'
+      } >&2
+      exit 1
+    fi
+    landed="$landed $lower"
     upper=$lower
   done
   git switch -q "$top"
@@ -251,11 +391,174 @@ ff_local_branch() {
   fi
 }
 
+# Path of the worktree that has branch $1 checked out, or empty.
+worktree_of() {
+  git worktree list --porcelain | awk -v ref="branch refs/heads/$1" \
+    '/^worktree /{w=substr($0,10)} $0==ref{print w; exit}'
+}
+
+# The stack's trunk without checking anything out: follow the PR bases down
+# from top until a base branch has no open PR of its own.
+trunk_from_prs() {
+  local b=$1 next seen=0
+  while next=$(gh pr view "$b" --json baseRefName,state --jq 'select(.state == "OPEN") | .baseRefName' 2>/dev/null) &&
+        [ -n "$next" ]; do
+    b=$next; seen=$((seen + 1))
+    [ "$seen" -lt 100 ] || die "PR bases from $1 do not end in a trunk"
+  done
+  [ "$seen" -gt 0 ] || die "$1 has no open PR"
+  printf '%s' "$b"
+}
+
+# The checked-out stack from gh stack's local record (trunk, branches bottom → top).
+gh_stack_json() { gh stack view --json; }
+
+cmd_merge() {
+  local top="" yes=0 dry=0 arg
+  while [ $# -gt 0 ]; do
+    arg=$1; shift
+    case $arg in
+      --yes|-y) yes=1 ;;
+      --dry|--dry-run|-n) dry=1 ;;
+      -*) die "unknown flag $arg" ;;
+      *) [ -z "$top" ] || die "usage: git stack merge [top] [--yes|--dry]"; top=$arg ;;
+    esac
+  done
+  git rev-parse --git-dir >/dev/null 2>&1 || die "not inside a git repository"
+  top=${top:-$(git branch --show-current)}
+  [ -n "$top" ] || die "usage: git stack merge [top] [--yes|--dry] (you are on a detached HEAD, so name the top branch)"
+  command -v gh >/dev/null 2>&1 || die "gh is not installed"
+  command -v jq >/dev/null 2>&1 || die "jq is not installed"
+  git fetch -q origin
+  if ! git rev-parse -q --verify "refs/heads/$top" >/dev/null; then
+    git rev-parse -q --verify "refs/remotes/origin/$top" >/dev/null || die "no branch $top here or on origin"
+    git branch -q --track "$top" "origin/$top"
+    printf 'git stack: created local %s from origin/%s\n' "$top" "$top"
+  fi
+
+  # Where to run: the worktree that holds top, so nothing is switched away from
+  # it. When none does, a temporary worktree (hooks off), so the checkout you
+  # ran this from, whatever branch it is on and however dirty, is never touched.
+  local dir tmp="" common
+  common=$(git rev-parse --path-format=absolute --git-common-dir)
+  dir=$(worktree_of "$top")
+  if [ -z "$dir" ] && [ "$dry" = 0 ]; then
+    tmp=$(mktemp -d "$(temp_base)/git-stack-merge.XXXXXX")
+    git -c core.hooksPath=/dev/null worktree add -q "$tmp/wt" "$top"
+    dir="$tmp/wt"
+    # Removed on any exit, a failure included, unless a conflict keeps it for resolving.
+    GS_TMP=$tmp GS_TMP_WT=$dir GS_COMMON=$common GS_KEEP=0
+    trap remove_temp_worktree EXIT
+    export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=core.hooksPath GIT_CONFIG_VALUE_0=/dev/null
+    printf 'git stack: %s is not checked out anywhere; working in a temporary worktree %s\n' "$top" "$dir"
+  fi
+  if [ -n "$dir" ]; then
+    cd "$dir"
+    rebase_in_progress && die "a rebase is in progress in $dir, the worktree that holds $top. Finish it (git rebase --continue or --abort) first"
+    if [ -n "$(git status --porcelain)" ]; then
+      printf 'git stack: %s holds %s and has uncommitted changes:\n' "$dir" "$top" >&2
+      git status --short | sed 's/^/  /' >&2
+      [ "$dry" = 1 ] || die "commit or stash them in $dir, then run again"
+      printf 'git stack: a real merge would stop here until they are committed or stashed.\n\n' >&2
+    fi
+  fi
+
+  if [ "$dry" = 1 ]; then
+    local trunk
+    trunk=$(trunk_from_prs "$top")
+    printf 'merging the stack under %s onto %s, in %s:\n' "$top" "$trunk" "${dir:-a temporary worktree (no worktree holds $top)}"
+    printf '  gh stack checkout %s\n  gh stack sync\n  (every open layer must equal origin)\n' "$top"
+    printf '  git stack land %s %s\n' "$top" "$trunk"
+    local between chain found=0
+    between=$(stack_branches "$top" "origin/$trunk" | grep -vx "$top" || true)
+    if ! git merge-base --is-ancestor "origin/$trunk" "$top"; then
+      printf 'note: the stack is not on origin/%s yet (%s commits behind); the sync step rebases it first.\n' \
+        "$trunk" "$(git rev-list --count "$top..origin/$trunk")"
+      # shellcheck disable=SC2086
+      ( replay_conflicts "$trunk" $between "$top" ) || found=$?
+      if [ "$found" = 1 ]; then
+        printf '\n===== the sync WOULD CONFLICT (preview above); a real merge would stop at it =====\n'
+        resolve_hint "${dir:-a worktree that holds $top}" "$trunk" "$top"
+        printf '\n'
+      elif [ "$found" = 0 ]; then
+        printf 'the stack replays onto origin/%s with no conflict.\n' "$trunk"
+      fi
+    fi
+    # shellcheck disable=SC2086
+    chain=$(printf '%s\n' "$trunk" $between | sed '1!G;h;$!d')
+    # shellcheck disable=SC2086
+    land_plan "$top" "$trunk" $chain
+    printf 'dry run: nothing was checked out, synced or pushed.\n'
+    return
+  fi
+
+  printf 'git stack: gh stack checkout %s (in %s)\n' "$top" "$dir"
+  gh stack checkout "$top" || die "gh stack checkout $top failed (its output is above). Is $top on a gh stack? gh stack checkout <stack-number> picks one."
+  [ "$(git branch --show-current)" = "$top" ] || git switch -q "$top"
+
+  local json trunk branches
+  json=$(gh_stack_json) || die "gh stack view --json failed in $dir"
+  trunk=$(jq -r '.trunk' <<<"$json")
+  [ -n "$trunk" ] && [ "$trunk" != null ] || die "gh stack view gave no trunk"
+  jq -e --arg t "$top" 'any(.branches[]; .name == $t)' <<<"$json" >/dev/null ||
+    die "$top is not on the stack gh stack checked out (stack: $(jq -r '[.branches[].name] | join(", ")' <<<"$json"))"
+  branches=$(jq -r '.branches[] | select(.isMerged | not) | .name' <<<"$json")
+
+  printf 'git stack: gh stack sync (onto origin/%s)\n' "$trunk"
+  local log="" status=0
+  if [ -t 1 ]; then
+    gh stack sync || status=$?
+  else
+    # Not a terminal (an agent, a script): keep what sync printed for the report.
+    log=$(mktemp "$(temp_base)/git-stack-sync.XXXXXX")
+    gh stack sync 2>&1 | tee "$log" || status=${PIPESTATUS[0]}
+  fi
+  if [ "$status" != 0 ]; then
+    git fetch -q origin
+    # shellcheck disable=SC2086
+    report_sync_failure "$trunk" "$log" $branches
+    if [ -n "$tmp" ]; then
+      GS_KEEP=1
+      printf 'git stack: kept the temporary worktree %s for resolving; remove it after with: git worktree remove --force %s\n' "$dir" "$dir" >&2
+    fi
+    exit 1
+  fi
+  [ -z "$log" ] || rm -f "$log"
+
+  json=$(gh_stack_json) || die "gh stack view --json failed after the sync"
+  branches=$(jq -r '.branches[] | select(.isMerged | not) | .name' <<<"$json")
+  git fetch -q origin
+  local b stale=""
+  for b in $branches; do
+    [ "$(git rev-parse "refs/heads/$b")" = "$(git rev-parse -q --verify "refs/remotes/origin/$b" || echo none)" ] ||
+      stale="$stale"$'\n'"  $b  local $(git rev-parse --short "refs/heads/$b")  origin $(git rev-parse -q --short --verify "refs/remotes/origin/$b" || echo missing)"
+  done
+  [ -z "$stale" ] || die "after the sync these layers still differ from origin:$stale
+push or sync them (git stack push $top), then run again"
+  printf 'git stack: every layer matches origin; landing on %s\n' "$trunk"
+  git rev-parse -q --verify "refs/heads/$trunk" >/dev/null || git branch -q --track "$trunk" "origin/$trunk"
+
+  local flags=()
+  [ "$yes" = 1 ] && flags+=(--yes)
+  cmd_land "$top" "$trunk" ${flags[@]+"${flags[@]}"}
+}
+
+GS_TMP="" GS_TMP_WT="" GS_COMMON="" GS_KEEP=0
+temp_base() { local t=${TMPDIR:-/tmp}; printf '%s' "${t%/}"; }
+remove_temp_worktree() {
+  [ -n "$GS_TMP" ] && [ "$GS_KEEP" = 0 ] || return 0
+  cd /
+  git --git-dir="$GS_COMMON" worktree remove --force "$GS_TMP_WT" 2>/dev/null || true
+  git --git-dir="$GS_COMMON" worktree prune 2>/dev/null || true
+  rm -rf "$GS_TMP"
+}
+
 case ${1:-} in
   ls) shift; cmd_ls "$@" ;;
   land) shift; cmd_land "$@" ;;
+  merge) shift; cmd_merge "$@" ;;
   rebase) shift; cmd_rebase "$@" ;;
   push) shift; cmd_push "$@" ;;
   sync) shift; cmd_sync "$@" ;;
-  *) sed -n '2,37p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+  *) sed -n '2,/^set -euo/p' "$0" | sed '$d' | sed 's/^# \{0,1\}//'; exit 2 ;;
 esac
