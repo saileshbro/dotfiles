@@ -169,6 +169,13 @@ themes/tinacious-theme/*.vsix
 
 # CLI state: Google Workspace CLI auth/cache, Cloudflare login + update checks
 .config/gws/*
-.config/cloudflare/config/default.json
-.config/cloudflare/cache/update-check-beta.json
-.config/cloudflare/state.json
+# cloudflare config/ holds one OAuth token file per profile (default, thulolab, ...)
+.config/cloudflare/
+
+# CLI credentials and telemetry
+.config/mcp-gsc/
+.config/resend/
+.config/revenuecat/
+.config/simslim/
+.config/respectaso-bypass/
+__pycache__/
